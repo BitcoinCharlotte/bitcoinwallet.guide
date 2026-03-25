@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Bitcoin (in 1 page) — Draft v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --purple: #41449f;
+    --orange: #F7931A;
+    --dark: #1a1a2e;
+    --light: #f5f5f5;
+    --white: #ffffff;
+  }
+  @page { size: 11in 8.5in; margin: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #bbb;
+    color: var(--dark);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  h1, h2, h3 { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.02em; }
+
+  .page {
+    width: 11in;
+    height: 8.5in;
+    display: flex;
+    background: var(--white);
+    margin: 0 auto 24px;
+    overflow: hidden;
+    page-break-after: always;
+  }
+  .page-label {
+    text-align: center; font-size: 13px; color: #555;
+    padding: 8px 0 4px; background: #bbb; font-family: 'DM Sans', sans-serif;
+  }
+  @media print { body { background: white; } .page { margin: 0; } .page-label { display: none; } }
+
+  .panel {
+    width: 3.6667in;
+    height: 8.5in;
+    padding: 0.35in 0.3in;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* === Accent line at top of panels === */
+  .accent-top { border-top: 4px solid var(--orange); }
+
+  /* === Typography === */
+  .panel-title {
+    font-size: 1.45em; line-height: 1.1; margin-bottom: 0.1in;
+  }
+  .t-orange { color: var(--orange); }
+  .t-purple { color: var(--purple); }
+  .t-white { color: var(--white); }
+  .t-dark { color: var(--dark); }
+
+  .body { font-size: 0.62em; line-height: 1.5; }
+  .body p { margin-bottom: 0.07in; }
+  .body strong { color: var(--purple); }
+
+  .body ul { list-style: none; padding: 0; }
+  .body ul li {
+    padding-left: 0.9em; position: relative; margin-bottom: 0.05in;
+  }
+  .body ul li::before {
+    content: "▸"; position: absolute; left: 0; color: var(--orange); font-weight: bold;
+  }
+
+  /* === Callout box === */
+  .callout {
+    border-left: 3px solid var(--orange);
+    padding: 0.07in 0.1in;
+    margin: 0.08in 0;
+    font-size: 0.62em; line-height: 1.45;
+    border-radius: 2px;
+  }
+  .callout-light { background: rgba(247,147,26,0.1); }
+  .callout-dark { background: rgba(247,147,26,0.15); color: rgba(255,255,255,0.9); }
+  .callout strong { color: var(--orange); }
+
+  /* === Problem pills === */
+  .problems-grid {
+    display: flex; flex-wrap: wrap; gap: 4px; margin: 0.08in 0;
+  }
+  .pill {
+    font-size: 0.52em; font-weight: 700;
+    padding: 3px 7px; border-radius: 3px;
+    background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.85);
+    border: 1px solid rgba(255,255,255,0.2);
+    line-height: 1.3;
+  }
+
+  /* === Property row === */
+  .prop-row {
+    display: flex; align-items: baseline; gap: 0.06in;
+    font-size: 0.6em; padding: 0.03in 0;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  .prop-check { color: var(--orange); font-weight: bold; font-size: 1.1em; flex-shrink: 0; }
+  .prop-name { font-weight: 700; color: var(--purple); white-space: nowrap; }
+  .prop-desc { color: #555; font-size: 0.92em; }
+  .prop-sep { color: #ccc; }
+
+  /* === Myth busters === */
+  .myth {
+    margin-bottom: 0.06in; font-size: 0.58em; line-height: 1.4;
+  }
+  .myth-claim {
+    font-weight: 700; color: var(--purple); font-size: 1.05em;
+  }
+  .myth-truth { color: #444; }
+
+  /* === QR === */
+  .qr-row {
+    display: flex; align-items: center; gap: 0.1in; margin-bottom: 0.1in;
+  }
+  .qr-box {
+    width: 0.72in; height: 0.72in;
+    border: 2px solid var(--purple); border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.45em; color: var(--purple); text-align: center;
+    flex-shrink: 0; background: var(--light);
+  }
+  .qr-text { font-size: 0.58em; line-height: 1.35; }
+  .qr-text strong { display: block; color: var(--purple); font-size: 1.1em; }
+  .qr-text .url { color: #888; font-size: 0.88em; }
+
+  .footer {
+    margin-top: auto; text-align: center; font-size: 0.5em; color: #999;
+  }
+  .footer-dark { color: rgba(255,255,255,0.4); }
+
+  .divider { width: 100%; height: 2px; background: var(--orange); opacity: 0.3; margin: 0.08in 0; }
+
+  /* ===================== PANELS ===================== */
+
+  /* OUTSIDE RIGHT = COVER */
+  .cover {
+    background: var(--dark); color: var(--white);
+    justify-content: center; align-items: center; text-align: center;
+  }
+  .cover-btc { font-size: 3.5em; color: var(--orange); margin-bottom: 0.12in; }
+  .cover-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.6em; line-height: 1.05; color: var(--orange);
+    margin-bottom: 0.15in;
+  }
+  .cover-sub {
+    font-size: 0.82em; color: rgba(255,255,255,0.8); line-height: 1.5;
+    margin-bottom: 0.25in;
+  }
+  .cover-brand {
+    margin-top: auto; text-align: center;
+  }
+  .cover-brand-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.35em; color: var(--orange); letter-spacing: 0.05em;
+  }
+  .cover-brand-url { font-size: 0.65em; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+  /* OUTSIDE CENTER = THE PROBLEMS */
+  .problems-panel {
+    background: var(--purple); color: var(--white);
+  }
+  .problems-panel .body { color: rgba(255,255,255,0.9); }
+  .problems-panel .body strong { color: var(--orange); }
+
+  /* OUTSIDE LEFT = TAKE ACTION */
+  .action-panel {
+    background: var(--dark); color: var(--light);
+  }
+  .action-panel .qr-box {
+    border-color: var(--orange); background: rgba(255,255,255,0.08);
+    color: var(--orange);
+  }
+  .action-panel .qr-text { color: rgba(255,255,255,0.85); }
+  .action-panel .qr-text strong { color: var(--orange); }
+  .action-panel .qr-text .url { color: rgba(255,255,255,0.45); }
+
+  /* INSIDE LEFT = ROOT CAUSE */
+  .cause-panel { background: var(--white); }
+
+  /* INSIDE CENTER = GOOD MONEY + BITCOIN */
+  .money-panel { background: var(--light); }
+
+  /* INSIDE RIGHT = MISCONCEPTIONS */
+  .myths-panel { background: var(--white); }
+
+  .bitcoin-box {
+    text-align: center; font-family: 'Bebas Neue', sans-serif;
+    font-size: 1em; color: var(--orange);
+    padding: 0.06in; border: 2px solid var(--orange); border-radius: 3px;
+    margin-top: 0.08in;
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== OUTSIDE ==================== -->
+<div class="page-label">▲ OUTSIDE — Right panel is the COVER (seen first when folded)</div>
+<div class="page">
+
+  <!-- LEFT: Common Misconceptions (back cover — seen last when folded) -->
+  <div class="panel accent-top" style="background: var(--dark); color: var(--white);">
+    <div class="panel-title t-orange" style="font-size: 1.3em;">Common Misconceptions</div>
+
+    <div class="myth" style="color: rgba(255,255,255,0.95);">
+      <div class="myth-claim" style="color: var(--orange);">"It's used by criminals"</div>
+      <div class="myth-truth" style="color: rgba(255,255,255,0.9);">Less than 2% of crypto activity is illicit. Banks have paid <strong style="color: var(--orange);">$321B in fines</strong> since 2008. HSBC laundered $881M for cartels. Bitcoin is <em>more</em> transparent — every transaction is recorded publicly, forever.</div>
+    </div>
+
+    <div class="myth" style="color: rgba(255,255,255,0.95);">
+      <div class="myth-claim" style="color: var(--orange);">"It uses too much energy"</div>
+      <div class="myth-truth" style="color: rgba(255,255,255,0.9);">That energy is what makes Bitcoin real. Proof of work ties Bitcoin to the physical world — real electricity, real hardware, real cost. That's what makes it secure and impossible to fake. It also incentivizes renewable energy and stabilizes power grids.</div>
+    </div>
+
+    <div class="myth" style="color: rgba(255,255,255,0.95);">
+      <div class="myth-claim" style="color: var(--orange);">"It's too volatile"</div>
+      <div class="myth-truth" style="color: rgba(255,255,255,0.9);">There's no path from $0 to global money without volatility. Adoption follows: store of value → medium of exchange → unit of account. The volatility has been <strong style="color: var(--orange);">overwhelmingly upward.</strong></div>
+    </div>
+
+    <div class="myth" style="color: rgba(255,255,255,0.95);">
+      <div class="myth-claim" style="color: var(--orange);">"The government will ban it"</div>
+      <div class="myth-truth" style="color: rgba(255,255,255,0.9);">China tried in 2021. The network never stopped. Miners moved to the US. El Salvador embraced it — 30% tourism growth, double-digit GDP. Countries that ban it lose. Countries that adopt it win.</div>
+    </div>
+
+    <div class="myth" style="color: rgba(255,255,255,0.95);">
+      <div class="myth-claim" style="color: var(--orange);">"It's a Ponzi scheme"</div>
+      <div class="myth-truth" style="color: rgba(255,255,255,0.9);">No leader, no company, no promises of returns, no pre-mine. Open source code anyone can audit. The most transparent financial system ever built.</div>
+    </div>
+
+    <div class="myth" style="color: rgba(255,255,255,0.95);">
+      <div class="myth-claim" style="color: var(--orange);">"Quantum computers will break it"</div>
+      <div class="myth-truth" style="color: rgba(255,255,255,0.9);">Today's best: 105 qubits. Breaking Bitcoin requires <strong style="color: var(--orange);">millions</strong> — decades away. Post-quantum upgrades are already planned (BIP 360). In 1995, they said video would break the internet.</div>
+    </div>
+
+    <div class="myth" style="color: rgba(255,255,255,0.95);">
+      <div class="myth-claim" style="color: var(--orange);">"Another crypto will replace it"</div>
+      <div class="myth-truth" style="color: rgba(255,255,255,0.9);">Bitcoin is grounded in physical reality through proof of work — real energy, real cost. Other cryptos use proof of stake, which Ethereum's own creator called <em>"a simulated universe with its own laws of physics."</em></div>
+    </div>
+
+    <div class="myth" style="color: rgba(255,255,255,0.95);">
+      <div class="myth-claim" style="color: var(--orange);">"You can't touch it"</div>
+      <div class="myth-truth" style="color: rgba(255,255,255,0.9);">That's the point. You can't — and neither can a bank, a government, or anyone else. <strong style="color: var(--orange);">Your time. Your energy. Your rules.</strong></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="body" style="text-align: center; margin-top: 0.02in; color: rgba(255,255,255,0.8); font-style: italic;">
+      <p>"There is a lot more to bitcoin than meets the eye. Some of the dominant power structures in the world stand to lose a lot of control as bitcoin gives power back to the individual."</p>
+      <p style="margin-top: 0.06in;"><strong style="color: var(--orange); font-style: normal; font-size: 1.15em;">This is why you hear what you hear.</strong></p>
+      <p style="font-size: 0.9em; margin-top: 0.04in; color: rgba(255,255,255,0.5);">— <em>Bitcoin in 21 Pages</em></p>
+    </div>
+  </div>
+
+  <!-- CENTER: The Problems You Feel -->
+  <div class="panel problems-panel accent-top">
+    <div class="panel-title t-white" style="font-size: 1.35em;">Sound Familiar?</div>
+
+    <div class="body">
+      <ul>
+        <li>Everything costs more every year — wages can't keep up</li>
+        <li>Endless wars that nobody asked for — funded how?</li>
+        <li>An obesity epidemic fueled by cheap, subsidized junk food</li>
+        <li>Addiction and opioid crisis getting worse every year</li>
+        <li>A mental health crisis — anxiety, depression, despair on the rise</li>
+        <li>The nuclear family is under attack — men and women pitted against each other, gender confusion replacing biology, traditional family structure dismantled by design</li>
+        <li>Food quality keeps declining while prices rise</li>
+        <li>It feels like the system is rigged — but no one can explain why</li>
+      </ul>
+    </div>
+
+    <div class="callout callout-dark" style="margin-top: 0.08in;">
+      <strong style="font-style: italic;">These problems seem unconnected. They're not.</strong><br>
+      They all trace back to one root cause:<br>
+      <strong style="font-size: 1.8em; font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.03em; line-height: 1.2;">The Quality of Our Money.</strong>
+    </div>
+
+    <div style="margin-top: 0.1in;">
+      <div style="font-size: 0.55em; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.05in; font-weight: 700; text-align: center;">What broken money creates:</div>
+      <div class="problems-grid" style="justify-content: center;">
+        <span class="pill">Endless wars</span>
+        <span class="pill">Wealth inequality</span>
+        <span class="pill">Housing crisis</span>
+        <span class="pill">Rising cost of living</span>
+        <span class="pill">Declining food quality</span>
+        <span class="pill">Obesity epidemic</span>
+        <span class="pill">Addiction & opioid crisis</span>
+        <span class="pill">Mental health crisis</span>
+        <span class="pill">Family breakdown</span>
+        <span class="pill">Declining birth rates</span>
+        <span class="pill">Homelessness</span>
+        <span class="pill">Bank bailouts</span>
+        <span class="pill">Boom & bust cycles</span>
+        <span class="pill">Government overreach</span>
+        <span class="pill">"Too big to fail"</span>
+        <span class="pill">Big Pharma</span>
+      </div>
+    </div>
+
+    <div class="body" style="margin-top: 0.08in; font-style: italic; color: rgba(255,255,255,0.7); text-align: center;">
+      <p>"How can anybody value a solution<br>unless they understand the problem?"</p>
+      <p style="font-size: 0.9em; margin-top: 0.03in;">— Joe Bryan, <em>What's The Problem?</em></p>
+    </div>
+
+    <div style="margin-top: auto; text-align: center; padding: 0.06in 0.1in; border-top: 2px solid rgba(247,147,26,0.4);">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 479.65 204.63" style="width: 0.7in; height: auto; margin-bottom: 4px;"><g fill="rgba(255,255,255,0.5)"><path d="M72.87,182.8c-2.3-.24-7.61-.81-7.72,2.02l-.52,13.28c-.15,3.83-2.8,6.06-6.49,6.48-3.5.39-6.41-1.47-7.23-5.19-1.05-4.77-1.1-9.81-1.52-14.81-.11-1.27-.86-2.04-2.23-2.05l-19.06-.14c-2.54-.02-4.68-1.58-5.27-3.55-.76-2.54-.04-5.42,2.55-6.36,6.19-2.25,14.63.48,14.27-7.15-.18-3.77.05-7.39.08-11.17l.23-32.94.13-12.5c.04-3.53-2.23-6.3-5.74-6.89-4.91-.82-15.48,2.49-15.81-5.42-.13-3.19,1.98-6.4,5.83-6.62l55.79-3.25c15.57-.91,33.74,7.81,34.15,25.06.22,9.33-2.75,13.92-10.28,19.28,2.1,1.18,4.2,1.65,6.24,2.56,7.51,3.36,11.41,10.83,11.19,18.93-.15,5.49-.59,10.62-3.13,15.51-3.19,6.15-8.76,10.3-15.53,11.85l-11.81,2.71c-.62,5.59-.94,10.95-2.13,16.48-.88,4.07-5.16,6.57-9.11,5.23-1.74-.59-2.87-2.71-3.18-4.47-.82-4.6-1.24-9.06-1.23-13.74,0-1.66-.65-2.94-2.49-3.13ZM85.05,124.97c4.06-2.24,6.24-6.1,5.89-10.69-.73-9.49-11.95-11.38-19.81-11.46-3.11-.03-6.04-.59-9.36.13l-.28,23.48c-.01,1.15,1.04,1.63,1.95,1.63,6.92-.03,15.58.26,21.61-3.08ZM91.84,163.43c3.39-2.38,5.13-6.19,4.81-10.28-.57-7.48-8.41-11.19-15.17-12.08s-13.09-.96-19.63-.66c-.82,2.24-.27,4.12-.27,6.2,0,3.24-.33,6.35-.06,9.59.4,4.69-.83,11.77,1.09,11.82,9.21.22,21.8.63,29.23-4.6Z"/><path d="M358.38,175.59c-14.61,15.87-39.12,16.78-54.78,2.41-16.51-15.15-16.48-40.87.11-55.96,14.8-13.46,37.54-13.51,52.36.03,15.43,14.09,16.61,37.98,2.31,53.51ZM347.3,144.37c-1.76-6.47-6.84-11.3-12.69-12.84-6.7-1.76-13.36,0-17.98,5.02-6.26,6.8-6.87,17.1-1.71,24.71,3.88,5.72,10.29,8.7,17.18,7.86,11.57-1.42,18.31-13.26,15.19-24.76Z"/><path d="M479.63,185.53c0,4.28-6.47,1.64-6.64,1.47l-39.06-37.39-.4,34.78c-.02,1.38-.64,2.38-1.97,2.73-5.12.29-10.11.5-15.19-.12-.78-.1-1.45-1.2-1.45-2.08v-69.42c0-.94.08-2.41.69-2.89,2.13-1.7,5.21-.91,6.93,1.06l15.67,15.52,22.68,22.22.13-35.97c0-1.55.94-2.45,2.38-2.58,4.85-.28,9.6-.37,14.43.08,1.14.1,1.83.87,1.83,2.08v70.5Z"/><path d="M278.06,165.04c1.81-1.07,3.44-.58,4.52.83,2.9,3.77,4.65,8.15,5.21,12.93.14,1.16-.5,2.12-1.44,2.76-11.27,7.76-28.71,8.62-41.08,3.01-18.74-8.49-25.82-29.91-19.34-48.15,3.94-11.08,12.74-19.22,23.91-22.57,11.8-3.55,25.71-2.49,36.22,4.32,1.53.99,1.96,2.5,1.56,4.2-1.03,4.35-2.58,8.41-5.28,11.93-1.2,1.56-2.71,1.71-4.41.68-6.22-3.77-13.48-5.54-20.64-3.55-8.09,2.25-13.25,9.66-13.43,18.07-.19,9.1,5.63,17.37,14.6,19.35,6.79,1.5,13.65-.31,19.59-3.82Z"/><path d="M199.18,187.16c-4.85.21-9.45.22-14.06,0-1.48-.07-2.13-1.28-2.13-2.67v-51.75c0-.85-.43-1.76-1.2-1.77l-20.25-.23c-.23-5.13-.15-9.85-.07-14.72.03-1.64,1.02-2.94,2.76-2.93l57.3.14c2.98,0,1.55,15.44,1.23,17.59l-21.02.21-.06,53.44c0,1.44-.93,2.63-2.5,2.7Z"/><path d="M396.08,186.97c-4.84.47-9.24.39-13.82.14-1.23-.07-2.62-.74-2.62-2.24v-71.67c5.55-.77,10.84-.61,16.23-.31,1.49.08,2.45.97,2.46,2.6l-.02,68.96c0,1.3-.86,2.39-2.24,2.53Z"/><path d="M149.98,186.81c-4.92.85-9.39.34-14.1.25-1.65-.03-2.98-.58-2.98-2.62v-68.93c0-1.71,1.17-2.68,2.69-2.73,4.5-.15,8.95-.2,13.43.08,1.67.1,2.59.92,2.59,2.66v68.92c-.01,1.04-.49,2.18-1.63,2.37Z"/></g></svg>
+      <div style="font-family: 'Bebas Neue', sans-serif; font-size: 1.15em; color: var(--orange); letter-spacing: 0.03em;">Fix the money, fix the world.</div>
+      <div style="font-size: 0.48em; color: rgba(255,255,255,0.5); margin-top: 2px;">Fix: to repair. And to lock — at 21 million.</div>
+    </div>
+  </div>
+
+  <!-- RIGHT: COVER -->
+  <div class="panel cover">
+    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+      <!-- Bitcoin ₿ logo — tilted like the original circle logo, no circle -->
+      <div style="margin-bottom: 0.3in;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="105" viewBox="0 0 273.6 360" fill="#F7931A" style="transform: rotate(14deg);">
+          <path d="M217.021,167.042c18.631-9.483,30.288-26.184,27.565-54.007c-3.667-38.023-36.526-50.773-78.006-54.404l-0.008-52.741 h-32.139l-0.009,51.354c-8.456,0-17.076,0.166-25.657,0.338L108.76,5.897l-32.11-0.003l-0.006,52.728 c-6.959,0.142-13.793,0.277-20.466,0.277v-0.156l-44.33-0.018l0.006,34.282c0,0,23.734-0.446,23.343-0.013 c13.013,0.009,17.262,7.559,18.484,14.076l0.01,60.083v84.397c-0.573,4.09-2.984,10.625-12.083,10.637 c0.414,0.364-23.379-0.004-23.379-0.004l-6.375,38.335h41.817c7.792,0.009,15.448,0.13,22.959,0.19l0.028,53.338l32.102,0.009 l-0.009-52.779c8.832,0.18,17.357,0.258,25.684,0.247l-0.009,52.532h32.138l0.018-53.249c54.022-3.1,91.842-16.697,96.544-67.385 C266.916,192.612,247.692,174.396,217.021,167.042z M109.535,95.321c18.126,0,75.132-5.767,75.14,32.064 c-0.008,36.269-56.996,32.032-75.14,32.032V95.321z M109.521,262.447l0.014-70.672c21.778-0.006,90.085-6.261,90.094,35.32 C199.638,266.971,131.313,262.431,109.521,262.447z"/>
+        </svg>
+      </div>
+
+      <div class="cover-sub" style="font-size: 0.95em; line-height: 1.6;">
+        Something is wrong.<br>
+        You can feel it.<br>
+        <strong style="color: var(--orange); font-size: 0.95em;">Here's why — and what fixes it.</strong>
+      </div>
+    </div>
+    <div class="cover-brand">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 479.65 204.63" style="width: 1.1in; height: auto; opacity: 0.8;"><g fill="rgba(255,255,255,0.85)"><path d="M72.87,182.8c-2.3-.24-7.61-.81-7.72,2.02l-.52,13.28c-.15,3.83-2.8,6.06-6.49,6.48-3.5.39-6.41-1.47-7.23-5.19-1.05-4.77-1.1-9.81-1.52-14.81-.11-1.27-.86-2.04-2.23-2.05l-19.06-.14c-2.54-.02-4.68-1.58-5.27-3.55-.76-2.54-.04-5.42,2.55-6.36,6.19-2.25,14.63.48,14.27-7.15-.18-3.77.05-7.39.08-11.17l.23-32.94.13-12.5c.04-3.53-2.23-6.3-5.74-6.89-4.91-.82-15.48,2.49-15.81-5.42-.13-3.19,1.98-6.4,5.83-6.62l55.79-3.25c15.57-.91,33.74,7.81,34.15,25.06.22,9.33-2.75,13.92-10.28,19.28,2.1,1.18,4.2,1.65,6.24,2.56,7.51,3.36,11.41,10.83,11.19,18.93-.15,5.49-.59,10.62-3.13,15.51-3.19,6.15-8.76,10.3-15.53,11.85l-11.81,2.71c-.62,5.59-.94,10.95-2.13,16.48-.88,4.07-5.16,6.57-9.11,5.23-1.74-.59-2.87-2.71-3.18-4.47-.82-4.6-1.24-9.06-1.23-13.74,0-1.66-.65-2.94-2.49-3.13ZM85.05,124.97c4.06-2.24,6.24-6.1,5.89-10.69-.73-9.49-11.95-11.38-19.81-11.46-3.11-.03-6.04-.59-9.36.13l-.28,23.48c-.01,1.15,1.04,1.63,1.95,1.63,6.92-.03,15.58.26,21.61-3.08ZM91.84,163.43c3.39-2.38,5.13-6.19,4.81-10.28-.57-7.48-8.41-11.19-15.17-12.08s-13.09-.96-19.63-.66c-.82,2.24-.27,4.12-.27,6.2,0,3.24-.33,6.35-.06,9.59.4,4.69-.83,11.77,1.09,11.82,9.21.22,21.8.63,29.23-4.6Z"/><path d="M59.55,73.17c-1.97-9.32-2.63-18.22-3.49-27.46-.2-2.18-.58-4.93-2.6-6.16-5.08-3.1-11.99-2.01-16.01,2.38-2.25,2.46-3.17,5.91-3.08,9.13.05,1.9,1.02,3.56,2.04,5.05l11.69,17.07c1.56,2.28,2.04,5.43,1.2,8.03s-8.05,2.76-13.11-3.64l-10.19-12.86c-3.78-4.77-5.43-10.68-4.64-16.83-3.43-.88-6.3,1.16-7.44,4.34-1.21,3.35-.23,7.2,1.63,10.33,2.99,5.04,6.53,9.3,9.95,14.07,1.38,1.93,2.48,5.18,1.02,7.28s-5.13,1.94-7.35.85c-7.2-3.52-13.5-13.12-16.95-20.24s-2.89-15.09,1.78-21.59c4.13-5.74,11.54-9.48,19.11-8.47,1.13.15,3.02.86,3.83-.12,8.6-10.32,22.39-12.02,34.26-5.8,11.05-7.29,24.33-7.71,34.54,1.47,1.35,1.21,3.71.05,5.32-.22,7.95-1.33,16.36,1.98,21,8.73s4.64,14.8,1.2,21.76c-2.81,5.68-5.94,10.62-9.47,15.96-2.08,3.15-7.63,5.72-10.89,3.58-5.4-5.86,12.38-22.71,8.91-32.22-1.3-3.56-4.57-5.79-8.32-4.71l-.15,9.77c-.05,3.02-1.33,5.73-2.96,8.21l-10.61,16.22c-1.21,1.84-3.12,3.29-5.27,3.67-1.51.26-2.87-.62-3.45-1.42-.79-1.11-1.33-2.84-.87-4.26,2.48-7.72,6.18-14.7,9.57-22.01,2.14-4.6.61-9.95-2.55-13.29-3.56-3.75-8.63-4.55-13.64-2.99-2.92.91-5.41,2.97-5.16,6.44l2.02,28.03c.21,2.87-.82,8.89-4.47,9.48s-5.64-3.93-6.41-7.56Z"/><path d="M358.38,175.59c-14.61,15.87-39.12,16.78-54.78,2.41-16.51-15.15-16.48-40.87.11-55.96,14.8-13.46,37.54-13.51,52.36.03,15.43,14.09,16.61,37.98,2.31,53.51ZM347.3,144.37c-1.76-6.47-6.84-11.3-12.69-12.84-6.7-1.76-13.36,0-17.98,5.02-6.26,6.8-6.87,17.1-1.71,24.71,3.88,5.72,10.29,8.7,17.18,7.86,11.57-1.42,18.31-13.26,15.19-24.76Z"/><path d="M479.63,185.53c0,4.28-6.47,1.64-6.64,1.47l-39.06-37.39-.4,34.78c-.02,1.38-.64,2.38-1.97,2.73-5.12.29-10.11.5-15.19-.12-.78-.1-1.45-1.2-1.45-2.08v-69.42c0-.94.08-2.41.69-2.89,2.13-1.7,5.21-.91,6.93,1.06l15.67,15.52,22.68,22.22.13-35.97c0-1.55.94-2.45,2.38-2.58,4.85-.28,9.6-.37,14.43.08,1.14.1,1.83.87,1.83,2.08v70.5Z"/><path d="M278.06,165.04c1.81-1.07,3.44-.58,4.52.83,2.9,3.77,4.65,8.15,5.21,12.93.14,1.16-.5,2.12-1.44,2.76-11.27,7.76-28.71,8.62-41.08,3.01-18.74-8.49-25.82-29.91-19.34-48.15,3.94-11.08,12.74-19.22,23.91-22.57,11.8-3.55,25.71-2.49,36.22,4.32,1.53.99,1.96,2.5,1.56,4.2-1.03,4.35-2.58,8.41-5.28,11.93-1.2,1.56-2.71,1.71-4.41.68-6.22-3.77-13.48-5.54-20.64-3.55-8.09,2.25-13.25,9.66-13.43,18.07-.19,9.1,5.63,17.37,14.6,19.35,6.79,1.5,13.65-.31,19.59-3.82Z"/><path d="M199.18,187.16c-4.85.21-9.45.22-14.06,0-1.48-.07-2.13-1.28-2.13-2.67v-51.75c0-.85-.43-1.76-1.2-1.77l-20.25-.23c-.23-5.13-.15-9.85-.07-14.72.03-1.64,1.02-2.94,2.76-2.93l57.3.14c2.98,0,1.55,15.44,1.23,17.59l-21.02.21-.06,53.44c0,1.44-.93,2.63-2.5,2.7Z"/><path d="M396.08,186.97c-4.84.47-9.24.39-13.82.14-1.23-.07-2.62-.74-2.62-2.24v-71.67c5.55-.77,10.84-.61,16.23-.31,1.49.08,2.45.97,2.46,2.6l-.02,68.96c0,1.3-.86,2.39-2.24,2.53Z"/><path d="M149.98,186.81c-4.92.85-9.39.34-14.1.25-1.65-.03-2.98-.58-2.98-2.62v-68.93c0-1.71,1.17-2.68,2.69-2.73,4.5-.15,8.95-.2,13.43.08,1.67.1,2.59.92,2.59,2.66v68.92c-.01,1.04-.49,2.18-1.63,2.37Z"/><path d="M368.54,82.61c-.43,12.59-11,21.47-23.08,20.78-8.88-.51-16.23-6.33-18.97-14.06-3.1-8.73-.54-17.97,6.46-23.79,6.67-5.56,15.74-6.61,23.6-2.73,7.06,3.48,12.29,10.96,11.99,19.81ZM357.19,82.76c.45-6.44-4.21-11.43-10.09-11.56s-10.85,4.86-10.66,11.14c.17,5.85,4.66,10.42,10.24,10.47s10.1-4.16,10.51-10.05Z"/><path d="M204.98,102.88l-6.75-.02c-1.11,0-1.77-.71-1.77-1.82l-.07-14.59-17.71-.05-.45,16.16c-2.83.57-5.52.19-8.29.29-1.14.04-1.81-.68-1.81-1.83l.02-38.31c0-1.08.89-1.74,1.84-1.78,2.05-.08,8.35-.67,8.38,1.34l.17,13.7h17.81s.11-13.28.11-13.28c.02-2.57,5.49-1.88,8.42-1.71,1.25.07,2.1.82,2.1,2.2l-.02,37.84c0,1.26-.89,1.87-1.98,1.87Z"/><path d="M283.63,103.36c-5.87.24-7.07-8.32-11.19-14.19-.93-1.33-4.04-.23-5.26-.28-.41,4.2-.18,7.74-.03,11.67.14,3.63-5.66,2.53-9.33,2.19-.61-.06-1.18-.98-1.18-1.7v-38.34c0-.89.74-1.57,1.56-1.57l17.21.08c6.2.03,10.91,4.46,12.21,10.35s-.63,11.3-5.61,14.84l7.75,14.7c1.22,2.3-4.01,2.16-6.13,2.25ZM273.31,78.55c2.51-.14,3.73-2.08,3.56-4.06-.37-4.24-6.04-3.27-9.6-3.17-.16,2.5-.15,4.69,0,7.18,2.03.26,3.87.17,6.04.05Z"/><path d="M475.27,77.44c.43,2.77.4,5.14.09,7.88-5.03.98-10,.26-15.28.57-.19,2.28-.19,4.52,0,6.86l16.81.07c1.25,0,1.98.74,1.98,1.98v6.24c-.12,1.43-1.17,1.86-2.49,1.86l-26.87-.11-.12-40.05c0-.94.72-1.58,1.61-1.58h25.88c1.26,0,1.98.77,2,1.99.05,4.01.8,8.07-2.01,8.08l-16.74.04c-.31,2.05-.22,3.75-.02,5.61,5.84.43,9.24-.69,15.16.58Z"/><path d="M145.2,92.22c8.16,2.78,12.53-3.62,14.5-1.51,1.27,1.36,2.18,2.97,2.82,4.76,2.57,7.19-12.01,8.37-15.99,8.03-11.62-1-19.74-10.17-19.73-21.64,0-7.68,3.63-14.55,10.32-18.3,7.48-4.2,16.06-4.14,23.66-.23,3.57,1.83,1.62,5.07-.58,9.31-1.67,3.22-4.21-1.6-10.87-1.66-5.51-.05-9.87,3.6-10.92,8.47-1.18,5.45,1.4,10.94,6.78,12.77Z"/><path d="M237.97,96.86l-12.35-.02c-3.08,0-1.16,5.76-6.26,6.17-1.47.12-9.78.86-8.48-1.86l18.72-39.23c.53-1.12,1.41-1.55,2.41-1.5s1.72.56,2.25,1.67l18.63,38.95c1.44,3-8.07,2.02-9.11,1.87-4.16-.6-2.2-6.06-5.8-6.06ZM235.69,87.97c-1.45-3.22-2.28-5.79-3.79-8.37l-3.63,8.5c2.73.14,4.83.37,7.41-.14Z"/><path d="M431.38,101.07c0,2.88-6.22,2.16-8.69,1.88-1.29-.15-1.81-1.13-1.81-2.36l-.02-29.29-10.18-.1c-2.86-.03-1.96-6.18-1.67-8.85.07-.66,1.02-1.19,1.73-1.19l30.18-.02c.87,0,1.61.14,2.12.68.93.98.99,7.65-.11,9.19l-11.46.3-.08,29.76Z"/><path d="M391.59,101.05c0,2.82-5.51,2.09-8.24,1.97-1.52-.07-2.28-.96-2.28-2.43l-.02-29.29-10.17-.09c-1.13-.01-1.8-.65-1.8-1.8l-.02-6.25c0-1.06.67-2,1.87-2l30.65-.02c1.32,0,2.19.85,2.23,2.09.06,1.78.63,7.84-1.33,7.88l-10.83.2-.07,29.75Z"/><path d="M323.42,92.86c2.5.03,1.84,4.6,1.74,7.73-.04,1.23-1.02,2.22-2.33,2.22l-25.31.06c-1.16,0-1.82-.68-1.82-1.84v-37.86c0-3.1,3.74-2.26,8.04-2.27,1.34,0,2.28.92,2.28,2.29v29.47s17.4.19,17.4.19Z"/><path d="M64.43,19.21c-4.97,2.24-10.58.36-13-4.05s-1.61-9.99,2.64-13.01c5.06-3.6,11.59-2.61,14.88,2.51s1.33,11.92-4.51,14.55Z"/></g></svg>
+      <div class="cover-brand-url" style="margin-top: 4px;">bitcoincharlotte.org</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ==================== INSIDE ==================== -->
+<div class="page-label">▼ INSIDE — Unfold to reveal (left to right reading order)</div>
+<div class="page">
+
+  <!-- LEFT: The Root Cause -->
+  <div class="panel cause-panel accent-top">
+    <div class="panel-title t-purple">The Root Cause</div>
+
+    <div class="callout callout-light" style="margin-top: 0;">
+      <strong>Money is stored time and energy.</strong> You go to work, trade your hours and effort, and receive money. That money is supposed to represent your life's work. When governments print more of it, they are <strong>stealing your time.</strong>
+    </div>
+
+    <div class="body" style="margin-top: 0.08in;">
+      <p>In 1971, the US severed the dollar's link to gold. For the first time in history, money had <strong>no anchor to anything scarce.</strong></p>
+
+      <p>Governments gained a <strong style="color: var(--orange);">"Big Red Button"</strong> — the power to print unlimited money. And they can't stop pressing it.</p>
+
+      <ul>
+        <li>The dollar has lost over <strong>87%</strong> of its purchasing power since 1971</li>
+        <li><strong>40%</strong> of all dollars ever created were printed in 2020–2022</li>
+        <li>Every new dollar devalues your savings — a hidden tax called <strong>inflation</strong></li>
+      </ul>
+    </div>
+
+    <div class="callout callout-light">
+      <strong>Who benefits?</strong> Those closest to the money printer spend new dollars <em>before</em> prices rise. Everyone else pays the bill. This is the <strong>Cantillon Effect.</strong>
+    </div>
+
+    <div class="callout callout-light" style="margin-top: 0.06in;">
+      <strong>1971:</strong> A house cost <strong>2.5×</strong> the average salary.<br>
+      <strong>2024:</strong> A house costs <strong>8.6×</strong> the average salary.<br>
+      Your time buys less every year — <em>by design.</em>
+    </div>
+
+    <div class="body" style="margin-top: 0.08in;">
+      <p><strong>War:</strong> Governments fund endless conflicts by printing money — no need to raise taxes or ask permission. Sound money forces hard choices; fiat writes blank checks.</p>
+      <p><strong>Obesity:</strong> Subsidized corn, soy, and seed oils make junk food cheaper than real food. The subsidies are funded by printed money. The food that's killing us is the food that's cheapest — by design.</p>
+      <p><strong>Addiction & Despair:</strong> When working harder buys less every year, people lose hope. Opioids, alcohol, screens — they're coping mechanisms for a system that quietly steals your future.</p>
+    </div>
+
+    <div class="body" style="margin-top: 0.06in;">
+      <p><strong style="color: var(--orange); font-size: 1.1em;">The money is broken. Everything else is a symptom.</strong></p>
+    </div>
+  </div>
+
+  <!-- CENTER: The Solution -->
+  <div class="panel money-panel accent-top">
+    <div class="panel-title t-purple">The Solution</div>
+
+    <div class="body">
+      <p>The printing press freed people from the church. The internet freed information. <strong style="color: var(--orange);">Bitcoin frees money.</strong></p>
+      <p>For all of human history, governments have had a <strong>monopoly on money.</strong> Bitcoin is humanity's first real competitor to that monopoly — a separation of money and state.</p>
+    </div>
+
+    <div style="margin: 0.06in 0;">
+      <div class="prop-row"><span class="prop-check">✓</span> <span class="prop-name">Scarce</span> <span class="prop-sep">—</span> <span class="prop-desc">21 million. Ever. Not even every millionaire can own one.</span></div>
+      <div class="prop-row"><span class="prop-check">✓</span> <span class="prop-name">Decentralized</span> <span class="prop-sep">—</span> <span class="prop-desc">No CEO, no company. Tens of thousands of nodes enforce the rules.</span></div>
+      <div class="prop-row"><span class="prop-check">✓</span> <span class="prop-name">Censorship Resistant</span> <span class="prop-sep">—</span> <span class="prop-desc">No permission needed. No bank can freeze it.</span></div>
+      <div class="prop-row"><span class="prop-check">✓</span> <span class="prop-name">Unconfiscatable</span> <span class="prop-sep">—</span> <span class="prop-desc">The strongest private property rights ever created.</span></div>
+      <div class="prop-row"><span class="prop-check">✓</span> <span class="prop-name">Borderless</span> <span class="prop-sep">—</span> <span class="prop-desc">Send billions anywhere for a fraction of a bank fee.</span></div>
+      <div class="prop-row"><span class="prop-check">✓</span> <span class="prop-name">Divisible</span> <span class="prop-sep">—</span> <span class="prop-desc">Down to 0.00000001 — you don't need a whole one.</span></div>
+      <div class="prop-row"><span class="prop-check">✓</span> <span class="prop-name">Verifiable</span> <span class="prop-sep">—</span> <span class="prop-desc">Open source. Anyone can audit the code and the supply.</span></div>
+    </div>
+
+    <div class="bitcoin-box">
+      No CEO · No company · No government<br>
+      Open source · 24/7 · Worldwide
+    </div>
+
+    <div class="body" style="margin-top: 0.1in;">
+      <p>Gold was confiscated in 1933 (Executive Order 6102). Real estate can be seized. Your bank account can be frozen. <strong style="color: var(--orange);">Bitcoin can't.</strong></p>
+      <p>Its monetary policy was set in stone in 2009 — and unlike a central bank, it can't be changed every quarter. Creating new bitcoin requires real electricity and real hardware. It is <strong>tied to the physical world.</strong></p>
+    </div>
+
+    <div class="footer" style="font-style: italic;">
+      "I don't believe we shall ever have good money again<br>before we take the thing out of the hands of government."<br>
+      <span style="font-size: 0.9em;">— Friedrich von Hayek, Nobel Laureate</span>
+    </div>
+  </div>
+
+  <!-- RIGHT: Get Started -->
+  <div class="panel accent-top" style="background: var(--white);">
+    <div class="panel-title t-purple">Get Started</div>
+
+    <div class="body" style="margin-top: 0.1in;">
+      <p>There are two easy ways to get bitcoin:</p>
+
+      <p style="margin-top: 0.08in;"><strong style="color: var(--purple);">1)</strong> The easiest is to have someone send it to you — no sign-up, no bank, nothing.</p>
+
+      <p style="margin-top: 0.06in;"><strong style="color: var(--purple);">2)</strong> You can buy it yourself by connecting a bank account to an app.</p>
+
+      <p style="margin-top: 0.08in;">Either way, you'll need somewhere to put it.</p>
+    </div>
+
+    <div class="divider" style="margin: 0.12in 0;"></div>
+
+    <div class="body">
+      <p>That's where a <strong>wallet</strong> comes in. A Bitcoin wallet is a free app that lets you hold, send, and receive bitcoin — no bank required, no middleman, just you and your money.</p>
+
+      <p style="margin-top: 0.08in;">Scan the QR code to see our recommended wallets and get started in minutes. Really, it only takes a few minutes.</p>
+    </div>
+
+    <div style="margin-top: 0.2in; text-align: center;">
+      <div class="qr-box" style="width: 1.4in; height: 1.4in; margin: 0 auto; border-color: var(--purple); background: var(--light); color: var(--purple); font-size: 0.55em;">QR<br>bitcoinwallet.guide</div>
+      <div style="font-size: 0.65em; color: var(--purple); font-weight: 700; margin-top: 0.08in; font-family: 'Bebas Neue', sans-serif; font-size: 1em; letter-spacing: 0.03em;">bitcoinwallet.guide</div>
+    </div>
+
+    <div class="footer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 479.65 204.63" style="width: 1.4in; height: auto; margin-bottom: 4px;"><g fill="var(--purple)"><path d="M72.87,182.8c-2.3-.24-7.61-.81-7.72,2.02l-.52,13.28c-.15,3.83-2.8,6.06-6.49,6.48-3.5.39-6.41-1.47-7.23-5.19-1.05-4.77-1.1-9.81-1.52-14.81-.11-1.27-.86-2.04-2.23-2.05l-19.06-.14c-2.54-.02-4.68-1.58-5.27-3.55-.76-2.54-.04-5.42,2.55-6.36,6.19-2.25,14.63.48,14.27-7.15-.18-3.77.05-7.39.08-11.17l.23-32.94.13-12.5c.04-3.53-2.23-6.3-5.74-6.89-4.91-.82-15.48,2.49-15.81-5.42-.13-3.19,1.98-6.4,5.83-6.62l55.79-3.25c15.57-.91,33.74,7.81,34.15,25.06.22,9.33-2.75,13.92-10.28,19.28,2.1,1.18,4.2,1.65,6.24,2.56,7.51,3.36,11.41,10.83,11.19,18.93-.15,5.49-.59,10.62-3.13,15.51-3.19,6.15-8.76,10.3-15.53,11.85l-11.81,2.71c-.62,5.59-.94,10.95-2.13,16.48-.88,4.07-5.16,6.57-9.11,5.23-1.74-.59-2.87-2.71-3.18-4.47-.82-4.6-1.24-9.06-1.23-13.74,0-1.66-.65-2.94-2.49-3.13ZM85.05,124.97c4.06-2.24,6.24-6.1,5.89-10.69-.73-9.49-11.95-11.38-19.81-11.46-3.11-.03-6.04-.59-9.36.13l-.28,23.48c-.01,1.15,1.04,1.63,1.95,1.63,6.92-.03,15.58.26,21.61-3.08ZM91.84,163.43c3.39-2.38,5.13-6.19,4.81-10.28-.57-7.48-8.41-11.19-15.17-12.08s-13.09-.96-19.63-.66c-.82,2.24-.27,4.12-.27,6.2,0,3.24-.33,6.35-.06,9.59.4,4.69-.83,11.77,1.09,11.82,9.21.22,21.8.63,29.23-4.6Z"/><path d="M358.38,175.59c-14.61,15.87-39.12,16.78-54.78,2.41-16.51-15.15-16.48-40.87.11-55.96,14.8-13.46,37.54-13.51,52.36.03,15.43,14.09,16.61,37.98,2.31,53.51ZM347.3,144.37c-1.76-6.47-6.84-11.3-12.69-12.84-6.7-1.76-13.36,0-17.98,5.02-6.26,6.8-6.87,17.1-1.71,24.71,3.88,5.72,10.29,8.7,17.18,7.86,11.57-1.42,18.31-13.26,15.19-24.76Z"/><path d="M479.63,185.53c0,4.28-6.47,1.64-6.64,1.47l-39.06-37.39-.4,34.78c-.02,1.38-.64,2.38-1.97,2.73-5.12.29-10.11.5-15.19-.12-.78-.1-1.45-1.2-1.45-2.08v-69.42c0-.94.08-2.41.69-2.89,2.13-1.7,5.21-.91,6.93,1.06l15.67,15.52,22.68,22.22.13-35.97c0-1.55.94-2.45,2.38-2.58,4.85-.28,9.6-.37,14.43.08,1.14.1,1.83.87,1.83,2.08v70.5Z"/><path d="M278.06,165.04c1.81-1.07,3.44-.58,4.52.83,2.9,3.77,4.65,8.15,5.21,12.93.14,1.16-.5,2.12-1.44,2.76-11.27,7.76-28.71,8.62-41.08,3.01-18.74-8.49-25.82-29.91-19.34-48.15,3.94-11.08,12.74-19.22,23.91-22.57,11.8-3.55,25.71-2.49,36.22,4.32,1.53.99,1.96,2.5,1.56,4.2-1.03,4.35-2.58,8.41-5.28,11.93-1.2,1.56-2.71,1.71-4.41.68-6.22-3.77-13.48-5.54-20.64-3.55-8.09,2.25-13.25,9.66-13.43,18.07-.19,9.1,5.63,17.37,14.6,19.35,6.79,1.5,13.65-.31,19.59-3.82Z"/><path d="M199.18,187.16c-4.85.21-9.45.22-14.06,0-1.48-.07-2.13-1.28-2.13-2.67v-51.75c0-.85-.43-1.76-1.2-1.77l-20.25-.23c-.23-5.13-.15-9.85-.07-14.72.03-1.64,1.02-2.94,2.76-2.93l57.3.14c2.98,0,1.55,15.44,1.23,17.59l-21.02.21-.06,53.44c0,1.44-.93,2.63-2.5,2.7Z"/><path d="M396.08,186.97c-4.84.47-9.24.39-13.82.14-1.23-.07-2.62-.74-2.62-2.24v-71.67c5.55-.77,10.84-.61,16.23-.31,1.49.08,2.45.97,2.46,2.6l-.02,68.96c0,1.3-.86,2.39-2.24,2.53Z"/><path d="M149.98,186.81c-4.92.85-9.39.34-14.1.25-1.65-.03-2.98-.58-2.98-2.62v-68.93c0-1.71,1.17-2.68,2.69-2.73,4.5-.15,8.95-.2,13.43.08,1.67.1,2.59.92,2.59,2.66v68.92c-.01,1.04-.49,2.18-1.63,2.37Z"/></g></svg>
+      <div style="margin-top: 2px; color: #999;">bitcoincharlotte.org</div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

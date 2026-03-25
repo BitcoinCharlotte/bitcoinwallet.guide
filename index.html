@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>₿itcoinWallet.Guide</title>
+<style>
+/* === Reset & Base === */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --orange: #F7931A;
+  --orange-dim: #c47515;
+  --bg: #0d1117;
+  --bg2: #161b22;
+  --bg3: #1c2129;
+  --border: #30363d;
+  --text: #e6edf3;
+  --text-dim: #8b949e;
+  --green: #3fb950;
+  --red: #f85149;
+  --radius: 10px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--orange); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* === Layout === */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px 16px 60px;
+}
+
+/* === Header === */
+.header {
+  text-align: center;
+  padding: 30px 0 20px;
+}
+.header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--orange);
+  margin-bottom: 6px;
+}
+.header h1 span { color: var(--text); }
+.header p {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+}
+
+/* === Builder Mode === */
+.welcome-input {
+  margin: 20px 0;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+.welcome-input label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+}
+.welcome-input textarea {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  resize: vertical;
+  min-height: 60px;
+}
+.welcome-input textarea:focus {
+  outline: none;
+  border-color: var(--orange);
+}
+
+/* === Section === */
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 28px 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* === Wallet Card (Builder) === */
+.wallet-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+@media (min-width: 600px) {
+  .wallet-grid { grid-template-columns: 1fr 1fr; }
+}
+
+.wallet-card {
+  background: var(--bg2);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  user-select: none;
+  position: relative;
+}
+.wallet-card:hover { border-color: var(--orange-dim); background: var(--bg3); }
+.wallet-card.selected { border-color: var(--orange); background: rgba(247,147,26,0.08); }
+.wallet-card .check {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all 0.15s;
+}
+.wallet-card.selected .check {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #000;
+}
+
+/* === Wallet Icon === */
+.wallet-card-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.wallet-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+.wallet-icon-lg {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+}
+.wallet-card-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.wallet-card .wname {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 4px;
+  padding-right: 30px;
+}
+.wallet-card .wdesc {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+.wallet-card .wmeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 0.75rem;
+}
+
+/* === Badges === */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.badge-lightning { background: rgba(255,210,63,0.15); color: #ffd23f; }
+.badge-onchain { background: rgba(247,147,26,0.15); color: var(--orange); }
+.badge-hardware { background: rgba(139,148,158,0.2); color: #c9d1d9; }
+.badge-multisig { background: rgba(63,185,80,0.15); color: var(--green); }
+.badge-exchange { background: rgba(59,130,246,0.15); color: #3b82f6; }
+.badge-ecash { background: rgba(168,85,247,0.15); color: #a855f7; }
+.badge-privacy { background: rgba(34,197,94,0.15); color: #22c55e; }
+.badge-custodial { background: rgba(248,81,73,0.15); color: var(--red); }
+.badge-self { background: rgba(63,185,80,0.1); color: var(--green); }
+.badge-community { background: rgba(168,85,247,0.15); color: #a855f7; }
+.badge-platform { background: rgba(139,148,158,0.12); color: var(--text-dim); }
+
+/* === Generate Area === */
+.generate-area {
+  margin-top: 30px;
+  text-align: center;
+}
+.btn {
+  display: inline-block;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.1s, opacity 0.15s;
+  font-family: inherit;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary {
+  background: var(--orange);
+  color: #000;
+}
+.btn-primary:hover { opacity: 0.9; }
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.btn-secondary {
+  background: var(--bg3);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.output-area {
+  margin-top: 20px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: none;
+}
+.output-area.visible { display: block; }
+
+.url-display {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  word-break: break-all;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.8rem;
+  color: var(--orange);
+  margin-bottom: 12px;
+}
+
+.url-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.qr-container {
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.char-count {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  margin-top: 8px;
+}
+.char-count.warn { color: var(--red); }
+
+/* === Landing Mode === */
+.landing-welcome {
+  text-align: center;
+  margin: 10px 0 30px;
+  padding: 20px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.landing-welcome p {
+  font-size: 1.1rem;
+  white-space: pre-wrap;
+}
+
+.landing-wallet {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 12px;
+}
+.landing-wallet .wname {
+  font-weight: 700;
+  font-size: 1.15rem;
+  margin-bottom: 4px;
+}
+.landing-wallet .wdesc {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+.landing-wallet .wmeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+  font-size: 0.75rem;
+}
+.landing-wallet .download-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 14px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: border-color 0.15s;
+}
+.download-btn:hover {
+  border-color: var(--orange);
+  text-decoration: none;
+}
+
+.landing-footer {
+  text-align: center;
+  margin: 36px 0 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.landing-footer a {
+  font-size: 0.95rem;
+}
+
+/* === Selection Counter === */
+.selection-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 -16px;
+  padding: 10px 16px;
+}
+.selection-count {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+.selection-count strong {
+  color: var(--orange);
+}
+
+/* === Toast === */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--green);
+  color: #000;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: transform 0.3s ease;
+  z-index: 999;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* === Filter Pills === */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+.filter-pill {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--bg2);
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.filter-pill:hover {
+  border-color: var(--orange-dim);
+  color: var(--text);
+}
+.filter-pill.active {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #000;
+}
+</style>
+</head>
+<body>
+
+<div class="container" id="app"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+// === Wallet Data (embedded from wallets.json) ===
+const WALLETS = [
+  {
+    id: "phoenix", name: "Phoenix",
+    description: "Self-custodial Lightning wallet with automatic channel management. Great for everyday spending.",
+    platforms: ["ios", "android"], categories: ["lightning"], custody: "self-custodial", beginnerFriendly: true,
+    url: "https://phoenix.acinq.co",
+    appStore: "https://apps.apple.com/app/phoenix-wallet/id1544097028",
+    playStore: "https://play.google.com/store/apps/details?id=fr.acinq.phoenix.mainnet",
+    desktop: null,
+    icon: "icons/phoenix.png"
+  },
+  {
+    id: "breez", name: "Breez",
+    description: "Non-custodial Lightning wallet with a built-in podcast player and point-of-sale mode.",
+    platforms: ["ios", "android"], categories: ["lightning"], custody: "self-custodial", beginnerFriendly: true,
+    url: "https://breez.technology",
+    appStore: "https://apps.apple.com/app/breez-lightning-client-pos/id1463604142",
+    playStore: "https://play.google.com/store/apps/details?id=com.breez.client",
+    desktop: null,
+    icon: "icons/breez.png"
+  },
+  {
+    id: "zeus", name: "Zeus",
+    description: "Advanced Lightning wallet that can connect to your own node or run an embedded node on your phone.",
+    platforms: ["ios", "android"], categories: ["lightning"], custody: "self-custodial", beginnerFriendly: false,
+    url: "https://zeusln.com",
+    appStore: "https://apps.apple.com/app/zeus-ln/id1456038895",
+    playStore: "https://play.google.com/store/apps/details?id=app.zeusln.zeus",
+    desktop: null,
+    icon: "icons/zeus.png"
+  },
+  {
+    id: "muun", name: "Muun",
+    description: "Self-custodial wallet for Bitcoin and Lightning. Simple interface with 2-of-2 multisig security.",
+    platforms: ["ios", "android"], categories: ["lightning", "onchain"], custody: "self-custodial", beginnerFriendly: true,
+    url: "https://muun.com",
+    appStore: "https://apps.apple.com/app/muun-wallet/id1482037683",
+    playStore: "https://play.google.com/store/apps/details?id=io.muun.apollo",
+    desktop: null,
+    icon: "icons/muun.png"
+  },
+  {
+    id: "wos", name: "Wallet of Satoshi",
+    description: "The simplest Lightning wallet. Now self-custodial via Spark. Dead-simple for beginners.",
+    platforms: ["ios", "android"], categories: ["lightning"], custody: "self-custodial", beginnerFriendly: true,
+    url: "https://www.walletofsatoshi.com",
+    appStore: "https://apps.apple.com/app/wallet-of-satoshi/id1438599608",
+    playStore: "https://play.google.com/store/apps/details?id=com.livingroomofsatoshi.wallet",
+    desktop: null,
+    icon: "icons/wos.png"
+  },
+  {
+    id: "blixt", name: "Blixt",
+    description: "Open-source Lightning wallet that runs a full LND node on your phone. For power users who want full control.",
+    platforms: ["ios", "android"], categories: ["lightning"], custody: "self-custodial", beginnerFriendly: false,
+    url: "https://blixtwallet.github.io",
+    appStore: "https://apps.apple.com/app/blixt-wallet/id1492822055",
+    playStore: "https://play.google.com/store/apps/details?id=com.blixtwallet",
+    desktop: null,
+    icon: "icons/blixt.png"
+  },
+  {
+    id: "alby", name: "Alby",
+    description: "Browser extension for Lightning payments on the web. Tip creators and pay for content instantly.",
+    platforms: ["desktop"], categories: ["lightning"], custody: "self-custodial", beginnerFriendly: true,
+    url: "https://getalby.com",
+    appStore: null,
+    playStore: null,
+    desktop: "https://getalby.com",
+    icon: "icons/alby.png"
+  },
+  {
+    id: "blink", name: "Blink",
+    description: "Community Lightning wallet. Simple and fast for everyday payments. Funds secured with multi-sig cold storage.",
+    platforms: ["ios", "android"], categories: ["lightning"], custody: "custodial", beginnerFriendly: true,
+    url: "https://www.blink.sv",
+    appStore: "https://apps.apple.com/app/blink-bitcoin-beach-wallet/id1531383905",
+    playStore: "https://play.google.com/store/apps/details?id=com.galoyapp",
+    desktop: null,
+    icon: "icons/blink.png"
+  },
+  {
+    id: "coinos", name: "Coinos",
+    description: "Web-based Lightning wallet. No app to download — works in any browser. Great for quick onboarding.",
+    platforms: ["web"], categories: ["lightning"], custody: "custodial", beginnerFriendly: true,
+    url: "https://coinos.io",
+    appStore: null,
+    playStore: null,
+    desktop: "https://coinos.io",
+    icon: "icons/coinos.png"
+  },
+  {
+    id: "sparrow", name: "Sparrow",
+    description: "Full-featured desktop wallet for serious self-custody. Supports hardware wallets, multi-sig, and coin control.",
+    platforms: ["desktop"], categories: ["onchain", "multisig"], custody: "self-custodial", beginnerFriendly: false,
+    url: "https://sparrowwallet.com",
+    appStore: null,
+    playStore: null,
+    desktop: "https://sparrowwallet.com/download",
+    icon: "icons/sparrow.png"
+  },
+  {
+    id: "bluewallet", name: "Blue Wallet",
+    description: "Simple and beautiful Bitcoin wallet for mobile. Supports on-chain and Lightning transactions.",
+    platforms: ["ios", "android"], categories: ["onchain"], custody: "self-custodial", beginnerFriendly: true,
+    url: "https://bluewallet.io",
+    appStore: "https://apps.apple.com/app/bluewallet-bitcoin-wallet/id1376878040",
+    playStore: "https://play.google.com/store/apps/details?id=io.bluewallet.bluewallet",
+    desktop: null,
+    icon: "icons/bluewallet.png"
+  },
+  {
+    id: "nunchuk", name: "Nunchuk",
+    description: "Collaborative multi-sig wallet that makes shared custody easy. Great for families and teams.",
+    platforms: ["ios", "android", "desktop"], categories: ["onchain", "multisig"], custody: "self-custodial", beginnerFriendly: false,
+    url: "https://nunchuk.io",
+    appStore: "https://apps.apple.com/app/nunchuk-bitcoin-wallet/id1563190073",
+    playStore: "https://play.google.com/store/apps/details?id=io.nunchuk.android",
+    desktop: "https://nunchuk.io/download",
+    icon: "icons/nunchuk.png"
+  },
+  {
+    id: "green", name: "Blockstream Green",
+    description: "Well-designed wallet from Blockstream with 2FA protection, Lightning, and hardware wallet support.",
+    platforms: ["ios", "android", "desktop"], categories: ["onchain", "lightning"], custody: "self-custodial", beginnerFriendly: true,
+    url: "https://blockstream.com/green",
+    appStore: "https://apps.apple.com/app/green-bitcoin-wallet/id1402243590",
+    playStore: "https://play.google.com/store/apps/details?id=com.greenaddress.greenbits_android_wallet",
+    desktop: "https://blockstream.com/green",
+    icon: "icons/green.png"
+  },
+  {
+    id: "aqua", name: "AQUA",
+    description: "Blockstream's mobile wallet for Bitcoin, Lightning, and Liquid. Simple swaps between layers.",
+    platforms: ["ios", "android"], categories: ["onchain", "lightning"], custody: "self-custodial", beginnerFriendly: true,
+    url: "https://aquawallet.io",
+    appStore: "https://apps.apple.com/app/aqua-bitcoin-wallet/id6468594241",
+    playStore: "https://play.google.com/store/apps/details?id=io.aquawallet.android",
+    desktop: null,
+    icon: "icons/aqua.png"
+  },
+  {
+    id: "envoy", name: "Envoy",
+    description: "Beautiful companion app for Foundation Passport. Also works as a standalone mobile Bitcoin wallet.",
+    platforms: ["ios", "android"], categories: ["onchain"], custody: "self-custodial", beginnerFriendly: true,
+    url: "https://foundation.xyz/envoy",
+    appStore: "https://apps.apple.com/app/envoy-by-foundation/id1567956002",
+    playStore: "https://play.google.com/store/apps/details?id=com.foundationdevices.envoy",
+    desktop: null,
+    icon: "icons/envoy.png"
+  },
+  {
+    id: "electrum", name: "Electrum",
+    description: "The original Bitcoin desktop wallet. Lightweight, fast, and battle-tested since 2011.",
+    platforms: ["desktop"], categories: ["onchain"], custody: "self-custodial", beginnerFriendly: false,
+    url: "https://electrum.org",
+    appStore: null,
+    playStore: null,
+    desktop: "https://electrum.org/#download",
+    icon: "icons/electrum.png"
+  },
+  {
+    id: "wasabi", name: "Wasabi",
+    description: "Privacy-focused desktop wallet with built-in CoinJoin. Runs over Tor for maximum anonymity.",
+    platforms: ["desktop"], categories: ["onchain"], custody: "self-custodial", beginnerFriendly: false,
+    url: "https://wasabiwallet.io",
+    appStore: null,
+    playStore: null,
+    desktop: "https://wasabiwallet.io/#download",
+    icon: "icons/wasabi.png"
+  },
+  {
+    id: "proton", name: "Proton Wallet",
+    description: "Self-custodial Bitcoin wallet from the Proton privacy team. End-to-end encrypted with email integration.",
+    platforms: ["ios", "android", "web"], categories: ["onchain"], custody: "self-custodial", beginnerFriendly: true,
+    url: "https://proton.me/wallet",
+    appStore: "https://apps.apple.com/app/proton-wallet-bitcoin-btc/id6504000008",
+    playStore: "https://play.google.com/store/apps/details?id=me.proton.wallet.android",
+    desktop: "https://proton.me/wallet",
+    icon: "icons/proton.png"
+  },
+  {
+    id: "bullbitcoin", name: "Bull Bitcoin",
+    description: "Bitcoin-only self-custodial wallet and exchange from Canada. On-chain + Lightning via Liquid from a single seed.",
+    platforms: ["ios", "android"], categories: ["onchain", "lightning", "exchange"], custody: "self-custodial", beginnerFriendly: true,
+    url: "https://www.bullbitcoin.com",
+    appStore: "https://apps.apple.com/app/bull-bitcoin/id6743380972",
+    playStore: "https://play.google.com/store/apps/details?id=com.bullbitcoin.mobile",
+    desktop: null,
+    icon: "icons/bullbitcoin.png"
+  },
+  {
+    id: "strike", name: "Strike",
+    description: "Buy, sell, and send bitcoin with low fees. Pay with Lightning instantly. Connect your bank to start buying.",
+    platforms: ["ios", "android"], categories: ["lightning", "exchange"], custody: "custodial", beginnerFriendly: true,
+    url: "https://strike.me",
+    appStore: "https://invite.strike.me/C28AIF",
+    playStore: "https://invite.strike.me/C28AIF",
+    desktop: null,
+    icon: "icons/strike.png"
+  },
+  {
+    id: "river", name: "River",
+    description: "Bitcoin-only exchange with auto-withdrawal to self-custody. Proof of reserves. Free monthly withdrawals.",
+    platforms: ["ios", "android", "web"], categories: ["exchange"], custody: "custodial", beginnerFriendly: true,
+    url: "https://river.com",
+    appStore: "https://apps.apple.com/app/river-buy-bitcoin/id1536176542",
+    playStore: "https://play.google.com/store/apps/details?id=com.river.app",
+    desktop: "https://river.com",
+    icon: "icons/river.png"
+  },
+  {
+    id: "swan", name: "Swan Bitcoin",
+    description: "Bitcoin-only platform for automatic savings. DCA, free withdrawals, and Swan Vault collaborative multisig.",
+    platforms: ["ios", "android", "web"], categories: ["exchange", "multisig"], custody: "custodial", beginnerFriendly: true,
+    url: "https://www.swanbitcoin.com",
+    appStore: "https://apps.apple.com/app/swan-bitcoin-buy-save/id1576287352",
+    playStore: "https://play.google.com/store/apps/details?id=com.swanbitcoin.android",
+    desktop: "https://www.swanbitcoin.com",
+    icon: "icons/swan.png"
+  },
+  {
+    id: "cashapp", name: "Cash App",
+    description: "Buy bitcoin and withdraw to your own wallet anytime. Full reserve, 1:1 backing. Also a payment app.",
+    platforms: ["ios", "android"], categories: ["exchange"], custody: "custodial", beginnerFriendly: true,
+    url: "https://cash.app/bitcoin",
+    appStore: "https://apps.apple.com/app/cash-app/id711923939",
+    playStore: "https://play.google.com/store/apps/details?id=com.squareup.cash",
+    desktop: null,
+    icon: "icons/cashapp.png"
+  },
+  {
+    id: "fold", name: "Fold",
+    description: "Earn bitcoin rewards on everyday purchases. Buy bitcoin with zero fees. Debit card with sats back.",
+    platforms: ["ios", "android"], categories: ["exchange"], custody: "custodial", beginnerFriendly: true,
+    url: "https://foldapp.com",
+    appStore: "https://apps.apple.com/app/fold-bitcoin-personal-finance/id1480424785",
+    playStore: "https://play.google.com/store/apps/details?id=com.fold",
+    desktop: null,
+    icon: "icons/fold.png"
+  },
+  {
+    id: "amber", name: "Amber",
+    description: "Bitcoin-only app from Australia. Auto DCA, Lightning support, and auto-withdrawal to self-custody.",
+    platforms: ["ios", "android"], categories: ["exchange"], custody: "custodial", beginnerFriendly: true,
+    url: "https://www.amber.app",
+    appStore: "https://apps.apple.com/app/amber-bitcoin-made-easy/id1410639317",
+    playStore: "https://play.google.com/store/apps/details?id=io.getamber.app",
+    desktop: null,
+    icon: "icons/amber.png"
+  },
+  {
+    id: "coldcard", name: "Coldcard",
+    description: "Air-gapped hardware wallet for maximum security. Multiple models: compact Mk5, premium Q with full keyboard and QR camera.",
+    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", beginnerFriendly: false,
+    url: "https://coldcard.com",
+    appStore: null,
+    playStore: null,
+    desktop: null, buyUrl: "https://store.coinkite.com",
+    icon: "icons/coldcard.png"
+  },
+  {
+    id: "passport", name: "Foundation Passport Core",
+    description: "Premium air-gapped hardware wallet with open-source firmware and camera for QR signing. Models: Passport Core and Passport Prime. Bitcoin-only, uses AAA batteries.",
+    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", beginnerFriendly: false,
+    url: "https://foundation.xyz/passport",
+    appStore: null,
+    playStore: null,
+    desktop: null, buyUrl: "https://foundation.xyz/passport",
+    icon: "icons/passport.png"
+  },
+  {
+    id: "jade", name: "Blockstream Jade",
+    description: "Bitcoin hardware wallet from Blockstream. Jade Classic for affordability, Jade Plus for premium features. Works with Green and AQUA apps.",
+    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", beginnerFriendly: true,
+    url: "https://blockstream.com/jade",
+    appStore: null,
+    playStore: null,
+    desktop: null, buyUrl: "https://store.blockstream.com/product/blockstream-jade",
+    icon: "icons/jade.png"
+  },
+  {
+    id: "seedsigner", name: "SeedSigner",
+    description: "DIY air-gapped signing device built on a Raspberry Pi Zero. Fully open-source and verifiable.",
+    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", beginnerFriendly: false,
+    url: "https://seedsigner.com",
+    appStore: null,
+    playStore: null,
+    desktop: null, buyUrl: "https://seedsigner.com",
+    icon: "icons/seedsigner.png"
+  },
+  {
+    id: "krux", name: "Krux",
+    description: "Open-source signing device firmware. Build your own hardware wallet from off-the-shelf parts.",
+    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", beginnerFriendly: false,
+    url: "https://selfcustody.github.io/krux/",
+    appStore: null,
+    playStore: null,
+    desktop: null, buyUrl: "https://selfcustody.github.io/krux/parts/",
+    icon: "icons/krux.png"
+  },
+  {
+    id: "trezor", name: "Trezor",
+    description: "Trusted hardware wallet with long track record. Use Bitcoin-only firmware to strip out altcoin bloat. Models: Safe 5 (touchscreen) and Safe 3 (budget).",
+    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", beginnerFriendly: true,
+    url: "https://trezor.io",
+    appStore: null,
+    playStore: null,
+    desktop: null, buyUrl: "https://trezor.io/trezor-safe-5",
+    icon: "icons/trezor.png"
+  },
+  {
+    id: "bitbox", name: "BitBox02",
+    description: "Minimalist Swiss-made hardware wallet. Bitcoin-only edition strips everything non-essential.",
+    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", beginnerFriendly: true,
+    url: "https://shiftcrypto.ch/bitbox02",
+    appStore: null,
+    playStore: null,
+    desktop: null, buyUrl: "https://shiftcrypto.ch/bitbox02",
+    icon: "icons/bitbox.png"
+  },
+  {
+    id: "bitkey", name: "Bitkey",
+    description: "2-of-3 multisig from Block. App + hardware device + cloud recovery. Designed to make self-custody simple.",
+    platforms: ["ios", "android", "hardware"], categories: ["hardware", "multisig"], custody: "self-custodial", beginnerFriendly: true,
+    url: "https://bitkey.build",
+    appStore: "https://apps.apple.com/app/bitkey/id6451402544",
+    playStore: "https://play.google.com/store/apps/details?id=build.wallet.android",
+    desktop: null, buyUrl: "https://bitkey.build",
+    icon: "icons/bitkey.png"
+  },
+  {
+    id: "unchained", name: "Unchained",
+    description: "Collaborative multisig custody. You hold 2 of 3 keys, Unchained holds 1 for backup. Premium security service.",
+    platforms: ["web"], categories: ["multisig"], custody: "self-custodial", beginnerFriendly: false,
+    url: "https://www.unchained.com",
+    appStore: null,
+    playStore: null,
+    desktop: "https://www.unchained.com",
+    icon: "icons/unchained.png"
+  },
+  {
+    id: "fedi", name: "Fedi",
+    description: "Fedimint ecash wallet. Community-based custody with privacy. Deposit bitcoin, transact with ecash via Lightning.",
+    platforms: ["ios", "android"], categories: ["ecash"], custody: "community", beginnerFriendly: true,
+    url: "https://www.fedi.xyz",
+    appStore: "https://apps.apple.com/app/fedi-bitcoin-ecash-wallet/id6446937428",
+    playStore: "https://play.google.com/store/apps/details?id=com.fedi",
+    desktop: null,
+    icon: "icons/fedi.png"
+  },
+  {
+    id: "enuts", name: "eNuts",
+    description: "Polished Cashu ecash wallet. Private, instant Bitcoin payments. Modern design with an intuitive interface.",
+    platforms: ["ios", "android"], categories: ["ecash"], custody: "community", beginnerFriendly: true,
+    url: "https://enuts.cash",
+    appStore: "https://apps.apple.com/app/enuts-cashu-wallet/id6478895063",
+    playStore: "https://play.google.com/store/apps/details?id=com.enuts",
+    desktop: null,
+    icon: "icons/enuts.png"
+  },
+  {
+    id: "minibits", name: "Minibits",
+    description: "Android Cashu ecash wallet focused on performance. Instant, cheap, and private Bitcoin transfers.",
+    platforms: ["android"], categories: ["ecash"], custody: "community", beginnerFriendly: true,
+    url: "https://www.minibits.cash",
+    appStore: null,
+    playStore: "https://play.google.com/store/apps/details?id=com.minibits_wallet",
+    desktop: null,
+    icon: "icons/minibits.png"
+  },
+  {
+    id: "cashume", name: "Cashu.me",
+    description: "Web-based Cashu ecash wallet. No app to download — works in any browser. Quick and private.",
+    platforms: ["web"], categories: ["ecash"], custody: "community", beginnerFriendly: true,
+    url: "https://wallet.cashu.me",
+    appStore: null,
+    playStore: null,
+    desktop: "https://wallet.cashu.me",
+    icon: "icons/cashume.png"
+  },
+  {
+    id: "liana", name: "Liana",
+    description: "Bitcoin wallet with built-in recovery. Uses timelocked scripts so you never lose access. Self-custodial, multi-sig capable.",
+    platforms: ["desktop"], categories: ["onchain", "multisig"], custody: "self-custodial", beginnerFriendly: false,
+    url: "https://wizardsardine.com/liana/",
+    appStore: null,
+    playStore: null,
+    desktop: "https://wizardsardine.com/liana/",
+    icon: "icons/liana.png"
+  },
+  {
+    id: "bitcoinsafe", name: "Bitcoin Safe",
+    description: "Open-source desktop wallet focused on ease of use and security. Designed to make hardware wallet and multi-sig accessible to everyone.",
+    platforms: ["desktop"], categories: ["onchain", "multisig"], custody: "self-custodial", beginnerFriendly: true,
+    url: "https://bitcoin-safe.org",
+    appStore: null,
+    playStore: null,
+    desktop: "https://bitcoin-safe.org",
+    icon: "icons/bitcoinsafe.png"
+  },
+  {
+    id: "specter", name: "Specter Desktop",
+    description: "Privacy-focused desktop wallet with full node integration. Excellent multi-sig support and hardware wallet compatibility.",
+    platforms: ["desktop"], categories: ["onchain", "multisig"], custody: "self-custodial", beginnerFriendly: false,
+    url: "https://specter.solutions/desktop/",
+    appStore: null,
+    playStore: null,
+    desktop: "https://specter.solutions/desktop/",
+    icon: "icons/specter.png"
+  },
+  {
+    id: "tapsigner", name: "Tapsigner",
+    description: "NFC card hardware wallet from Coinkite. Tap to sign transactions — credit card sized, no battery needed.",
+    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", beginnerFriendly: true,
+    url: "https://tapsigner.com",
+    appStore: null,
+    playStore: null,
+    desktop: null, buyUrl: "https://tapsigner.com",
+    icon: "icons/tapsigner.png"
+  },
+  {
+    id: "bitcoincore", name: "Bitcoin Core",
+    description: "The reference implementation of Bitcoin. Running Core means you validate every transaction yourself — the ultimate self-sovereignty.",
+    platforms: ["desktop"], categories: ["onchain"], custody: "self-custodial", beginnerFriendly: false,
+    url: "https://bitcoin.org/en/wallets/desktop/linux/bitcoincore/",
+    appStore: null,
+    playStore: null,
+    desktop: "https://bitcoin.org/en/wallets/desktop/linux/bitcoincore/",
+    icon: "icons/bitcoincore.png"
+  },
+  {
+    id: "bitcoinknots", name: "Bitcoin Knots",
+    description: "Enhanced Bitcoin Core fork with extra features and policy options. For technically advanced users who want more control over their node.",
+    platforms: ["desktop"], categories: ["onchain"], custody: "self-custodial", beginnerFriendly: false,
+    url: "https://bitcoin.org/en/wallets/desktop/linux/bitcoinknots/",
+    appStore: null,
+    playStore: null,
+    desktop: "https://bitcoin.org/en/wallets/desktop/linux/bitcoinknots/",
+    icon: "icons/bitcoinknots.png"
+  }
+];
+
+const WALLET_MAP = {};
+WALLETS.forEach(w => WALLET_MAP[w.id] = w);
+
+// === Minimal QR Code Generator (SVG) ===
+// Based on QR Code specification — generates version 1-10 QR codes
+const QR = (() => {
+  // Galois field math for Reed-Solomon
+  const GF = 256;
+  const EXP = new Uint8Array(512);
+  const LOG = new Uint8Array(256);
+  (() => {
+    let x = 1;
+    for (let i = 0; i < 255; i++) {
+      EXP[i] = x;
+      LOG[x] = i;
+      x = (x << 1) ^ (x >= 128 ? 0x11d : 0);
+    }
+    for (let i = 255; i < 512; i++) EXP[i] = EXP[i - 255];
+  })();
+
+  function gfMul(a, b) { return a === 0 || b === 0 ? 0 : EXP[LOG[a] + LOG[b]]; }
+
+  function polyMul(a, b) {
+    const r = new Uint8Array(a.length + b.length - 1);
+    for (let i = 0; i < a.length; i++)
+      for (let j = 0; j < b.length; j++)
+        r[i + j] ^= gfMul(a[i], b[j]);
+    return r;
+  }
+
+  function rsEncode(data, ecLen) {
+    let gen = new Uint8Array([1]);
+    for (let i = 0; i < ecLen; i++)
+      gen = polyMul(gen, new Uint8Array([1, EXP[i]]));
+    const msg = new Uint8Array(data.length + ecLen);
+    msg.set(data);
+    for (let i = 0; i < data.length; i++) {
+      const coeff = msg[i];
+      if (coeff !== 0)
+        for (let j = 0; j < gen.length; j++)
+          msg[i + j] ^= gfMul(gen[j], coeff);
+    }
+    return msg.slice(data.length);
+  }
+
+  // Version/EC info
+  const EC_CODEWORDS = {
+    1: { L: 7, M: 10, Q: 13, H: 17 },
+    2: { L: 10, M: 16, Q: 22, H: 28 },
+    3: { L: 15, M: 26, Q: 18, H: 22 },
+    4: { L: 20, M: 18, Q: 26, H: 16 },
+    5: { L: 26, M: 24, Q: 18, H: 22 },
+    6: { L: 18, M: 16, Q: 24, H: 28 },
+    7: { L: 20, M: 18, Q: 18, H: 26 },
+    8: { L: 24, M: 22, Q: 22, H: 26 },
+    9: { L: 30, M: 22, Q: 20, H: 24 },
+    10: { L: 18, M: 26, Q: 24, H: 28 }
+  };
+
+  const DATA_CODEWORDS = {
+    1: { L: 19, M: 16, Q: 13, H: 9 },
+    2: { L: 34, M: 28, Q: 22, H: 16 },
+    3: { L: 55, M: 44, Q: 34, H: 26 },
+    4: { L: 80, M: 64, Q: 48, H: 36 },
+    5: { L: 108, M: 86, Q: 62, H: 46 },
+    6: { L: 136, M: 108, Q: 76, H: 60 },
+    7: { L: 156, M: 124, Q: 88, H: 66 },
+    8: { L: 194, M: 154, Q: 110, H: 86 },
+    9: { L: 232, M: 182, Q: 132, H: 100 },
+    10: { L: 274, M: 216, Q: 154, H: 122 }
+  };
+
+  // Number of EC blocks
+  const EC_BLOCKS = {
+    1: { L: 1, M: 1, Q: 1, H: 1 },
+    2: { L: 1, M: 1, Q: 1, H: 1 },
+    3: { L: 1, M: 1, Q: 1, H: 2 },
+    4: { L: 1, M: 2, Q: 2, H: 4 },
+    5: { L: 1, M: 2, Q: 2, H: 2 },
+    6: { L: 2, M: 4, Q: 4, H: 4 },
+    7: { L: 2, M: 4, Q: 2, H: 4 },
+    8: { L: 2, M: 2, Q: 4, H: 4 },
+    9: { L: 2, M: 3, Q: 4, H: 4 },
+    10: { L: 2, M: 4, Q: 6, H: 6 }
+  };
+
+  const ALIGN_POS = {
+    2: [6, 18], 3: [6, 22], 4: [6, 26], 5: [6, 30],
+    6: [6, 34], 7: [6, 22, 38], 8: [6, 24, 42], 9: [6, 26, 46], 10: [6, 28, 52]
+  };
+
+  function getVersion(text, ecl) {
+    const byteLen = new TextEncoder().encode(text).length;
+    for (let v = 1; v <= 10; v++) {
+      const charCountBits = v < 10 ? 8 : 16;
+      const availBits = DATA_CODEWORDS[v][ecl] * 8;
+      const neededBits = 4 + charCountBits + byteLen * 8;
+      if (neededBits <= availBits) return v;
+    }
+    return -1;
+  }
+
+  function encodeData(text, version, ecl) {
+    const bytes = new TextEncoder().encode(text);
+    const totalDataCW = DATA_CODEWORDS[version][ecl];
+    const charCountBits = version < 10 ? 8 : 16;
+
+    let bits = '';
+    bits += '0100';
+    bits += bytes.length.toString(2).padStart(charCountBits, '0');
+    for (const b of bytes) bits += b.toString(2).padStart(8, '0');
+    const totalBits = totalDataCW * 8;
+    const termLen = Math.min(4, totalBits - bits.length);
+    bits += '0'.repeat(termLen);
+    if (bits.length % 8 !== 0) bits += '0'.repeat(8 - (bits.length % 8));
+    const padBytes = [0xEC, 0x11];
+    let pi = 0;
+    while (bits.length < totalBits) {
+      bits += padBytes[pi % 2].toString(2).padStart(8, '0');
+      pi++;
+    }
+
+    const data = new Uint8Array(totalDataCW);
+    for (let i = 0; i < totalDataCW; i++)
+      data[i] = parseInt(bits.substr(i * 8, 8), 2);
+
+    return data;
+  }
+
+  function getCodewords(data, version, ecl) {
+    const numBlocks = EC_BLOCKS[version][ecl];
+    const ecCWPerBlock = EC_CODEWORDS[version][ecl];
+    const totalData = data.length;
+    const shortBlockLen = Math.floor(totalData / numBlocks);
+    const longBlocks = totalData % numBlocks;
+
+    const dataBlocks = [];
+    const ecBlocks = [];
+    let offset = 0;
+    for (let i = 0; i < numBlocks; i++) {
+      const len = shortBlockLen + (i >= numBlocks - longBlocks ? 1 : 0);
+      const block = data.slice(offset, offset + len);
+      dataBlocks.push(block);
+      ecBlocks.push(rsEncode(block, ecCWPerBlock));
+      offset += len;
+    }
+
+    const result = [];
+    const maxDataLen = shortBlockLen + (longBlocks > 0 ? 1 : 0);
+    for (let i = 0; i < maxDataLen; i++)
+      for (let j = 0; j < numBlocks; j++)
+        if (i < dataBlocks[j].length) result.push(dataBlocks[j][i]);
+    for (let i = 0; i < ecCWPerBlock; i++)
+      for (let j = 0; j < numBlocks; j++)
+        result.push(ecBlocks[j][i]);
+
+    return result;
+  }
+
+  function createMatrix(version) {
+    const size = version * 4 + 17;
+    const matrix = Array.from({ length: size }, () => new Uint8Array(size));
+    const reserved = Array.from({ length: size }, () => new Uint8Array(size));
+    return { matrix, reserved, size };
+  }
+
+  function placeFinderPattern(m, r, row, col) {
+    for (let dr = -1; dr <= 7; dr++) {
+      for (let dc = -1; dc <= 7; dc++) {
+        const rr = row + dr, cc = col + dc;
+        if (rr < 0 || rr >= m.size || cc < 0 || cc >= m.size) continue;
+        r[rr][cc] = 1;
+        if (dr >= 0 && dr <= 6 && dc >= 0 && dc <= 6) {
+          if (dr === 0 || dr === 6 || dc === 0 || dc === 6 ||
+              (dr >= 2 && dr <= 4 && dc >= 2 && dc <= 4))
+            m.matrix[rr][cc] = 1;
+          else
+            m.matrix[rr][cc] = 0;
+        } else {
+          m.matrix[rr][cc] = 0;
+        }
+      }
+    }
+  }
+
+  function placeAlignmentPattern(m, r, row, col) {
+    for (let dr = -2; dr <= 2; dr++) {
+      for (let dc = -2; dc <= 2; dc++) {
+        const rr = row + dr, cc = col + dc;
+        r[rr][cc] = 1;
+        if (Math.abs(dr) === 2 || Math.abs(dc) === 2 || (dr === 0 && dc === 0))
+          m.matrix[rr][cc] = 1;
+        else
+          m.matrix[rr][cc] = 0;
+      }
+    }
+  }
+
+  function placePatterns(m, version) {
+    const { matrix, reserved, size } = m;
+
+    placeFinderPattern(m, reserved, 0, 0);
+    placeFinderPattern(m, reserved, 0, size - 7);
+    placeFinderPattern(m, reserved, size - 7, 0);
+
+    if (version >= 2) {
+      const positions = ALIGN_POS[version];
+      for (const r of positions) {
+        for (const c of positions) {
+          if (reserved[r][c]) continue;
+          placeAlignmentPattern(m, reserved, r, c);
+        }
+      }
+    }
+
+    for (let i = 8; i < size - 8; i++) {
+      if (!reserved[6][i]) {
+        reserved[6][i] = 1;
+        matrix[6][i] = i % 2 === 0 ? 1 : 0;
+      }
+      if (!reserved[i][6]) {
+        reserved[i][6] = 1;
+        matrix[i][6] = i % 2 === 0 ? 1 : 0;
+      }
+    }
+
+    matrix[size - 8][8] = 1;
+    reserved[size - 8][8] = 1;
+
+    for (let i = 0; i < 8; i++) {
+      reserved[8][i] = 1;
+      reserved[8][size - 1 - i] = 1;
+      reserved[i][8] = 1;
+      reserved[size - 1 - i][8] = 1;
+    }
+    reserved[8][8] = 1;
+  }
+
+  function placeData(m, codewords) {
+    const { matrix, reserved, size } = m;
+    let bitIdx = 0;
+    const totalBits = codewords.length * 8;
+    let col = size - 1;
+    let upward = true;
+
+    while (col >= 0) {
+      if (col === 6) col--;
+      const rows = upward
+        ? Array.from({ length: size }, (_, i) => size - 1 - i)
+        : Array.from({ length: size }, (_, i) => i);
+
+      for (const row of rows) {
+        for (let c = 0; c < 2; c++) {
+          const cc = col - c;
+          if (cc < 0) continue;
+          if (reserved[row][cc]) continue;
+          if (bitIdx < totalBits) {
+            const byteIdx = bitIdx >> 3;
+            const bitPos = 7 - (bitIdx & 7);
+            matrix[row][cc] = (codewords[byteIdx] >> bitPos) & 1;
+            bitIdx++;
+          }
+        }
+      }
+      col -= 2;
+      upward = !upward;
+    }
+  }
+
+  function applyMask(m, maskId) {
+    const { matrix, reserved, size } = m;
+    const maskFn = [
+      (r, c) => (r + c) % 2 === 0,
+      (r, c) => r % 2 === 0,
+      (r, c) => c % 3 === 0,
+      (r, c) => (r + c) % 3 === 0,
+      (r, c) => (Math.floor(r / 2) + Math.floor(c / 3)) % 2 === 0,
+      (r, c) => ((r * c) % 2 + (r * c) % 3) === 0,
+      (r, c) => ((r * c) % 2 + (r * c) % 3) % 2 === 0,
+      (r, c) => ((r + c) % 2 + (r * c) % 3) % 2 === 0,
+    ][maskId];
+
+    for (let r = 0; r < size; r++)
+      for (let c = 0; c < size; c++)
+        if (!reserved[r][c] && maskFn(r, c))
+          matrix[r][c] ^= 1;
+  }
+
+  function getFormatBits(ecl, mask) {
+    const eclBits = { L: 1, M: 0, Q: 3, H: 2 }[ecl];
+    let data = (eclBits << 3) | mask;
+    let bits = data << 10;
+    let gen = 0x537;
+    for (let i = 4; i >= 0; i--) {
+      if (bits & (1 << (i + 10)))
+        bits ^= gen << i;
+    }
+    bits = ((data << 10) | bits) ^ 0x5412;
+    return bits;
+  }
+
+  function placeFormatInfo(m, ecl, mask) {
+    const { matrix, size } = m;
+    const bits = getFormatBits(ecl, mask);
+
+    const positions1 = [
+      [8, 0], [8, 1], [8, 2], [8, 3], [8, 4], [8, 5], [8, 7], [8, 8],
+      [7, 8], [5, 8], [4, 8], [3, 8], [2, 8], [1, 8], [0, 8]
+    ];
+    for (let i = 0; i < 15; i++)
+      matrix[positions1[i][0]][positions1[i][1]] = (bits >> (14 - i)) & 1;
+
+    const positions2 = [
+      [size - 1, 8], [size - 2, 8], [size - 3, 8], [size - 4, 8],
+      [size - 5, 8], [size - 6, 8], [size - 7, 8],
+      [8, size - 8], [8, size - 7], [8, size - 6], [8, size - 5],
+      [8, size - 4], [8, size - 3], [8, size - 2], [8, size - 1]
+    ];
+    for (let i = 0; i < 15; i++)
+      matrix[positions2[i][0]][positions2[i][1]] = (bits >> (14 - i)) & 1;
+  }
+
+  function penalty(matrix, size) {
+    let score = 0;
+    for (let r = 0; r < size; r++) {
+      let count = 1;
+      for (let c = 1; c < size; c++) {
+        if (matrix[r][c] === matrix[r][c - 1]) count++;
+        else { if (count >= 5) score += count - 2; count = 1; }
+      }
+      if (count >= 5) score += count - 2;
+    }
+    for (let c = 0; c < size; c++) {
+      let count = 1;
+      for (let r = 1; r < size; r++) {
+        if (matrix[r][c] === matrix[r - 1][c]) count++;
+        else { if (count >= 5) score += count - 2; count = 1; }
+      }
+      if (count >= 5) score += count - 2;
+    }
+    for (let r = 0; r < size - 1; r++)
+      for (let c = 0; c < size - 1; c++) {
+        const v = matrix[r][c];
+        if (v === matrix[r][c + 1] && v === matrix[r + 1][c] && v === matrix[r + 1][c + 1])
+          score += 3;
+      }
+    return score;
+  }
+
+  function generate(text, ecl = 'M') {
+    const version = getVersion(text, ecl);
+    if (version < 0) return null;
+
+    const data = encodeData(text, version, ecl);
+    const codewords = getCodewords(data, version, ecl);
+
+    let bestMatrix = null, bestPenalty = Infinity;
+    for (let mask = 0; mask < 8; mask++) {
+      const m = createMatrix(version);
+      placePatterns(m, version);
+      placeData(m, codewords);
+      applyMask(m, mask);
+      placeFormatInfo(m, ecl, mask);
+      const p = penalty(m.matrix, m.size);
+      if (p < bestPenalty) { bestPenalty = p; bestMatrix = m; }
+    }
+
+    return bestMatrix;
+  }
+
+  function toSVG(text, ecl = 'M', moduleSize = 4, quietZone = 4) {
+    const m = generate(text, ecl);
+    if (!m) return '<p style="color:red">URL too long for QR code</p>';
+    const { matrix, size } = m;
+    const svgSize = (size + quietZone * 2) * moduleSize;
+    let paths = '';
+    for (let r = 0; r < size; r++)
+      for (let c = 0; c < size; c++)
+        if (matrix[r][c])
+          paths += `M${(c + quietZone) * moduleSize},${(r + quietZone) * moduleSize}h${moduleSize}v${moduleSize}h-${moduleSize}z`;
+
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${svgSize} ${svgSize}" width="${svgSize}" height="${svgSize}">` +
+      `<rect width="100%" height="100%" fill="#fff"/>` +
+      `<path d="${paths}" fill="#000"/>` +
+      `</svg>`;
+  }
+
+  return { toSVG };
+})();
+
+
+// === App Logic ===
+const app = document.getElementById('app');
+let selected = new Set();
+
+const PLATFORM_ICONS = {
+  ios: '📱',
+  android: '📱',
+  desktop: '🖥️',
+  hardware: '🔒',
+  web: '🌐'
+};
+
+const CATEGORY_LABELS = {
+  lightning: { label: 'Lightning', cls: 'badge-lightning' },
+  onchain: { label: 'On-chain', cls: 'badge-onchain' },
+  hardware: { label: 'Hardware', cls: 'badge-hardware' },
+  multisig: { label: 'Multi-sig', cls: 'badge-multisig' },
+  exchange: { label: 'Exchange', cls: 'badge-exchange' },
+  ecash: { label: 'eCash', cls: 'badge-ecash' },
+  privacy: { label: 'Privacy', cls: 'badge-privacy' }
+};
+
+const PLATFORM_LABELS = {
+  ios: 'iOS',
+  android: 'Android',
+  desktop: 'Desktop',
+  hardware: 'Hardware',
+  web: 'Web'
+};
+
+function parseHash() {
+  const hash = location.hash.slice(1);
+  if (!hash) return null;
+  const params = new URLSearchParams(hash);
+  const w = params.get('w');
+  const t = params.get('t');
+  if (!w) return null;
+  return {
+    walletIds: w.split(',').filter(Boolean),
+    welcomeText: t ? safeAtob(t) : ''
+  };
+}
+
+function safeAtob(str) {
+  try { return decodeURIComponent(escape(atob(str))); } catch { return ''; }
+}
+function safeBtoa(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+function renderBadges(wallet) {
+  let html = '';
+  for (const cat of wallet.categories) {
+    const info = CATEGORY_LABELS[cat];
+    if (info) html += `<span class="badge ${info.cls}">${info.label}</span>`;
+  }
+  if (wallet.custody === 'custodial') {
+    html += `<span class="badge badge-custodial">⚠️ Custodial</span>`;
+  } else if (wallet.custody === 'community') {
+    html += `<span class="badge badge-community">🫂 Community custody</span>`;
+  } else {
+    html += `<span class="badge badge-self">🔑 Self-custody</span>`;
+  }
+  for (const p of wallet.platforms) {
+    html += `<span class="badge badge-platform">${PLATFORM_ICONS[p] || ''} ${PLATFORM_LABELS[p] || p}</span>`;
+  }
+  return html;
+}
+
+let activeFilters = new Set(['all']);
+
+function getWalletFilterTags(w) {
+  const tags = new Set();
+  for (const cat of w.categories) tags.add(cat);
+  for (const p of w.platforms) tags.add(p);
+  return tags;
+}
+
+function walletMatchesFilters(w) {
+  if (activeFilters.has('all')) return true;
+  const tags = getWalletFilterTags(w);
+  for (const f of activeFilters) {
+    if (tags.has(f)) return true;
+  }
+  return false;
+}
+
+function toggleFilter(filter) {
+  if (filter === 'all') {
+    activeFilters.clear();
+    activeFilters.add('all');
+  } else {
+    activeFilters.delete('all');
+    if (activeFilters.has(filter)) {
+      activeFilters.delete(filter);
+      if (activeFilters.size === 0) activeFilters.add('all');
+    } else {
+      activeFilters.add(filter);
+    }
+  }
+  updateFiltersAndGrid();
+}
+
+function renderFilterPills() {
+  const filters = [
+    { id: 'all', label: 'All' },
+    { id: 'lightning', label: '⚡ Lightning' },
+    { id: 'onchain', label: '🔗 On-chain' },
+    { id: 'hardware', label: '🔒 Hardware' },
+    { id: 'multisig', label: '🔐 Multi-sig' },
+    { id: 'exchange', label: '💰 Exchange' },
+    { id: 'ecash', label: '🫂 eCash' },
+
+    { id: 'ios', label: '📱 iOS' },
+    { id: 'android', label: '📱 Android' },
+    { id: 'desktop', label: '🖥️ Desktop' },
+    { id: 'web', label: '🌐 Web' },
+  ];
+  return filters.map(f =>
+    `<button class="filter-pill${activeFilters.has(f.id) ? ' active' : ''}" onclick="toggleFilter('${f.id}')">${f.label}</button>`
+  ).join('');
+}
+
+function renderWalletGrid() {
+  let html = '<div class="wallet-grid">';
+  for (const w of WALLETS) {
+    if (!walletMatchesFilters(w)) continue;
+    const sel = selected.has(w.id) ? ' selected' : '';
+    html += `
+      <div class="wallet-card${sel}" data-id="${w.id}" onclick="toggleWallet('${w.id}')">
+        <div class="check">${selected.has(w.id) ? '✓' : ''}</div>
+        <div class="wallet-card-inner">
+          ${w.icon ? `<img class="wallet-icon" src="${w.icon}" alt="${w.name}" loading="lazy">` : ''}
+          <div class="wallet-card-text">
+            <div class="wname">${w.name}</div>
+            <div class="wdesc">${w.description}</div>
+            <div class="wmeta">${renderBadges(w)}</div>
+          </div>
+        </div>
+      </div>`;
+  }
+  html += '</div>';
+  return html;
+}
+
+function updateFiltersAndGrid() {
+  const filtersEl = document.getElementById('filter-bar');
+  const gridEl = document.getElementById('wallet-grid-container');
+  if (filtersEl) filtersEl.innerHTML = renderFilterPills();
+  if (gridEl) gridEl.innerHTML = renderWalletGrid();
+}
+
+// === Builder Mode ===
+function renderBuilder() {
+  let html = `
+    <div class="header">
+      <h1><span><span style="color:var(--orange);">₿</span>itcoinWallet.Guide</span></h1>
+      <p>Select wallets to recommend, write a welcome message, generate a shareable link.</p>
+    </div>
+
+    <div class="selection-bar">
+      <span class="selection-count"><strong id="sel-count">0</strong> wallets selected</span>
+      <button class="btn btn-primary" id="gen-btn" onclick="generateLink()" disabled>Generate Link</button>
+    </div>
+
+    <div class="welcome-input">
+      <label for="welcome-text">📝 Welcome Message (shown to recipients)</label>
+      <textarea id="welcome-text" placeholder="Welcome to our Bitcoin meetup! Here are the wallets we recommend..." rows="3"></textarea>
+      <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 6px;">Tip: Add links with <code style="background: var(--bg3); padding: 1px 5px; border-radius: 3px;">[link text](https://url.com)</code></div>
+    </div>
+
+    <div class="filter-bar" id="filter-bar">${renderFilterPills()}</div>
+    <div id="wallet-grid-container">${renderWalletGrid()}</div>
+  `;
+
+  html += `
+    <div class="output-area" id="output-area">
+      <div class="url-display" id="url-display"></div>
+      <div class="url-actions">
+        <button class="btn btn-secondary" onclick="copyUrl()">📋 Copy Link</button>
+        <button class="btn btn-secondary" onclick="openPreview()">👁️ Preview</button>
+      </div>
+      <div class="char-count" id="char-count"></div>
+      <div class="qr-container" id="qr-container"></div>
+    </div>
+  `;
+
+  app.innerHTML = html;
+  updateCount();
+}
+
+function toggleWallet(id) {
+  if (selected.has(id)) selected.delete(id);
+  else selected.add(id);
+
+  const card = document.querySelector(`.wallet-card[data-id="${id}"]`);
+  if (card) {
+    card.classList.toggle('selected');
+    card.querySelector('.check').textContent = selected.has(id) ? '✓' : '';
+  }
+  updateCount();
+
+  const output = document.getElementById('output-area');
+  if (output && output.classList.contains('visible')) generateLink();
+}
+
+function updateCount() {
+  const el = document.getElementById('sel-count');
+  const btn = document.getElementById('gen-btn');
+  if (el) el.textContent = selected.size;
+  if (btn) btn.disabled = selected.size === 0;
+}
+
+let generatedUrl = '';
+
+function generateLink() {
+  const text = document.getElementById('welcome-text').value.trim();
+  const walletParam = Array.from(selected).join(',');
+  let fragment = `w=${walletParam}`;
+  if (text) fragment += `&t=${safeBtoa(text)}`;
+
+  const baseUrl = location.origin + location.pathname;
+  generatedUrl = `${baseUrl}#${fragment}`;
+
+  const output = document.getElementById('output-area');
+  const urlDisplay = document.getElementById('url-display');
+  const charCount = document.getElementById('char-count');
+  const qrContainer = document.getElementById('qr-container');
+
+  urlDisplay.textContent = generatedUrl;
+  const len = generatedUrl.length;
+  charCount.textContent = `${len} characters${len > 1000 ? ' ⚠️ URL may be too long for reliable QR scanning' : ''}`;
+  charCount.className = `char-count${len > 1000 ? ' warn' : ''}`;
+
+  qrContainer.innerHTML = QR.toSVG(generatedUrl, 'L', 3, 4);
+  output.classList.add('visible');
+
+  output.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function copyUrl() {
+  navigator.clipboard.writeText(generatedUrl).then(() => showToast('Link copied!'));
+}
+
+function openPreview() {
+  window.open(generatedUrl, '_blank');
+}
+
+
+// === Landing Mode ===
+function renderLanding(walletIds, welcomeText) {
+  const wallets = walletIds.map(id => WALLET_MAP[id]).filter(Boolean);
+
+  let html = `
+    <div class="header">
+      <h1><span><span style="color:var(--orange);">₿</span>itcoinWallet.Guide</span></h1>
+    </div>
+  `;
+
+  if (welcomeText) {
+    const links = extractLinks(welcomeText);
+    const welcomeMargin = links.length > 0 ? 'margin-bottom:0;border-bottom-left-radius:0;border-bottom-right-radius:0;' : '';
+    html += `<div class="landing-welcome" style="${welcomeMargin}"><p>${renderMarkdownLinks(welcomeText)}</p></div>`;
+    if (links.length > 0) {
+      html += `<div style="font-size:0.65rem;color:var(--text-dim);margin:-1px 0 20px;padding:4px 12px;text-align:center;">`;
+      html += `<span style="opacity:0.6;">🔗 Verify links before clicking:</span><br>`;
+      html += links.map(link => `<div style="margin:2px 0;">${escapeHtml(link.label)} → <span style="color:var(--orange);word-break:break-all;">${escapeHtml(link.url)}</span></div>`).join('');
+      html += `</div>`;
+    }
+  }
+
+  if (wallets.length === 0) {
+    html += '<p style="text-align:center;color:var(--text-dim);padding:40px 0;">No valid wallets found in this link.</p>';
+  }
+
+  for (const w of wallets) {
+    // Build download links for web platform
+    let webLink = '';
+    if (w.platforms.includes('web') && w.desktop) {
+      webLink = `<a class="download-btn" href="${w.desktop}" target="_blank">🌐 Web</a>`;
+    }
+
+    html += `
+      <div class="landing-wallet">
+        <div class="wallet-card-inner">
+          ${w.icon ? `<img class="wallet-icon wallet-icon-lg" src="${w.icon}" alt="${w.name}" loading="lazy">` : ''}
+          <div class="wallet-card-text">
+            <div class="wname">${w.name}</div>
+            <div class="wdesc">${w.description}</div>
+            <div class="wmeta">${renderBadges(w)}</div>
+          </div>
+        </div>
+        <div class="download-links">
+          ${w.appStore ? `<a class="download-btn" href="${w.appStore}" target="_blank">📱 App Store</a>` : ''}
+          ${w.playStore ? `<a class="download-btn" href="${w.playStore}" target="_blank">📱 Google Play</a>` : ''}
+          ${w.desktop && !w.platforms.includes('web') ? `<a class="download-btn" href="${w.desktop}" target="_blank">🖥️ Desktop</a>` : ''}
+          ${webLink}
+          ${w.buyUrl ? `<a class="download-btn" href="${w.buyUrl}" target="_blank">🛒 Buy</a>` : ''}
+          <a class="download-btn" href="${w.url}" target="_blank">🌐 Website</a>
+        </div>
+      </div>`;
+  }
+
+  const currentUrl = location.href;
+  html += `
+    <div style="text-align:center;margin:30px 0 10px;padding:20px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);">
+      <div style="font-size:0.85rem;color:var(--text-dim);margin-bottom:12px;">📱 Share this page — scan to open on another device</div>
+      <div class="qr-container" id="landing-qr">${QR.toSVG(currentUrl, 'L', 3, 4)}</div>
+      <div style="font-size:0.7rem;color:var(--text-dim);margin-top:8px;word-break:break-all;">${escapeHtml(currentUrl)}</div>
+    </div>
+    <div class="landing-footer">
+      <a href="${location.pathname}">← Browse All Wallets &amp; Build Your Own List</a>
+    </div>`;
+
+  app.innerHTML = html;
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function renderMarkdownLinks(text) {
+  // Convert [text](url) to <a> tags, escape everything else
+  const parts = text.split(/(\[[^\]]+\]\([^)]+\))/g);
+  return parts.map(part => {
+    const match = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+    if (match) return `<a href="${match[2]}" target="_blank">${match[1]}</a>`;
+    const div = document.createElement('div');
+    div.textContent = part;
+    return div.innerHTML;
+  }).join('');
+}
+
+function extractLinks(text) {
+  const links = [];
+  const regex = /\[([^\]]+)\]\(([^)]+)\)/g;
+  let match;
+  while ((match = regex.exec(text)) !== null) {
+    links.push({ label: match[1], url: match[2] });
+  }
+  return links;
+}
+
+
+// === Router ===
+function route() {
+  const params = parseHash();
+  if (params) {
+    renderLanding(params.walletIds, params.welcomeText);
+  } else {
+    selected.clear();
+    renderBuilder();
+  }
+}
+
+window.addEventListener('hashchange', route);
+route();
+</script>
+</body>
+</html>
