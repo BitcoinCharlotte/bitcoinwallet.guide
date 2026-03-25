@@ -1355,6 +1355,8 @@ function getWalletFilterTags(w) {
 function walletMatchesFilters(w) {
   if (activeFilters.has('all')) return true;
   const tags = getWalletFilterTags(w);
+  // Also add custody type as a filterable tag
+  tags.add(w.custody);
   for (const f of activeFilters) {
     if (tags.has(f)) return true;
   }
@@ -1386,7 +1388,8 @@ function renderFilterPills() {
     { id: 'multisig', label: '🔐 Multi-sig' },
     { id: 'exchange', label: '💰 Exchange' },
     { id: 'ecash', label: '🫂 eCash' },
-
+    { id: 'self-custodial', label: '🔑 Self-custody' },
+    { id: 'custodial', label: '🏦 Custodial' },
     { id: 'ios', label: '📱 iOS' },
     { id: 'android', label: '📱 Android' },
     { id: 'desktop', label: '🖥️ Desktop' },
@@ -1441,8 +1444,12 @@ function renderBuilder() {
 
     <div class="welcome-input">
       <label for="welcome-text">📝 Welcome Message (shown to recipients)</label>
-      <textarea id="welcome-text" placeholder="Welcome to our Bitcoin meetup! Here are the wallets we recommend..." rows="3"></textarea>
-      <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 6px;">Tip: Add links with <code style="background: var(--bg3); padding: 1px 5px; border-radius: 3px;">[link text](https://url.com)</code></div>
+      <textarea id="welcome-text" placeholder="Welcome to our Bitcoin meetup! Here are the wallets we recommend..." rows="3" maxlength="1000" oninput="updateCharCount()"></textarea>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+        <span style="font-size: 0.75rem; color: var(--text-dim);">Tip: Add links with <code style="background: var(--bg3); padding: 1px 5px; border-radius: 3px;">[link text](https://url.com)</code></span>
+        <span id="char-counter" style="font-size:0.75rem;color:var(--text-dim);">0 / 1,000</span>
+      </div>
+
     </div>
 
     <div class="filter-bar" id="filter-bar">${renderFilterPills()}</div>
@@ -1485,6 +1492,15 @@ function updateCount() {
   const btn = document.getElementById('gen-btn');
   if (el) el.textContent = selected.size;
   if (btn) btn.disabled = selected.size === 0;
+}
+
+function updateCharCount() {
+  const textarea = document.getElementById('welcome-text');
+  const counter = document.getElementById('char-counter');
+  if (!textarea || !counter) return;
+  const len = textarea.value.length;
+  counter.textContent = `${len.toLocaleString()} / 1,000`;
+  counter.style.color = len > 900 ? 'var(--red)' : len > 700 ? 'var(--orange)' : 'var(--text-dim)';
 }
 
 let generatedUrl = '';
