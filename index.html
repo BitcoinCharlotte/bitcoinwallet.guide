@@ -1297,16 +1297,23 @@ const PLATFORM_LABELS = {
   web: 'Web'
 };
 
-function parseHash() {
+async function parseHash() {
   const hash = location.hash.slice(1);
   if (!hash) return null;
   const params = new URLSearchParams(hash);
   const w = params.get('w');
-  const t = params.get('t');
   if (!w) return null;
+  const c = params.get('c');
+  const t = params.get('t');
+  let welcomeText = '';
+  if (c) {
+    welcomeText = await decompressText(c);
+  } else if (t) {
+    welcomeText = safeAtob(t);
+  }
   return {
     walletIds: w.split(',').filter(Boolean),
-    welcomeText: t ? safeAtob(t) : ''
+    welcomeText
   };
 }
 
@@ -1315,6 +1322,69 @@ function safeAtob(str) {
 }
 function safeBtoa(str) {
   return btoa(unescape(encodeURIComponent(str)));
+}
+
+// === Compression (deflate-raw via CompressionStream/DecompressionStream) ===
+function toBase64url(bytes) {
+  let s = '';
+  for (const b of bytes) s += String.fromCharCode(b);
+  return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+function fromBase64url(str) {
+  str = str.replace(/-/g, '+').replace(/_/g, '/');
+  while (str.length % 4) str += '=';
+  const bin = atob(str);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return bytes;
+}
+
+async function compressText(text) {
+  if (typeof CompressionStream === 'undefined') return null;
+  try {
+    const encoded = new TextEncoder().encode(text);
+    const cs = new CompressionStream('deflate-raw');
+    const writer = cs.writable.getWriter();
+    writer.write(encoded);
+    writer.close();
+    const reader = cs.readable.getReader();
+    const chunks = [];
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      chunks.push(value);
+    }
+    let totalLen = 0;
+    for (const c of chunks) totalLen += c.length;
+    const result = new Uint8Array(totalLen);
+    let offset = 0;
+    for (const c of chunks) { result.set(c, offset); offset += c.length; }
+    return toBase64url(result);
+  } catch { return null; }
+}
+
+async function decompressText(b64) {
+  if (typeof DecompressionStream === 'undefined') return '';
+  try {
+    const bytes = fromBase64url(b64);
+    const ds = new DecompressionStream('deflate-raw');
+    const writer = ds.writable.getWriter();
+    writer.write(bytes);
+    writer.close();
+    const reader = ds.readable.getReader();
+    const chunks = [];
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      chunks.push(value);
+    }
+    let totalLen = 0;
+    for (const c of chunks) totalLen += c.length;
+    const result = new Uint8Array(totalLen);
+    let offset = 0;
+    for (const c of chunks) { result.set(c, offset); offset += c.length; }
+    return new TextDecoder().decode(result);
+  } catch { return ''; }
 }
 
 function showToast(msg) {
@@ -1444,10 +1514,10 @@ function renderBuilder() {
 
     <div class="welcome-input">
       <label for="welcome-text">📝 Welcome Message (shown to recipients)</label>
-      <textarea id="welcome-text" placeholder="Welcome to our Bitcoin meetup! Here are the wallets we recommend..." rows="3" maxlength="1000" oninput="updateCharCount()"></textarea>
+      <textarea id="welcome-text" placeholder="Welcome to our Bitcoin meetup! Here are the wallets we recommend..." rows="3" maxlength="500" oninput="updateCharCount()"></textarea>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
         <span style="font-size: 0.75rem; color: var(--text-dim);">Tip: Add links with <code style="background: var(--bg3); padding: 1px 5px; border-radius: 3px;">[link text](https://url.com)</code></span>
-        <span id="char-counter" style="font-size:0.75rem;color:var(--text-dim);">0 / 1,000</span>
+        <span id="char-counter" style="font-size:0.75rem;color:var(--text-dim);">0 / 500</span>
       </div>
 
     </div>
@@ -1499,17 +1569,25 @@ function updateCharCount() {
   const counter = document.getElementById('char-counter');
   if (!textarea || !counter) return;
   const len = textarea.value.length;
-  counter.textContent = `${len.toLocaleString()} / 1,000`;
-  counter.style.color = len > 900 ? 'var(--red)' : len > 700 ? 'var(--orange)' : 'var(--text-dim)';
+  counter.textContent = `${len.toLocaleString()} / 500`;
+  counter.style.color = len > 450 ? 'var(--red)' : len > 400 ? 'var(--orange)' : 'var(--text-dim)';
 }
 
 let generatedUrl = '';
 
-function generateLink() {
+async function generateLink() {
   const text = document.getElementById('welcome-text').value.trim();
   const walletParam = Array.from(selected).join(',');
   let fragment = `w=${walletParam}`;
-  if (text) fragment += `&t=${safeBtoa(text)}`;
+  if (text) {
+    const compressed = await compressText(text);
+    const fallback = safeBtoa(text);
+    if (compressed && compressed.length < fallback.length) {
+      fragment += `&c=${compressed}`;
+    } else {
+      fragment += `&t=${fallback}`;
+    }
+  }
 
   const baseUrl = location.origin + location.pathname;
   generatedUrl = `${baseUrl}#${fragment}`;
@@ -1637,8 +1715,8 @@ function extractLinks(text) {
 
 
 // === Router ===
-function route() {
-  const params = parseHash();
+async function route() {
+  const params = await parseHash();
   if (params) {
     renderLanding(params.walletIds, params.welcomeText);
   } else {
