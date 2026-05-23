@@ -172,17 +172,6 @@ a:hover { text-decoration: underline; }
   border-color: var(--red);
   background: rgba(248,81,73,0.08);
   opacity: 0.55;
-  position: relative;
-}
-.wallet-card.flagged::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: var(--red);
-  border-radius: var(--radius) 0 0 var(--radius);
 }
 .wallet-card.flagged:hover { opacity: 1; }
 .wallet-card.flagged.selected { opacity: 1; border-color: var(--red); background: rgba(248,81,73,0.14); }
@@ -257,7 +246,9 @@ a:hover { text-decoration: underline; }
 
 /* === Badges === */
 .badge {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   padding: 2px 8px;
   border-radius: 20px;
   font-size: 0.72rem;
@@ -265,6 +256,9 @@ a:hover { text-decoration: underline; }
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
+.badge .lucide { width: 13px; height: 13px; flex-shrink: 0; }
+.filter-pill .lucide { width: 14px; height: 14px; flex-shrink: 0; vertical-align: -2px; }
+.download-btn .lucide { width: 14px; height: 14px; flex-shrink: 0; vertical-align: -2px; }
 .badge-lightning { background: rgba(255,210,63,0.15); color: #ffd23f; }
 .badge-onchain { background: rgba(247,147,26,0.15); color: var(--orange); }
 .badge-hardware { background: rgba(139,148,158,0.2); color: #c9d1d9; }
@@ -280,10 +274,6 @@ a:hover { text-decoration: underline; }
   background: rgba(248,81,73,0.15);
   color: var(--red);
   border: 1px solid rgba(248,81,73,0.3);
-}
-.badge-beginner {
-  background: rgba(63,185,80,0.12);
-  color: var(--green);
 }
 .badge-bitcoin-only {
   background: rgba(247,147,26,0.12);
@@ -599,7 +589,7 @@ const WALLETS = [
   {
     id: "phoenix", name: "Phoenix",
     description: "Self-custodial Lightning wallet with automatic channel management. Great for everyday spending.",
-    platforms: ["ios", "android"], categories: ["lightning"], custody: "self-custodial", beginnerFriendly: true,
+    platforms: ["ios", "android"], categories: ["lightning"], custody: "self-custodial",
     url: "https://phoenix.acinq.co",
     appStore: "https://apps.apple.com/app/phoenix-wallet/id1544097028",
     playStore: "https://play.google.com/store/apps/details?id=fr.acinq.phoenix.mainnet",
@@ -609,7 +599,7 @@ const WALLETS = [
   {
     id: "breez", name: "Breez",
     description: "Non-custodial Lightning wallet with a built-in podcast player and point-of-sale mode.",
-    platforms: ["ios", "android"], categories: ["lightning"], custody: "self-custodial", beginnerFriendly: true,
+    platforms: ["ios", "android"], categories: ["lightning"], custody: "self-custodial",
     url: "https://breez.technology",
     appStore: "https://apps.apple.com/app/breez-lightning-client-pos/id1463604142",
     playStore: "https://play.google.com/store/apps/details?id=com.breez.client",
@@ -619,7 +609,7 @@ const WALLETS = [
   {
     id: "zeus", name: "Zeus",
     description: "Advanced Lightning wallet that can connect to your own node or run an embedded node on your phone.",
-    platforms: ["ios", "android"], categories: ["lightning"], custody: "self-custodial", beginnerFriendly: false,
+    platforms: ["ios", "android"], categories: ["lightning"], custody: "self-custodial",
     url: "https://zeusln.com",
     appStore: "https://apps.apple.com/app/zeus-ln/id1456038895",
     playStore: "https://play.google.com/store/apps/details?id=app.zeusln.zeus",
@@ -629,7 +619,7 @@ const WALLETS = [
   {
     id: "muun", name: "Muun",
     description: "Self-custodial wallet for Bitcoin and Lightning. Simple interface with 2-of-2 multisig security.",
-    platforms: ["ios", "android"], categories: ["lightning", "onchain"], custody: "self-custodial", beginnerFriendly: true,
+    platforms: ["ios", "android"], categories: ["lightning", "onchain"], custody: "self-custodial",
     url: "https://muun.com",
     appStore: "https://apps.apple.com/app/muun-wallet/id1482037683",
     playStore: "https://play.google.com/store/apps/details?id=io.muun.apollo",
@@ -639,7 +629,7 @@ const WALLETS = [
   {
     id: "wos", name: "Wallet of Satoshi",
     description: "Originally a custodial Lightning wallet, now migrating users to self-custody via the Spark protocol. Dead-simple for beginners — check your version's custody model in the app.",
-    platforms: ["ios", "android"], categories: ["lightning"], custody: "self-custodial", beginnerFriendly: true,
+    platforms: ["ios", "android"], categories: ["lightning"], custody: "self-custodial",
     url: "https://www.walletofsatoshi.com",
     appStore: "https://apps.apple.com/app/wallet-of-satoshi/id1438599608",
     playStore: "https://play.google.com/store/apps/details?id=com.livingroomofsatoshi.wallet",
@@ -649,7 +639,7 @@ const WALLETS = [
   {
     id: "blixt", name: "Blixt",
     description: "Open-source Lightning wallet that runs a full LND node on your phone. For power users who want full control.",
-    platforms: ["ios", "android"], categories: ["lightning"], custody: "self-custodial", beginnerFriendly: false,
+    platforms: ["ios", "android"], categories: ["lightning"], custody: "self-custodial",
     url: "https://blixtwallet.github.io",
     appStore: "https://apps.apple.com/app/blixt-wallet/id1492822055",
     playStore: "https://play.google.com/store/apps/details?id=com.blixtwallet",
@@ -659,7 +649,7 @@ const WALLETS = [
   {
     id: "alby", name: "Alby",
     description: "Browser extension for Lightning payments on the web. Tip creators and pay for content instantly.",
-    platforms: ["desktop"], categories: ["lightning"], custody: "self-custodial", beginnerFriendly: true,
+    platforms: ["desktop"], categories: ["lightning"], custody: "self-custodial",
     url: "https://getalby.com",
     appStore: null,
     playStore: null,
@@ -669,7 +659,7 @@ const WALLETS = [
   {
     id: "blink", name: "Blink",
     description: "Community Lightning wallet. Simple and fast for everyday payments. Funds secured with multi-sig cold storage.",
-    platforms: ["ios", "android"], categories: ["lightning"], custody: "custodial", beginnerFriendly: true,
+    platforms: ["ios", "android"], categories: ["lightning"], custody: "custodial",
     url: "https://www.blink.sv",
     appStore: "https://apps.apple.com/app/blink-bitcoin-beach-wallet/id1531383905",
     playStore: "https://play.google.com/store/apps/details?id=com.galoyapp",
@@ -679,7 +669,7 @@ const WALLETS = [
   {
     id: "coinos", name: "Coinos",
     description: "Web-based Lightning wallet. No app to download — works in any browser. Great for quick onboarding.",
-    platforms: ["web"], categories: ["lightning"], custody: "custodial", beginnerFriendly: true,
+    platforms: ["web"], categories: ["lightning"], custody: "custodial",
     url: "https://coinos.io",
     appStore: null,
     playStore: null,
@@ -689,7 +679,7 @@ const WALLETS = [
   {
     id: "sparrow", name: "Sparrow",
     description: "Full-featured desktop wallet for serious self-custody. Supports hardware wallets, multi-sig, and coin control.",
-    platforms: ["desktop"], categories: ["onchain", "multisig"], custody: "self-custodial", beginnerFriendly: false,
+    platforms: ["desktop"], categories: ["onchain", "multisig"], custody: "self-custodial",
     url: "https://sparrowwallet.com",
     appStore: null,
     playStore: null,
@@ -699,7 +689,7 @@ const WALLETS = [
   {
     id: "bluewallet", name: "Blue Wallet",
     description: "Simple and beautiful Bitcoin wallet for mobile. Supports on-chain and Lightning transactions.",
-    platforms: ["ios", "android"], categories: ["onchain"], custody: "self-custodial", beginnerFriendly: true,
+    platforms: ["ios", "android"], categories: ["onchain"], custody: "self-custodial",
     url: "https://bluewallet.io",
     appStore: "https://apps.apple.com/app/bluewallet-bitcoin-wallet/id1376878040",
     playStore: "https://play.google.com/store/apps/details?id=io.bluewallet.bluewallet",
@@ -709,7 +699,7 @@ const WALLETS = [
   {
     id: "nunchuk", name: "Nunchuk",
     description: "Collaborative multi-sig wallet that makes shared custody easy. Great for families and teams.",
-    platforms: ["ios", "android", "desktop"], categories: ["onchain", "multisig"], custody: "self-custodial", beginnerFriendly: false,
+    platforms: ["ios", "android", "desktop"], categories: ["onchain", "multisig"], custody: "self-custodial",
     url: "https://nunchuk.io",
     appStore: "https://apps.apple.com/app/nunchuk-bitcoin-wallet/id1563190073",
     playStore: "https://play.google.com/store/apps/details?id=io.nunchuk.android",
@@ -719,7 +709,7 @@ const WALLETS = [
   {
     id: "green", name: "Blockstream Green",
     description: "Well-designed wallet from Blockstream with 2FA protection, Lightning, and hardware wallet support.",
-    platforms: ["ios", "android", "desktop"], categories: ["onchain", "lightning"], custody: "self-custodial", beginnerFriendly: true,
+    platforms: ["ios", "android", "desktop"], categories: ["onchain", "lightning"], custody: "self-custodial",
     url: "https://blockstream.com/green",
     appStore: "https://apps.apple.com/app/green-bitcoin-wallet/id1402243590",
     playStore: "https://play.google.com/store/apps/details?id=com.greenaddress.greenbits_android_wallet",
@@ -729,7 +719,7 @@ const WALLETS = [
   {
     id: "aqua", name: "AQUA",
     description: "Blockstream's mobile wallet for Bitcoin, Lightning, and Liquid. Simple swaps between layers.",
-    platforms: ["ios", "android"], categories: ["onchain", "lightning"], custody: "self-custodial", beginnerFriendly: true,
+    platforms: ["ios", "android"], categories: ["onchain", "lightning"], custody: "self-custodial",
     url: "https://aquawallet.io",
     appStore: "https://apps.apple.com/app/aqua-bitcoin-wallet/id6468594241",
     playStore: "https://play.google.com/store/apps/details?id=io.aquawallet.android",
@@ -739,7 +729,7 @@ const WALLETS = [
   {
     id: "envoy", name: "Envoy",
     description: "Beautiful companion app for Foundation Passport. Also works as a standalone mobile Bitcoin wallet.",
-    platforms: ["ios", "android"], categories: ["onchain"], custody: "self-custodial", beginnerFriendly: true,
+    platforms: ["ios", "android"], categories: ["onchain"], custody: "self-custodial",
     url: "https://foundation.xyz/envoy",
     appStore: "https://apps.apple.com/app/envoy-by-foundation/id1567956002",
     playStore: "https://play.google.com/store/apps/details?id=com.foundationdevices.envoy",
@@ -749,7 +739,7 @@ const WALLETS = [
   {
     id: "electrum", name: "Electrum",
     description: "The original Bitcoin desktop wallet. Lightweight, fast, and battle-tested since 2011.",
-    platforms: ["desktop"], categories: ["onchain"], custody: "self-custodial", beginnerFriendly: false,
+    platforms: ["desktop"], categories: ["onchain"], custody: "self-custodial",
     url: "https://electrum.org",
     appStore: null,
     playStore: null,
@@ -759,7 +749,7 @@ const WALLETS = [
   {
     id: "wasabi", name: "Wasabi",
     description: "Privacy-focused desktop wallet with built-in CoinJoin. Runs over Tor for maximum anonymity.",
-    platforms: ["desktop"], categories: ["onchain"], custody: "self-custodial", beginnerFriendly: false,
+    platforms: ["desktop"], categories: ["onchain"], custody: "self-custodial",
     url: "https://wasabiwallet.io",
     appStore: null,
     playStore: null,
@@ -769,7 +759,7 @@ const WALLETS = [
   {
     id: "proton", name: "Proton Wallet",
     description: "Self-custodial Bitcoin wallet from the Proton privacy team. End-to-end encrypted with email integration.",
-    platforms: ["ios", "android", "web"], categories: ["onchain"], custody: "self-custodial", beginnerFriendly: true,
+    platforms: ["ios", "android", "web"], categories: ["onchain"], custody: "self-custodial",
     url: "https://proton.me/wallet",
     appStore: "https://apps.apple.com/app/proton-wallet-bitcoin-btc/id6504000008",
     playStore: "https://play.google.com/store/apps/details?id=me.proton.wallet.android",
@@ -779,7 +769,7 @@ const WALLETS = [
   {
     id: "bullbitcoin", name: "Bull Bitcoin",
     description: "Bitcoin-only self-custodial wallet and exchange from Canada. On-chain + Lightning via Liquid from a single seed.",
-    platforms: ["ios", "android"], categories: ["onchain", "lightning", "exchange"], custody: "self-custodial", beginnerFriendly: true,
+    platforms: ["ios", "android"], categories: ["onchain", "lightning", "exchange"], custody: "self-custodial",
     url: "https://www.bullbitcoin.com",
     appStore: "https://apps.apple.com/app/bull-bitcoin/id6743380972",
     playStore: "https://play.google.com/store/apps/details?id=com.bullbitcoin.mobile",
@@ -789,7 +779,7 @@ const WALLETS = [
   {
     id: "strike", name: "Strike",
     description: "Buy, sell, and send bitcoin over Lightning. Connect a bank to start buying. US-first with expanding international coverage — feature availability varies by region.",
-    platforms: ["ios", "android"], categories: ["lightning", "exchange"], custody: "custodial", beginnerFriendly: true, bitcoinOnly: true,
+    platforms: ["ios", "android"], categories: ["lightning", "exchange"], custody: "custodial", bitcoinOnly: true,
     url: "https://strike.me",
     appStore: "https://invite.strike.me/C28AIF",
     playStore: "https://invite.strike.me/C28AIF",
@@ -799,7 +789,7 @@ const WALLETS = [
   {
     id: "river", name: "River",
     description: "Bitcoin-only exchange with auto-withdrawal to self-custody. Proof of reserves. Free monthly withdrawals.",
-    platforms: ["ios", "android", "web"], categories: ["exchange"], custody: "custodial", beginnerFriendly: true,
+    platforms: ["ios", "android", "web"], categories: ["exchange"], custody: "custodial",
     url: "https://river.com",
     appStore: "https://apps.apple.com/app/river-buy-bitcoin/id1536176542",
     playStore: "https://play.google.com/store/apps/details?id=com.river.app",
@@ -809,7 +799,7 @@ const WALLETS = [
   {
     id: "swan", name: "Swan Bitcoin",
     description: "Bitcoin-only platform for automatic savings. DCA, free withdrawals, and Swan Vault collaborative multisig.",
-    platforms: ["ios", "android", "web"], categories: ["exchange", "multisig"], custody: "custodial", beginnerFriendly: true,
+    platforms: ["ios", "android", "web"], categories: ["exchange", "multisig"], custody: "custodial",
     url: "https://www.swanbitcoin.com",
     appStore: "https://apps.apple.com/app/swan-bitcoin-buy-save/id1576287352",
     playStore: "https://play.google.com/store/apps/details?id=com.swanbitcoin.android",
@@ -819,7 +809,7 @@ const WALLETS = [
   {
     id: "cashapp", name: "Cash App",
     description: "Custodial: Cash App holds your bitcoin until you withdraw it. Withdrawals to your own wallet are supported anytime. Also a popular payments app.",
-    platforms: ["ios", "android"], categories: ["exchange"], custody: "custodial", beginnerFriendly: true, bitcoinOnly: true,
+    platforms: ["ios", "android"], categories: ["exchange"], custody: "custodial", bitcoinOnly: true,
     url: "https://cash.app/bitcoin",
     appStore: "https://apps.apple.com/app/cash-app/id711923939",
     playStore: "https://play.google.com/store/apps/details?id=com.squareup.cash",
@@ -829,7 +819,7 @@ const WALLETS = [
   {
     id: "fold", name: "Fold",
     description: "Earn bitcoin rewards on everyday purchases. Buy bitcoin with zero fees. Debit card with sats back.",
-    platforms: ["ios", "android"], categories: ["exchange"], custody: "custodial", beginnerFriendly: true,
+    platforms: ["ios", "android"], categories: ["exchange"], custody: "custodial",
     url: "https://foldapp.com",
     appStore: "https://apps.apple.com/app/fold-bitcoin-personal-finance/id1480424785",
     playStore: "https://play.google.com/store/apps/details?id=com.fold",
@@ -839,7 +829,7 @@ const WALLETS = [
   {
     id: "amber", name: "Amber",
     description: "Bitcoin-only app from Australia. Auto DCA, Lightning support, and auto-withdrawal to self-custody.",
-    platforms: ["ios", "android"], categories: ["exchange"], custody: "custodial", beginnerFriendly: true,
+    platforms: ["ios", "android"], categories: ["exchange"], custody: "custodial",
     url: "https://www.amber.app",
     appStore: "https://apps.apple.com/app/amber-bitcoin-made-easy/id1410639317",
     playStore: "https://play.google.com/store/apps/details?id=io.getamber.app",
@@ -849,7 +839,7 @@ const WALLETS = [
   {
     id: "coldcard", name: "Coldcard",
     description: "Air-gapped hardware wallet for maximum security. Multiple models: compact Mk5, premium Q with full keyboard and QR camera.",
-    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", beginnerFriendly: false,
+    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial",
     url: "https://coldcard.com",
     appStore: null,
     playStore: null,
@@ -859,7 +849,7 @@ const WALLETS = [
   {
     id: "passport", name: "Foundation Passport",
     description: "Premium air-gapped hardware wallet with open-source firmware and QR-signing camera. Two models: Passport (the original, still sold) and the newer Passport Prime. Bitcoin-only, uses AAA batteries.",
-    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", beginnerFriendly: false, bitcoinOnly: true,
+    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", bitcoinOnly: true,
     url: "https://foundation.xyz/passport",
     appStore: null,
     playStore: null,
@@ -869,7 +859,7 @@ const WALLETS = [
   {
     id: "jade", name: "Blockstream Jade",
     description: "Bitcoin hardware wallet from Blockstream. Jade Classic for affordability, Jade Plus for premium features. Works with Green and AQUA apps.",
-    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", beginnerFriendly: true,
+    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial",
     url: "https://blockstream.com/jade",
     appStore: null,
     playStore: null,
@@ -879,7 +869,7 @@ const WALLETS = [
   {
     id: "seedsigner", name: "SeedSigner",
     description: "DIY air-gapped signing device built on a Raspberry Pi Zero. Fully open-source and verifiable.",
-    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", beginnerFriendly: false,
+    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial",
     url: "https://seedsigner.com",
     appStore: null,
     playStore: null,
@@ -889,7 +879,7 @@ const WALLETS = [
   {
     id: "krux", name: "Krux",
     description: "Open-source signing device firmware. Build your own hardware wallet from off-the-shelf parts.",
-    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", beginnerFriendly: false,
+    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial",
     url: "https://selfcustody.github.io/krux/",
     appStore: null,
     playStore: null,
@@ -899,7 +889,7 @@ const WALLETS = [
   {
     id: "trezor", name: "Trezor",
     description: "Popular hardware wallet with a long track record — but supports many altcoins by default. Bitcoin-only firmware is available and recommended if you want to strip altcoin code from the device. Models: Safe 5 (touchscreen) and Safe 3 (budget).",
-    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", beginnerFriendly: true, notBitcoinOnly: true,
+    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", notBitcoinOnly: true,
     url: "https://trezor.io",
     appStore: null,
     playStore: null,
@@ -909,7 +899,7 @@ const WALLETS = [
   {
     id: "bitbox", name: "BitBox02",
     description: "Minimalist Swiss-made hardware wallet. Bitcoin-only edition strips everything non-essential.",
-    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", beginnerFriendly: true,
+    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial",
     url: "https://shiftcrypto.ch/bitbox02",
     appStore: null,
     playStore: null,
@@ -919,7 +909,7 @@ const WALLETS = [
   {
     id: "bitkey", name: "Bitkey",
     description: "2-of-3 multisig from Block. App + hardware device + cloud recovery. Designed to make self-custody simple.",
-    platforms: ["ios", "android", "hardware"], categories: ["hardware", "multisig"], custody: "self-custodial", beginnerFriendly: true,
+    platforms: ["ios", "android", "hardware"], categories: ["hardware", "multisig"], custody: "self-custodial",
     url: "https://bitkey.build",
     appStore: "https://apps.apple.com/app/bitkey/id6451402544",
     playStore: "https://play.google.com/store/apps/details?id=build.wallet.android",
@@ -929,7 +919,7 @@ const WALLETS = [
   {
     id: "unchained", name: "Unchained",
     description: "Collaborative multisig custody. You hold 2 of 3 keys, Unchained holds 1 for backup. Premium security service.",
-    platforms: ["web"], categories: ["multisig"], custody: "self-custodial", beginnerFriendly: false,
+    platforms: ["web"], categories: ["multisig"], custody: "self-custodial",
     url: "https://www.unchained.com",
     appStore: null,
     playStore: null,
@@ -939,7 +929,7 @@ const WALLETS = [
   {
     id: "fedi", name: "Fedi",
     description: "Fedimint ecash wallet. Community-based custody with privacy. Deposit bitcoin, transact with ecash via Lightning.",
-    platforms: ["ios", "android"], categories: ["ecash"], custody: "community", beginnerFriendly: true,
+    platforms: ["ios", "android"], categories: ["ecash"], custody: "community",
     url: "https://www.fedi.xyz",
     appStore: "https://apps.apple.com/app/fedi-bitcoin-ecash-wallet/id6446937428",
     playStore: "https://play.google.com/store/apps/details?id=com.fedi",
@@ -949,7 +939,7 @@ const WALLETS = [
   {
     id: "enuts", name: "eNuts",
     description: "Polished Cashu ecash wallet. Private, instant Bitcoin payments. Modern design with an intuitive interface.",
-    platforms: ["ios", "android"], categories: ["ecash"], custody: "community", beginnerFriendly: true,
+    platforms: ["ios", "android"], categories: ["ecash"], custody: "community",
     url: "https://enuts.cash",
     appStore: "https://apps.apple.com/app/enuts-cashu-wallet/id6478895063",
     playStore: "https://play.google.com/store/apps/details?id=com.enuts",
@@ -959,7 +949,7 @@ const WALLETS = [
   {
     id: "minibits", name: "Minibits",
     description: "Android Cashu ecash wallet focused on performance. Instant, cheap, and private Bitcoin transfers.",
-    platforms: ["android"], categories: ["ecash"], custody: "community", beginnerFriendly: true,
+    platforms: ["android"], categories: ["ecash"], custody: "community",
     url: "https://www.minibits.cash",
     appStore: null,
     playStore: "https://play.google.com/store/apps/details?id=com.minibits_wallet",
@@ -969,7 +959,7 @@ const WALLETS = [
   {
     id: "cashume", name: "Cashu.me",
     description: "Web-based Cashu ecash wallet. No app to download — works in any browser. Quick and private.",
-    platforms: ["web"], categories: ["ecash"], custody: "community", beginnerFriendly: true,
+    platforms: ["web"], categories: ["ecash"], custody: "community",
     url: "https://wallet.cashu.me",
     appStore: null,
     playStore: null,
@@ -979,7 +969,7 @@ const WALLETS = [
   {
     id: "liana", name: "Liana",
     description: "Bitcoin wallet with built-in recovery. Uses timelocked scripts so you never lose access. Self-custodial, multi-sig capable.",
-    platforms: ["desktop"], categories: ["onchain", "multisig"], custody: "self-custodial", beginnerFriendly: false,
+    platforms: ["desktop"], categories: ["onchain", "multisig"], custody: "self-custodial",
     url: "https://wizardsardine.com/liana/",
     appStore: null,
     playStore: null,
@@ -989,7 +979,7 @@ const WALLETS = [
   {
     id: "bitcoinsafe", name: "Bitcoin Safe",
     description: "Open-source desktop wallet focused on ease of use and security. Designed to make hardware wallet and multi-sig accessible to everyone.",
-    platforms: ["desktop"], categories: ["onchain", "multisig"], custody: "self-custodial", beginnerFriendly: true,
+    platforms: ["desktop"], categories: ["onchain", "multisig"], custody: "self-custodial",
     url: "https://bitcoin-safe.org",
     appStore: null,
     playStore: null,
@@ -999,7 +989,7 @@ const WALLETS = [
   {
     id: "specter", name: "Specter Desktop",
     description: "Privacy-focused desktop wallet with full node integration. Excellent multi-sig support and hardware wallet compatibility.",
-    platforms: ["desktop"], categories: ["onchain", "multisig"], custody: "self-custodial", beginnerFriendly: false,
+    platforms: ["desktop"], categories: ["onchain", "multisig"], custody: "self-custodial",
     url: "https://specter.solutions/desktop/",
     appStore: null,
     playStore: null,
@@ -1009,7 +999,7 @@ const WALLETS = [
   {
     id: "tapsigner", name: "Tapsigner",
     description: "NFC card hardware wallet from Coinkite. Tap to sign transactions — credit card sized, no battery needed.",
-    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", beginnerFriendly: true,
+    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial",
     url: "https://tapsigner.com",
     appStore: null,
     playStore: null,
@@ -1019,7 +1009,7 @@ const WALLETS = [
   {
     id: "bitcoincore", name: "Bitcoin Core",
     description: "The reference implementation of Bitcoin. Running Core means you validate every transaction yourself — the ultimate self-sovereignty.",
-    platforms: ["desktop"], categories: ["onchain"], custody: "self-custodial", beginnerFriendly: false,
+    platforms: ["desktop"], categories: ["onchain"], custody: "self-custodial",
     url: "https://bitcoin.org/en/wallets/desktop/linux/bitcoincore/",
     appStore: null,
     playStore: null,
@@ -1029,7 +1019,7 @@ const WALLETS = [
   {
     id: "bitcoinknots", name: "Bitcoin Knots",
     description: "Enhanced Bitcoin Core fork with extra features and policy options. For technically advanced users who want more control over their node.",
-    platforms: ["desktop"], categories: ["onchain"], custody: "self-custodial", beginnerFriendly: false,
+    platforms: ["desktop"], categories: ["onchain"], custody: "self-custodial",
     url: "https://bitcoin.org/en/wallets/desktop/linux/bitcoinknots/",
     appStore: null,
     playStore: null,
@@ -1039,7 +1029,7 @@ const WALLETS = [
   {
     id: "bitcoinkeeper", name: "Bitcoin Keeper",
     description: "Bitcoin-only mobile wallet from BitHyve that makes multi-sig accessible. Supports hot wallets, hardware wallets, and inheritance planning with key recovery flows.",
-    platforms: ["ios", "android"], categories: ["onchain", "multisig"], custody: "self-custodial", beginnerFriendly: true, bitcoinOnly: true,
+    platforms: ["ios", "android"], categories: ["onchain", "multisig"], custody: "self-custodial", bitcoinOnly: true,
     url: "https://bitcoinkeeper.app",
     appStore: "https://apps.apple.com/app/bitcoin-keeper/id1545535925",
     playStore: "https://play.google.com/store/apps/details?id=io.hexawallet.bitcoinkeeper",
@@ -1049,7 +1039,7 @@ const WALLETS = [
   {
     id: "theya", name: "Theya",
     description: "Mobile-first Bitcoin multisig wallet. Self-custodial 2-of-3 with hardware wallet support and optional collaborative recovery. Bitcoin-only.",
-    platforms: ["ios", "android"], categories: ["onchain", "multisig"], custody: "self-custodial", beginnerFriendly: true, bitcoinOnly: true,
+    platforms: ["ios", "android"], categories: ["onchain", "multisig"], custody: "self-custodial", bitcoinOnly: true,
     url: "https://theya.us",
     appStore: "https://apps.apple.com/app/theya-bitcoin-vault/id6469734162",
     playStore: "https://play.google.com/store/apps/details?id=us.theya.android",
@@ -1059,7 +1049,7 @@ const WALLETS = [
   {
     id: "bitkit", name: "Bitkit",
     description: "Self-custodial Lightning + on-chain wallet from Synonym. Separates savings (on-chain) and spending (Lightning) into two visually distinct accounts. Built on LDK, open source, Bitcoin-only.",
-    platforms: ["ios", "android"], categories: ["lightning", "onchain"], custody: "self-custodial", beginnerFriendly: true, bitcoinOnly: true,
+    platforms: ["ios", "android"], categories: ["lightning", "onchain"], custody: "self-custodial", bitcoinOnly: true,
     url: "https://bitkit.to",
     appStore: "https://apps.apple.com/app/bitkit-wallet/id6502440655",
     playStore: "https://play.google.com/store/apps/details?id=to.bitkit",
@@ -1069,7 +1059,7 @@ const WALLETS = [
   {
     id: "casa", name: "Casa",
     description: "Collaborative multisig custody service. Premium plans for 2-of-3 and 3-of-5 vaults with concierge support and inheritance planning. Supports Bitcoin and other assets — choose Bitcoin-only setups carefully.",
-    platforms: ["ios", "android", "web"], categories: ["multisig"], custody: "self-custodial", beginnerFriendly: false, notBitcoinOnly: true,
+    platforms: ["ios", "android", "web"], categories: ["multisig"], custody: "self-custodial", notBitcoinOnly: true,
     url: "https://casa.io",
     appStore: "https://apps.apple.com/app/casa-secure-bitcoin-storage/id1300262378",
     playStore: "https://play.google.com/store/apps/details?id=io.casa.casaclient",
@@ -1079,7 +1069,7 @@ const WALLETS = [
   {
     id: "ledger", name: "Ledger",
     description: "The most popular hardware wallet brand. Supports many cryptocurrencies, not just Bitcoin. Closed-source secure element and the optional Ledger Recover service (which can extract encrypted seed shards from the device with firmware approval) are major reasons many Bitcoiners avoid Ledger. Listed here for awareness — research carefully before choosing.",
-    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", beginnerFriendly: true, notBitcoinOnly: true,
+    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", notBitcoinOnly: true,
     url: "https://www.ledger.com",
     appStore: null,
     playStore: null,
@@ -1089,7 +1079,7 @@ const WALLETS = [
   {
     id: "coinbase", name: "Coinbase",
     description: "Major US exchange. Supports many cryptocurrencies, not just Bitcoin. Custodial — Coinbase holds the keys until you withdraw to your own wallet. Listed for awareness because it's so widely used; not a self-custody recommendation.",
-    platforms: ["ios", "android", "web"], categories: ["exchange"], custody: "custodial", beginnerFriendly: true, notBitcoinOnly: true,
+    platforms: ["ios", "android", "web"], categories: ["exchange"], custody: "custodial", notBitcoinOnly: true,
     url: "https://www.coinbase.com",
     appStore: "https://apps.apple.com/app/coinbase-buy-bitcoin-ether/id886427730",
     playStore: "https://play.google.com/store/apps/details?id=com.coinbase.android",
@@ -1493,22 +1483,48 @@ const QR = (() => {
 const app = document.getElementById('app');
 let selected = new Set();
 
+// Lucide icon registry — inline SVG bodies (geometry only).
+// Color inherits from the parent's CSS `color` via stroke="currentColor", so each badge gets its tag color automatically.
+const LUCIDE = {
+  'zap': `<path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />`,
+  'link': `<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />`,
+  'cpu': `<path d="M12 20v2" /><path d="M12 2v2" /><path d="M17 20v2" /><path d="M17 2v2" /><path d="M2 12h2" /><path d="M2 17h2" /><path d="M2 7h2" /><path d="M20 12h2" /><path d="M20 17h2" /><path d="M20 7h2" /><path d="M7 20v2" /><path d="M7 2v2" /><rect x="4" y="4" width="16" height="16" rx="2" /><rect x="8" y="8" width="8" height="8" rx="1" />`,
+  'shield-check': `<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" />`,
+  'arrow-left-right': `<path d="M8 3 4 7l4 4" /><path d="M4 7h16" /><path d="m16 21 4-4-4-4" /><path d="M20 17H4" />`,
+  'users': `<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><path d="M16 3.128a4 4 0 0 1 0 7.744" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><circle cx="9" cy="7" r="4" />`,
+  'key': `<path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4" /><path d="m21 2-9.6 9.6" /><circle cx="7.5" cy="15.5" r="5.5" />`,
+  'landmark': `<path d="M10 18v-7" /><path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z" /><path d="M14 18v-7" /><path d="M18 18v-7" /><path d="M3 22h18" /><path d="M6 18v-7" />`,
+  'bitcoin': `<path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893-3.94-.694m5.155-6.2L8.29 4.26m5.908 1.042.348-1.97M7.48 20.364l3.126-17.727" />`,
+  'smartphone': `<rect width="14" height="20" x="5" y="2" rx="2" ry="2" /><path d="M12 18h.01" />`,
+  'monitor': `<rect width="20" height="14" x="2" y="3" rx="2" /><line x1="8" x2="16" y1="21" y2="21" /><line x1="12" x2="12" y1="17" y2="21" />`,
+  'globe': `<circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" />`,
+  'triangle-alert': `<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /><path d="M12 9v4" /><path d="M12 17h.01" />`,
+  'eye': `<path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" /><circle cx="12" cy="12" r="3" />`,
+  'shopping-cart': `<circle cx="8" cy="21" r="1" /><circle cx="19" cy="21" r="1" /><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />`,
+  'clipboard': `<rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />`,
+};
+function icon(name) {
+  const body = LUCIDE[name];
+  if (!body) return '';
+  return `<svg class="lucide" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${body}</svg>`;
+}
+
 const PLATFORM_ICONS = {
-  ios: '📱',
-  android: '📱',
-  desktop: '🖥️',
-  hardware: '🔒',
-  web: '🌐'
+  ios: 'smartphone',
+  android: 'smartphone',
+  desktop: 'monitor',
+  hardware: 'cpu',
+  web: 'globe'
 };
 
 const CATEGORY_LABELS = {
-  lightning: { label: 'Lightning', cls: 'badge-lightning' },
-  onchain: { label: 'On-chain', cls: 'badge-onchain' },
-  hardware: { label: 'Hardware', cls: 'badge-hardware' },
-  multisig: { label: 'Multi-sig', cls: 'badge-multisig' },
-  exchange: { label: 'Exchange', cls: 'badge-exchange' },
-  ecash: { label: 'eCash', cls: 'badge-ecash' },
-  privacy: { label: 'Privacy', cls: 'badge-privacy' }
+  lightning: { label: 'Lightning', cls: 'badge-lightning', icon: 'zap' },
+  onchain: { label: 'On-chain', cls: 'badge-onchain', icon: 'link' },
+  hardware: { label: 'Hardware', cls: 'badge-hardware', icon: 'cpu' },
+  multisig: { label: 'Multi-sig', cls: 'badge-multisig', icon: 'shield-check' },
+  exchange: { label: 'Exchange', cls: 'badge-exchange', icon: 'arrow-left-right' },
+  ecash: { label: 'eCash', cls: 'badge-ecash', icon: 'users' },
+  privacy: { label: 'Privacy', cls: 'badge-privacy', icon: 'shield-check' }
 };
 
 const PLATFORM_LABELS = {
@@ -1620,27 +1636,26 @@ function renderBadges(wallet) {
   let html = '';
   // 🚩 Lead with the warning if this isn't Bitcoin-only — we want it impossible to miss
   if (wallet.notBitcoinOnly) {
-    html += `<span class="badge badge-not-btc-only">⚠️ Not Bitcoin-only</span>`;
+    html += `<span class="badge badge-not-btc-only">${icon('triangle-alert')} Not Bitcoin-only</span>`;
   }
   for (const cat of wallet.categories) {
     const info = CATEGORY_LABELS[cat];
-    if (info) html += `<span class="badge ${info.cls}">${info.label}</span>`;
+    if (info) html += `<span class="badge ${info.cls}">${icon(info.icon)} ${info.label}</span>`;
   }
   if (wallet.custody === 'custodial') {
-    html += `<span class="badge badge-custodial">⚠️ Custodial</span>`;
+    html += `<span class="badge badge-custodial">${icon('landmark')} Custodial</span>`;
   } else if (wallet.custody === 'community') {
-    html += `<span class="badge badge-community">🫂 Community custody</span>`;
+    html += `<span class="badge badge-community">${icon('users')} Community custody</span>`;
   } else {
-    html += `<span class="badge badge-self">🔑 Self-custody</span>`;
+    html += `<span class="badge badge-self">${icon('key')} Self-custody</span>`;
   }
   if (wallet.bitcoinOnly) {
-    html += `<span class="badge badge-bitcoin-only">₿ Bitcoin-only</span>`;
-  }
-  if (wallet.beginnerFriendly) {
-    html += `<span class="badge badge-beginner">🌱 Beginner-friendly</span>`;
+    html += `<span class="badge badge-bitcoin-only">${icon('bitcoin')} Bitcoin-only</span>`;
   }
   for (const p of wallet.platforms) {
-    html += `<span class="badge badge-platform">${PLATFORM_ICONS[p] || ''} ${PLATFORM_LABELS[p] || p}</span>`;
+    // 'hardware' is already shown via the category badge — don't duplicate as a platform tag.
+    if (p === 'hardware') continue;
+    html += `<span class="badge badge-platform">${icon(PLATFORM_ICONS[p])} ${PLATFORM_LABELS[p] || p}</span>`;
   }
   return html;
 }
@@ -1687,19 +1702,19 @@ function toggleFilter(filter) {
 function renderFilterPills() {
   const filters = [
     { id: 'all', label: 'All' },
-    { id: 'lightning', label: '⚡ Lightning' },
-    { id: 'onchain', label: '🔗 On-chain' },
-    { id: 'hardware', label: '🔒 Hardware' },
-    { id: 'multisig', label: '🔐 Multi-sig' },
-    { id: 'exchange', label: '💰 Exchange' },
-    { id: 'ecash', label: '🫂 eCash' },
-    { id: 'self-custodial', label: '🔑 Self-custody' },
-    { id: 'custodial', label: '🏦 Custodial' },
-    { id: 'bitcoin-only', label: '₿ Bitcoin-only' },
-    { id: 'ios', label: '📱 iOS' },
-    { id: 'android', label: '📱 Android' },
-    { id: 'desktop', label: '🖥️ Desktop' },
-    { id: 'web', label: '🌐 Web' },
+    { id: 'lightning', label: `${icon('zap')} Lightning` },
+    { id: 'onchain', label: `${icon('link')} On-chain` },
+    { id: 'hardware', label: `${icon('cpu')} Hardware` },
+    { id: 'multisig', label: `${icon('shield-check')} Multi-sig` },
+    { id: 'exchange', label: `${icon('arrow-left-right')} Exchange` },
+    { id: 'ecash', label: `${icon('users')} eCash` },
+    { id: 'self-custodial', label: `${icon('key')} Self-custody` },
+    { id: 'custodial', label: `${icon('landmark')} Custodial` },
+    { id: 'bitcoin-only', label: `${icon('bitcoin')} Bitcoin-only` },
+    { id: 'ios', label: `${icon('smartphone')} iOS` },
+    { id: 'android', label: `${icon('smartphone')} Android` },
+    { id: 'desktop', label: `${icon('monitor')} Desktop` },
+    { id: 'web', label: `${icon('globe')} Web` },
   ];
   return filters.map(f =>
     `<button class="filter-pill${activeFilters.has(f.id) ? ' active' : ''}" onclick="toggleFilter('${f.id}')">${f.label}</button>`
@@ -1708,7 +1723,13 @@ function renderFilterPills() {
 
 function renderWalletGrid() {
   let html = '<div class="wallet-grid">';
-  for (const w of WALLETS) {
+  // Flagged (non-Bitcoin-only) wallets always sort to the bottom, preserving original order within each group.
+  const ordered = WALLETS.slice().sort((a, b) => {
+    const af = a.notBitcoinOnly ? 1 : 0;
+    const bf = b.notBitcoinOnly ? 1 : 0;
+    return af - bf;
+  });
+  for (const w of ordered) {
     if (!walletMatchesFilters(w)) continue;
     const sel = selected.has(w.id) ? ' selected' : '';
     const flag = w.notBitcoinOnly ? ' flagged' : '';
@@ -1767,8 +1788,8 @@ function renderBuilder() {
     <div class="output-area" id="output-area">
       <div class="url-display" id="url-display"></div>
       <div class="url-actions">
-        <button class="btn btn-secondary" onclick="copyUrl()">📋 Copy Link</button>
-        <button class="btn btn-secondary" onclick="openPreview()">👁️ Preview</button>
+        <button class="btn btn-secondary" onclick="copyUrl()">${icon('clipboard')} Copy Link</button>
+        <button class="btn btn-secondary" onclick="openPreview()">${icon('eye')} Preview</button>
       </div>
       <div class="char-count" id="char-count"></div>
       <div class="qr-container" id="qr-container"></div>
@@ -1870,7 +1891,7 @@ function renderLanding(walletIds, welcomeText) {
     html += `<div class="landing-welcome" style="${welcomeMargin}"><p>${renderMarkdownLinks(welcomeText)}</p></div>`;
     if (links.length > 0) {
       html += `<div style="font-size:0.65rem;color:var(--text-dim);margin:-1px 0 20px;padding:4px 12px;text-align:center;">`;
-      html += `<span style="opacity:0.6;">🔗 Verify links before clicking:</span><br>`;
+      html += `<span style="opacity:0.6;">${icon('link')} Verify links before clicking:</span><br>`;
       html += links.map(link => `<div style="margin:2px 0;">${escapeHtml(link.label)} → <span style="color:var(--orange);word-break:break-all;">${escapeHtml(link.url)}</span></div>`).join('');
       html += `</div>`;
     }
@@ -1884,7 +1905,7 @@ function renderLanding(walletIds, welcomeText) {
     // Build download links for web platform
     let webLink = '';
     if (w.platforms.includes('web') && w.desktop) {
-      webLink = `<a class="download-btn" href="${w.desktop}" target="_blank">🌐 Web</a>`;
+      webLink = `<a class="download-btn" href="${w.desktop}" target="_blank">${icon('globe')} Web</a>`;
     }
 
     html += `
@@ -1898,12 +1919,12 @@ function renderLanding(walletIds, welcomeText) {
           </div>
         </div>
         <div class="download-links">
-          ${w.appStore ? `<a class="download-btn" href="${w.appStore}" target="_blank">📱 App Store</a>` : ''}
-          ${w.playStore ? `<a class="download-btn" href="${w.playStore}" target="_blank">📱 Google Play</a>` : ''}
-          ${w.desktop && !w.platforms.includes('web') ? `<a class="download-btn" href="${w.desktop}" target="_blank">🖥️ Desktop</a>` : ''}
+          ${w.appStore ? `<a class="download-btn" href="${w.appStore}" target="_blank">${icon('smartphone')} App Store</a>` : ''}
+          ${w.playStore ? `<a class="download-btn" href="${w.playStore}" target="_blank">${icon('smartphone')} Google Play</a>` : ''}
+          ${w.desktop && !w.platforms.includes('web') ? `<a class="download-btn" href="${w.desktop}" target="_blank">${icon('monitor')} Desktop</a>` : ''}
           ${webLink}
-          ${w.buyUrl ? `<a class="download-btn" href="${w.buyUrl}" target="_blank">🛒 Buy</a>` : ''}
-          <a class="download-btn" href="${w.url}" target="_blank">🌐 Website</a>
+          ${w.buyUrl ? `<a class="download-btn" href="${w.buyUrl}" target="_blank">${icon('shopping-cart')} Buy</a>` : ''}
+          <a class="download-btn" href="${w.url}" target="_blank">${icon('globe')} Website</a>
         </div>
       </div>`;
   }
@@ -1911,7 +1932,7 @@ function renderLanding(walletIds, welcomeText) {
   const currentUrl = location.href;
   html += `
     <div style="text-align:center;margin:30px 0 10px;padding:20px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);">
-      <div style="font-size:0.85rem;color:var(--text-dim);margin-bottom:12px;">📱 Share this page — scan to open on another device</div>
+      <div style="font-size:0.85rem;color:var(--text-dim);margin-bottom:12px;">${icon('smartphone')} Share this page — scan to open on another device</div>
       <div class="qr-container" id="landing-qr">${QR.toSVG(currentUrl, 'L', 3, 4)}</div>
       <div style="font-size:0.7rem;color:var(--text-dim);margin-top:8px;word-break:break-all;">${escapeHtml(currentUrl)}</div>
     </div>
