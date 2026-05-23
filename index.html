@@ -64,6 +64,7 @@
   --text-dim: #8b949e;
   --green: #3fb950;
   --red: #f85149;
+  --yellow: #e3b341;
   --radius: 10px;
 }
 
@@ -182,6 +183,20 @@ a:hover { text-decoration: underline; }
   font-size: 0.85em;
   vertical-align: 1px;
 }
+.wallet-card.cautioned {
+  border-color: var(--yellow);
+  background: rgba(227,179,65,0.07);
+  opacity: 0.75;
+}
+.wallet-card.cautioned:hover { opacity: 1; }
+.wallet-card.cautioned.selected { opacity: 1; border-color: var(--yellow); background: rgba(227,179,65,0.14); }
+.wallet-card.cautioned .wname::after {
+  content: '⚠';
+  margin-left: 6px;
+  color: var(--yellow);
+  font-size: 0.85em;
+  vertical-align: 1px;
+}
 .wallet-card .check {
   position: absolute;
   top: 12px;
@@ -274,6 +289,11 @@ a:hover { text-decoration: underline; }
   background: rgba(248,81,73,0.15);
   color: var(--red);
   border: 1px solid rgba(248,81,73,0.3);
+}
+.badge-caution {
+  background: rgba(227,179,65,0.15);
+  color: var(--yellow);
+  border: 1px solid rgba(227,179,65,0.3);
 }
 .badge-bitcoin-only {
   background: rgba(247,147,26,0.12);
@@ -1059,7 +1079,7 @@ const WALLETS = [
   {
     id: "casa", name: "Casa",
     description: "Collaborative multisig custody service. Premium plans for 2-of-3 and 3-of-5 vaults with concierge support and inheritance planning. Supports Bitcoin and other assets — choose Bitcoin-only setups carefully.",
-    platforms: ["ios", "android", "web"], categories: ["multisig"], custody: "self-custodial", notBitcoinOnly: true,
+    platforms: ["ios", "android", "web"], categories: ["multisig"], custody: "self-custodial", caution: true,
     url: "https://casa.io",
     appStore: "https://apps.apple.com/app/casa-secure-bitcoin-storage/id1300262378",
     playStore: "https://play.google.com/store/apps/details?id=io.casa.casaclient",
@@ -1637,6 +1657,8 @@ function renderBadges(wallet) {
   // 🚩 Lead with the warning if this isn't Bitcoin-only — we want it impossible to miss
   if (wallet.notBitcoinOnly) {
     html += `<span class="badge badge-not-btc-only">${icon('triangle-alert')} Not Bitcoin-only</span>`;
+  } else if (wallet.caution) {
+    html += `<span class="badge badge-caution">${icon('triangle-alert')} Vet carefully</span>`;
   }
   for (const cat of wallet.categories) {
     const info = CATEGORY_LABELS[cat];
@@ -1667,8 +1689,8 @@ function getWalletFilterTags(w) {
   for (const cat of w.categories) tags.add(cat);
   for (const p of w.platforms) tags.add(p);
   // Synthesize a `bitcoin-only` tag for filtering: include wallets explicitly marked Bitcoin-only
-  // AND exclude anything flagged notBitcoinOnly.
-  if (w.bitcoinOnly && !w.notBitcoinOnly) tags.add('bitcoin-only');
+  // AND exclude anything with a warning flag (notBitcoinOnly or caution).
+  if (w.bitcoinOnly && !w.notBitcoinOnly && !w.caution) tags.add('bitcoin-only');
   return tags;
 }
 
@@ -1723,16 +1745,13 @@ function renderFilterPills() {
 
 function renderWalletGrid() {
   let html = '<div class="wallet-grid">';
-  // Flagged (non-Bitcoin-only) wallets always sort to the bottom, preserving original order within each group.
-  const ordered = WALLETS.slice().sort((a, b) => {
-    const af = a.notBitcoinOnly ? 1 : 0;
-    const bf = b.notBitcoinOnly ? 1 : 0;
-    return af - bf;
-  });
+  // Sort order: clean (0) → cautioned (1) → flagged (2). Preserves original order within each group.
+  const tier = w => w.notBitcoinOnly ? 2 : (w.caution ? 1 : 0);
+  const ordered = WALLETS.slice().sort((a, b) => tier(a) - tier(b));
   for (const w of ordered) {
     if (!walletMatchesFilters(w)) continue;
     const sel = selected.has(w.id) ? ' selected' : '';
-    const flag = w.notBitcoinOnly ? ' flagged' : '';
+    const flag = w.notBitcoinOnly ? ' flagged' : (w.caution ? ' cautioned' : '');
     html += `
       <div class="wallet-card${sel}${flag}" data-id="${w.id}" onclick="toggleWallet('${w.id}')">
         <div class="check">${selected.has(w.id) ? '✓' : ''}</div>
