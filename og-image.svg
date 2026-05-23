@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#161b22"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.18" cy="0.5" r="0.55">
+      <stop offset="0%" stop-color="#F7931A" stop-opacity="0.18"/>
+      <stop offset="60%" stop-color="#F7931A" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#F7931A" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- Big ₿ glyph -->
+  <text x="195" y="395" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+        font-weight="700" font-size="360" fill="#F7931A" text-anchor="middle">₿</text>
+
+  <!-- Wordmark -->
+  <text x="370" y="280" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+        font-weight="700" font-size="64" fill="#e6edf3">BitcoinWallet.Guide</text>
+
+  <!-- Tagline -->
+  <text x="370" y="340" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+        font-weight="500" font-size="30" fill="#8b949e">The Bitcoin onboarding toolkit</text>
+  <text x="370" y="380" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+        font-weight="500" font-size="30" fill="#8b949e">for meetup organizers and educators.</text>
+
+  <!-- Feature pills with colored dot indicators (no emojis — they don't render in SVG without emoji fonts) -->
+  <g transform="translate(370, 440)" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="20" font-weight="600">
+    <!-- Pill 1: 40+ wallets -->
+    <rect x="0" y="0" width="180" height="48" rx="24" fill="#1c2129" stroke="#30363d" stroke-width="1.5"/>
+    <circle cx="26" cy="24" r="6" fill="#F7931A"/>
+    <text x="44" y="32" fill="#e6edf3">40+ wallets</text>
+
+    <!-- Pill 2: Self-custody -->
+    <rect x="198" y="0" width="200" height="48" rx="24" fill="#1c2129" stroke="#30363d" stroke-width="1.5"/>
+    <circle cx="224" cy="24" r="6" fill="#3fb950"/>
+    <text x="242" y="32" fill="#e6edf3">Self-custody first</text>
+
+    <!-- Pill 3: No tracking -->
+    <rect x="416" y="0" width="170" height="48" rx="24" fill="#1c2129" stroke="#30363d" stroke-width="1.5"/>
+    <circle cx="442" cy="24" r="6" fill="#f85149"/>
+    <text x="460" y="32" fill="#e6edf3">No tracking</text>
+  </g>
+
+  <!-- Bottom: domain -->
+  <text x="600" y="585" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="22" font-weight="600"
+        fill="#6e7681" text-anchor="middle">bitcoinwallet.guide</text>
+</svg>

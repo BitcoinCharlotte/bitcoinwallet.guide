@@ -3,7 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>₿itcoinWallet.Guide</title>
+<title>BitcoinWallet.Guide — The Bitcoin Onboarding Toolkit</title>
+<meta name="description" content="The Bitcoin onboarding toolkit for meetup organizers and educators. Generate custom wallet recommendation pages today — flyers, stickers, and printables coming soon.">
+<meta name="theme-color" content="#0d1117">
+<meta name="color-scheme" content="dark">
+<link rel="canonical" href="https://bitcoinwallet.guide/">
+
+<!-- Favicon: inline SVG, Bitcoin orange ₿ on dark -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230d1117'/%3E%3Ctext x='32' y='48' text-anchor='middle' font-family='-apple-system,system-ui,Segoe UI,Roboto,sans-serif' font-weight='700' font-size='46' fill='%23F7931A'%3E%E2%82%BF%3C/text%3E%3C/svg%3E">
+
+<!-- Open Graph (Facebook, Signal, Matrix, iMessage, Discord) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bitcoinwallet.guide/">
+<meta property="og:site_name" content="BitcoinWallet.Guide">
+<meta property="og:title" content="BitcoinWallet.Guide — The Bitcoin Onboarding Toolkit">
+<meta property="og:description" content="The Bitcoin onboarding toolkit for meetup organizers and educators. Generate custom wallet recommendation pages today — flyers, stickers, and printables coming soon.">
+<meta property="og:image" content="https://bitcoinwallet.guide/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="BitcoinWallet.Guide — The Bitcoin onboarding toolkit for meetup organizers and educators.">
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="BitcoinWallet.Guide — The Bitcoin Onboarding Toolkit">
+<meta name="twitter:description" content="The Bitcoin onboarding toolkit for meetup organizers and educators. Generate custom wallet recommendation pages today — flyers, stickers, and printables coming soon.">
+<meta name="twitter:image" content="https://bitcoinwallet.guide/og-image.png">
+<meta name="twitter:image:alt" content="BitcoinWallet.Guide — The Bitcoin onboarding toolkit for meetup organizers and educators.">
+
+<!-- JSON-LD structured data for search engines -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "BitcoinWallet.Guide",
+  "url": "https://bitcoinwallet.guide/",
+  "description": "The Bitcoin onboarding toolkit for meetup organizers and educators. Generate custom wallet recommendation pages today — flyers, stickers, and printables coming soon.",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any (web browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "creator": {
+    "@type": "Organization",
+    "name": "Bitcoin Charlotte",
+    "url": "https://bitcoincharlotte.org"
+  },
+  "isAccessibleForFree": true
+}
+</script>
 <style>
 /* === Reset & Base === */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -123,6 +168,31 @@ a:hover { text-decoration: underline; }
 }
 .wallet-card:hover { border-color: var(--orange-dim); background: var(--bg3); }
 .wallet-card.selected { border-color: var(--orange); background: rgba(247,147,26,0.08); }
+.wallet-card.flagged {
+  border-color: var(--red);
+  background: rgba(248,81,73,0.08);
+  opacity: 0.55;
+  position: relative;
+}
+.wallet-card.flagged::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--red);
+  border-radius: var(--radius) 0 0 var(--radius);
+}
+.wallet-card.flagged:hover { opacity: 1; }
+.wallet-card.flagged.selected { opacity: 1; border-color: var(--red); background: rgba(248,81,73,0.14); }
+.wallet-card.flagged .wname::after {
+  content: '⚠';
+  margin-left: 6px;
+  color: var(--red);
+  font-size: 0.85em;
+  vertical-align: 1px;
+}
 .wallet-card .check {
   position: absolute;
   top: 12px;
@@ -206,6 +276,19 @@ a:hover { text-decoration: underline; }
 .badge-self { background: rgba(63,185,80,0.1); color: var(--green); }
 .badge-community { background: rgba(168,85,247,0.15); color: #a855f7; }
 .badge-platform { background: rgba(139,148,158,0.12); color: var(--text-dim); }
+.badge-not-btc-only {
+  background: rgba(248,81,73,0.15);
+  color: var(--red);
+  border: 1px solid rgba(248,81,73,0.3);
+}
+.badge-beginner {
+  background: rgba(63,185,80,0.12);
+  color: var(--green);
+}
+.badge-bitcoin-only {
+  background: rgba(247,147,26,0.12);
+  color: var(--orange);
+}
 
 /* === Generate Area === */
 .generate-area {
@@ -396,6 +479,47 @@ a:hover { text-decoration: underline; }
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
+/* === Site Footer === */
+.site-footer {
+  border-top: 1px solid var(--border);
+  background: var(--bg2);
+  margin-top: 60px;
+  padding: 32px 20px;
+  text-align: center;
+}
+.footer-inner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+.footer-inner p {
+  color: var(--text-dim);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin: 0;
+}
+.footer-inner p + p { margin-top: 10px; }
+.footer-disclaimer {
+  font-size: 0.75rem !important;
+  opacity: 0.7;
+}
+.site-footer a {
+  color: var(--orange);
+  text-decoration: none;
+  font-weight: 500;
+}
+.site-footer a:hover { text-decoration: underline; }
+.footer-version {
+  margin-top: 14px !important;
+  font-size: 0.7rem !important;
+  opacity: 0.55;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  letter-spacing: 0.02em;
+}
+.footer-version a {
+  color: var(--text-dim) !important;
+  font-weight: 400 !important;
+}
+
 /* === Filter Pills === */
 .filter-bar {
   display: flex;
@@ -430,6 +554,44 @@ a:hover { text-decoration: underline; }
 
 <div class="container" id="app"></div>
 <div class="toast" id="toast"></div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>
+      Built by <a href="https://bitcoincharlotte.org" target="_blank" rel="noopener">Bitcoin Charlotte</a>
+      &middot; <a href="https://github.com/BitcoinCharlotte/bitcoinwallet.guide" target="_blank" rel="noopener">Source on GitHub</a>
+      &middot; MIT licensed &middot; No tracking
+    </p>
+    <p class="footer-disclaimer">
+      Wallet info is for educational purposes — always verify before downloading.
+      Listed wallets are independent third-party software; we are not affiliated with any of them.
+    </p>
+    <p class="footer-version">
+      <a id="version-link" href="https://github.com/BitcoinCharlotte/bitcoinwallet.guide" target="_blank" rel="noopener" title="View this version on GitHub">
+        <span id="version-commit">···</span>
+      </a>
+    </p>
+  </div>
+</footer>
+
+<script>
+// Footer: load build version (commit hash + date) from version.json
+(async () => {
+  try {
+    const r = await fetch('version.json', { cache: 'no-store' });
+    if (!r.ok) return;
+    const v = await r.json();
+    if (!v.commit) return;
+    const el = document.getElementById('version-commit');
+    const link = document.getElementById('version-link');
+    const d = v.date ? new Date(v.date) : null;
+    const ds = d && !isNaN(d) ? d.toISOString().slice(0, 10) : '';
+    el.textContent = ds ? `${v.commit} · ${ds}` : v.commit;
+    link.href = `https://github.com/BitcoinCharlotte/bitcoinwallet.guide/commit/${v.commit}`;
+    link.title = `View commit ${v.commit} on GitHub`;
+  } catch (_) { /* silent — footer just won't show version */ }
+})();
+</script>
 
 <script>
 // === Wallet Data (embedded from wallets.json) ===
@@ -476,7 +638,7 @@ const WALLETS = [
   },
   {
     id: "wos", name: "Wallet of Satoshi",
-    description: "The simplest Lightning wallet. Now self-custodial via Spark. Dead-simple for beginners.",
+    description: "Originally a custodial Lightning wallet, now migrating users to self-custody via the Spark protocol. Dead-simple for beginners — check your version's custody model in the app.",
     platforms: ["ios", "android"], categories: ["lightning"], custody: "self-custodial", beginnerFriendly: true,
     url: "https://www.walletofsatoshi.com",
     appStore: "https://apps.apple.com/app/wallet-of-satoshi/id1438599608",
@@ -626,8 +788,8 @@ const WALLETS = [
   },
   {
     id: "strike", name: "Strike",
-    description: "Buy, sell, and send bitcoin with low fees. Pay with Lightning instantly. Connect your bank to start buying.",
-    platforms: ["ios", "android"], categories: ["lightning", "exchange"], custody: "custodial", beginnerFriendly: true,
+    description: "Buy, sell, and send bitcoin over Lightning. Connect a bank to start buying. US-first with expanding international coverage — feature availability varies by region.",
+    platforms: ["ios", "android"], categories: ["lightning", "exchange"], custody: "custodial", beginnerFriendly: true, bitcoinOnly: true,
     url: "https://strike.me",
     appStore: "https://invite.strike.me/C28AIF",
     playStore: "https://invite.strike.me/C28AIF",
@@ -656,8 +818,8 @@ const WALLETS = [
   },
   {
     id: "cashapp", name: "Cash App",
-    description: "Buy bitcoin and withdraw to your own wallet anytime. Full reserve, 1:1 backing. Also a payment app.",
-    platforms: ["ios", "android"], categories: ["exchange"], custody: "custodial", beginnerFriendly: true,
+    description: "Custodial: Cash App holds your bitcoin until you withdraw it. Withdrawals to your own wallet are supported anytime. Also a popular payments app.",
+    platforms: ["ios", "android"], categories: ["exchange"], custody: "custodial", beginnerFriendly: true, bitcoinOnly: true,
     url: "https://cash.app/bitcoin",
     appStore: "https://apps.apple.com/app/cash-app/id711923939",
     playStore: "https://play.google.com/store/apps/details?id=com.squareup.cash",
@@ -695,9 +857,9 @@ const WALLETS = [
     icon: "icons/coldcard.png"
   },
   {
-    id: "passport", name: "Foundation Passport Core",
-    description: "Premium air-gapped hardware wallet with open-source firmware and camera for QR signing. Models: Passport Core and Passport Prime. Bitcoin-only, uses AAA batteries.",
-    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", beginnerFriendly: false,
+    id: "passport", name: "Foundation Passport",
+    description: "Premium air-gapped hardware wallet with open-source firmware and QR-signing camera. Two models: Passport (the original, still sold) and the newer Passport Prime. Bitcoin-only, uses AAA batteries.",
+    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", beginnerFriendly: false, bitcoinOnly: true,
     url: "https://foundation.xyz/passport",
     appStore: null,
     playStore: null,
@@ -736,8 +898,8 @@ const WALLETS = [
   },
   {
     id: "trezor", name: "Trezor",
-    description: "Trusted hardware wallet with long track record. Use Bitcoin-only firmware to strip out altcoin bloat. Models: Safe 5 (touchscreen) and Safe 3 (budget).",
-    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", beginnerFriendly: true,
+    description: "Popular hardware wallet with a long track record — but supports many altcoins by default. Bitcoin-only firmware is available and recommended if you want to strip altcoin code from the device. Models: Safe 5 (touchscreen) and Safe 3 (budget).",
+    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", beginnerFriendly: true, notBitcoinOnly: true,
     url: "https://trezor.io",
     appStore: null,
     playStore: null,
@@ -873,6 +1035,66 @@ const WALLETS = [
     playStore: null,
     desktop: "https://bitcoin.org/en/wallets/desktop/linux/bitcoinknots/",
     icon: "icons/bitcoinknots.png"
+  },
+  {
+    id: "bitcoinkeeper", name: "Bitcoin Keeper",
+    description: "Bitcoin-only mobile wallet from BitHyve that makes multi-sig accessible. Supports hot wallets, hardware wallets, and inheritance planning with key recovery flows.",
+    platforms: ["ios", "android"], categories: ["onchain", "multisig"], custody: "self-custodial", beginnerFriendly: true, bitcoinOnly: true,
+    url: "https://bitcoinkeeper.app",
+    appStore: "https://apps.apple.com/app/bitcoin-keeper/id1545535925",
+    playStore: "https://play.google.com/store/apps/details?id=io.hexawallet.bitcoinkeeper",
+    desktop: null,
+    icon: "icons/bitcoinkeeper.png"
+  },
+  {
+    id: "theya", name: "Theya",
+    description: "Mobile-first Bitcoin multisig wallet. Self-custodial 2-of-3 with hardware wallet support and optional collaborative recovery. Bitcoin-only.",
+    platforms: ["ios", "android"], categories: ["onchain", "multisig"], custody: "self-custodial", beginnerFriendly: true, bitcoinOnly: true,
+    url: "https://theya.us",
+    appStore: "https://apps.apple.com/app/theya-bitcoin-vault/id6469734162",
+    playStore: "https://play.google.com/store/apps/details?id=us.theya.android",
+    desktop: null,
+    icon: "icons/theya.png"
+  },
+  {
+    id: "bitkit", name: "Bitkit",
+    description: "Self-custodial Lightning + on-chain wallet from Synonym. Separates savings (on-chain) and spending (Lightning) into two visually distinct accounts. Built on LDK, open source, Bitcoin-only.",
+    platforms: ["ios", "android"], categories: ["lightning", "onchain"], custody: "self-custodial", beginnerFriendly: true, bitcoinOnly: true,
+    url: "https://bitkit.to",
+    appStore: "https://apps.apple.com/app/bitkit-wallet/id6502440655",
+    playStore: "https://play.google.com/store/apps/details?id=to.bitkit",
+    desktop: null,
+    icon: "icons/bitkit.png"
+  },
+  {
+    id: "casa", name: "Casa",
+    description: "Collaborative multisig custody service. Premium plans for 2-of-3 and 3-of-5 vaults with concierge support and inheritance planning. Supports Bitcoin and other assets — choose Bitcoin-only setups carefully.",
+    platforms: ["ios", "android", "web"], categories: ["multisig"], custody: "self-custodial", beginnerFriendly: false, notBitcoinOnly: true,
+    url: "https://casa.io",
+    appStore: "https://apps.apple.com/app/casa-secure-bitcoin-storage/id1300262378",
+    playStore: "https://play.google.com/store/apps/details?id=io.casa.casaclient",
+    desktop: "https://app.casa.io",
+    icon: "icons/casa.png"
+  },
+  {
+    id: "ledger", name: "Ledger",
+    description: "The most popular hardware wallet brand. Supports many cryptocurrencies, not just Bitcoin. Closed-source secure element and the optional Ledger Recover service (which can extract encrypted seed shards from the device with firmware approval) are major reasons many Bitcoiners avoid Ledger. Listed here for awareness — research carefully before choosing.",
+    platforms: ["hardware"], categories: ["hardware"], custody: "self-custodial", beginnerFriendly: true, notBitcoinOnly: true,
+    url: "https://www.ledger.com",
+    appStore: null,
+    playStore: null,
+    desktop: null, buyUrl: "https://shop.ledger.com",
+    icon: "icons/ledger.png"
+  },
+  {
+    id: "coinbase", name: "Coinbase",
+    description: "Major US exchange. Supports many cryptocurrencies, not just Bitcoin. Custodial — Coinbase holds the keys until you withdraw to your own wallet. Listed for awareness because it's so widely used; not a self-custody recommendation.",
+    platforms: ["ios", "android", "web"], categories: ["exchange"], custody: "custodial", beginnerFriendly: true, notBitcoinOnly: true,
+    url: "https://www.coinbase.com",
+    appStore: "https://apps.apple.com/app/coinbase-buy-bitcoin-ether/id886427730",
+    playStore: "https://play.google.com/store/apps/details?id=com.coinbase.android",
+    desktop: "https://www.coinbase.com",
+    icon: "icons/coinbase.png"
   }
 ];
 
@@ -1396,6 +1618,10 @@ function showToast(msg) {
 
 function renderBadges(wallet) {
   let html = '';
+  // 🚩 Lead with the warning if this isn't Bitcoin-only — we want it impossible to miss
+  if (wallet.notBitcoinOnly) {
+    html += `<span class="badge badge-not-btc-only">⚠️ Not Bitcoin-only</span>`;
+  }
   for (const cat of wallet.categories) {
     const info = CATEGORY_LABELS[cat];
     if (info) html += `<span class="badge ${info.cls}">${info.label}</span>`;
@@ -1406,6 +1632,12 @@ function renderBadges(wallet) {
     html += `<span class="badge badge-community">🫂 Community custody</span>`;
   } else {
     html += `<span class="badge badge-self">🔑 Self-custody</span>`;
+  }
+  if (wallet.bitcoinOnly) {
+    html += `<span class="badge badge-bitcoin-only">₿ Bitcoin-only</span>`;
+  }
+  if (wallet.beginnerFriendly) {
+    html += `<span class="badge badge-beginner">🌱 Beginner-friendly</span>`;
   }
   for (const p of wallet.platforms) {
     html += `<span class="badge badge-platform">${PLATFORM_ICONS[p] || ''} ${PLATFORM_LABELS[p] || p}</span>`;
@@ -1419,6 +1651,9 @@ function getWalletFilterTags(w) {
   const tags = new Set();
   for (const cat of w.categories) tags.add(cat);
   for (const p of w.platforms) tags.add(p);
+  // Synthesize a `bitcoin-only` tag for filtering: include wallets explicitly marked Bitcoin-only
+  // AND exclude anything flagged notBitcoinOnly.
+  if (w.bitcoinOnly && !w.notBitcoinOnly) tags.add('bitcoin-only');
   return tags;
 }
 
@@ -1460,6 +1695,7 @@ function renderFilterPills() {
     { id: 'ecash', label: '🫂 eCash' },
     { id: 'self-custodial', label: '🔑 Self-custody' },
     { id: 'custodial', label: '🏦 Custodial' },
+    { id: 'bitcoin-only', label: '₿ Bitcoin-only' },
     { id: 'ios', label: '📱 iOS' },
     { id: 'android', label: '📱 Android' },
     { id: 'desktop', label: '🖥️ Desktop' },
@@ -1475,8 +1711,9 @@ function renderWalletGrid() {
   for (const w of WALLETS) {
     if (!walletMatchesFilters(w)) continue;
     const sel = selected.has(w.id) ? ' selected' : '';
+    const flag = w.notBitcoinOnly ? ' flagged' : '';
     html += `
-      <div class="wallet-card${sel}" data-id="${w.id}" onclick="toggleWallet('${w.id}')">
+      <div class="wallet-card${sel}${flag}" data-id="${w.id}" onclick="toggleWallet('${w.id}')">
         <div class="check">${selected.has(w.id) ? '✓' : ''}</div>
         <div class="wallet-card-inner">
           ${w.icon ? `<img class="wallet-icon" src="${w.icon}" alt="${w.name}" loading="lazy">` : ''}
@@ -1504,7 +1741,7 @@ function renderBuilder() {
   let html = `
     <div class="header">
       <h1><span><span style="color:var(--orange);">₿</span>itcoinWallet.Guide</span></h1>
-      <p>Select wallets to recommend, write a welcome message, generate a shareable link.</p>
+      <p>The Bitcoin onboarding toolkit for meetup organizers and educators. Pick wallets, write a welcome message, share a custom page.</p>
     </div>
 
     <div class="selection-bar">
