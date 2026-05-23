@@ -38,6 +38,25 @@ python3 -m http.server 8000
 
 No build step, no dependencies, no toolchain. The whole app lives in `index.html` — HTML, CSS, JavaScript, the wallet database, and inline Lucide SVG icons. Edit, refresh, ship.
 
+## Development & publish workflow
+
+This repo is mirrored across two remotes:
+
+| Remote | URL | Purpose |
+|---|---|---|
+| `origin` | Gitea (private TTMF instance) | Source of truth. All commits land here first. |
+| `github` | github.com/BitcoinCharlotte/bitcoinwallet.guide | Public mirror. Pushes here trigger a GitHub Pages deploy to https://bitcoinwallet.guide/ |
+
+**The flow:**
+
+1. Edit `index.html` (or whatever) → `git add` → `git commit`.
+2. `git push` → goes to Gitea only. Test against your local preview server at `http://127.0.0.1:8766/` (or wherever you're serving).
+3. When you're confident, run `./scripts/publish.sh` → promotes the same commit to GitHub. Pages auto-deploys in ~30 seconds.
+
+The publish script has safety checks: it refuses to publish if the working tree isn't clean, if local `main` is ahead of Gitea (untested), or if the push would require a force-push (i.e. GitHub has commits Gitea doesn't — investigate first).
+
+This setup keeps "iterate fast" (push to Gitea, no public exposure) separate from "publish to the world" (an explicit, deliberate action).
+
 ## Project layout
 
 ```
@@ -49,6 +68,9 @@ No build step, no dependencies, no toolchain. The whole app lives in `index.html
 ├── 404.html          # Branded "page not found" page
 ├── og-image.png      # Open Graph social-share image
 ├── version.json      # Footer commit hash for "this site is from commit X" verification
+├── scripts/
+│   ├── bump-version.sh   # Updates version.json with current HEAD commit hash
+│   └── publish.sh        # Promotes Gitea state to GitHub Pages (the live site)
 ├── LICENSE           # MIT
 └── README.md
 ```
