@@ -290,11 +290,6 @@ a:hover { text-decoration: underline; }
   color: var(--red);
   border: 1px solid rgba(248,81,73,0.3);
 }
-.badge-caution {
-  background: rgba(227,179,65,0.15);
-  color: var(--yellow);
-  border: 1px solid rgba(227,179,65,0.3);
-}
 .badge-bitcoin-only {
   background: rgba(247,147,26,0.12);
   color: var(--orange);
@@ -1654,11 +1649,10 @@ function showToast(msg) {
 
 function renderBadges(wallet) {
   let html = '';
-  // 🚩 Lead with the warning if this isn't Bitcoin-only — we want it impossible to miss
-  if (wallet.notBitcoinOnly) {
+  // 🚩 Lead with the warning — red "Not Bitcoin-only" badge whenever the wallet supports non-BTC assets,
+  // regardless of caution tier. Caution tier changes the card chrome (yellow border) but not the badge.
+  if (wallet.notBitcoinOnly || wallet.caution) {
     html += `<span class="badge badge-not-btc-only">${icon('triangle-alert')} Not Bitcoin-only</span>`;
-  } else if (wallet.caution) {
-    html += `<span class="badge badge-caution">${icon('triangle-alert')} Vet carefully</span>`;
   }
   for (const cat of wallet.categories) {
     const info = CATEGORY_LABELS[cat];
