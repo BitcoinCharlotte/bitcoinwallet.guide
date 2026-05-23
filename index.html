@@ -515,6 +515,58 @@ a:hover { text-decoration: underline; }
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
+/* === Share URL row (landing page) === */
+.share-url-row {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  margin-top: 12px;
+  max-width: 100%;
+}
+.share-url-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: block;
+  padding: 8px 12px;
+  background: var(--bg1);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  text-align: left;
+  user-select: all;
+  transition: border-color 0.15s, color 0.15s;
+}
+.share-url-text:hover {
+  border-color: var(--orange);
+  color: var(--text);
+}
+.share-url-copy {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--bg3);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.share-url-copy:hover {
+  background: var(--bg1);
+  border-color: var(--orange);
+}
+.share-url-copy .lucide { width: 14px; height: 14px; }
+
 /* === Site Footer === */
 .site-footer {
   border-top: 1px solid var(--border);
@@ -1573,6 +1625,11 @@ function copyUrl() {
   navigator.clipboard.writeText(generatedUrl).then(() => showToast('Link copied!'));
 }
 
+function copyShareUrl() {
+  // Used on landing pages — copies the current page URL (which includes the encoded hash).
+  navigator.clipboard.writeText(location.href).then(() => showToast('Link copied!'));
+}
+
 function openPreview() {
   window.open(generatedUrl, '_blank');
 }
@@ -1637,7 +1694,10 @@ function renderLanding(walletIds, welcomeText) {
     <div style="text-align:center;margin:30px 0 10px;padding:20px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);">
       <div style="font-size:0.85rem;color:var(--text-dim);margin-bottom:12px;">${icon('smartphone')} Share this page — scan to open on another device</div>
       <div class="qr-container" id="landing-qr">${QR.toSVG(currentUrl, 'L', 3, 4)}</div>
-      <div style="font-size:0.7rem;color:var(--text-dim);margin-top:8px;word-break:break-all;">${escapeHtml(currentUrl)}</div>
+      <div class="share-url-row">
+        <button class="share-url-text" type="button" onclick="copyShareUrl()" title="${escapeHtml(currentUrl)}">${escapeHtml(currentUrl)}</button>
+        <button class="share-url-copy" type="button" onclick="copyShareUrl()" aria-label="Copy share link">${icon('clipboard')} Copy</button>
+      </div>
     </div>
     <div class="landing-footer">
       <a href="${location.pathname}">← Browse All Wallets &amp; Build Your Own List</a>
