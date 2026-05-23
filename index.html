@@ -634,6 +634,8 @@ a:hover { text-decoration: underline; }
 })();
 </script>
 
+<script src="lib/qrcodegen.min.js"></script>
+
 <script>
 // === Wallet Data (embedded from wallets.json) ===
 const WALLETS = [
@@ -1142,385 +1144,40 @@ const WALLETS = [
 const WALLET_MAP = {};
 WALLETS.forEach(w => WALLET_MAP[w.id] = w);
 
-// === Minimal QR Code Generator (SVG) ===
-// Based on QR Code specification — generates version 1-10 QR codes
+// === QR Code Generator (using Nayuki's qrcodegen library, MIT licensed) ===
+// Library: lib/qrcodegen.min.js — supports QR versions 1-40 (up to ~2.9KB byte mode).
+// API: qrcodegen.QrCode.encodeText(text, errCorLvl)
+// We expose a `QR.toSVG(text, ecl, moduleSize, quietZone)` shim so existing call sites stay unchanged.
 const QR = (() => {
-  // Galois field math for Reed-Solomon
-  const GF = 256;
-  const EXP = new Uint8Array(512);
-  const LOG = new Uint8Array(256);
-  (() => {
-    let x = 1;
-    for (let i = 0; i < 255; i++) {
-      EXP[i] = x;
-      LOG[x] = i;
-      x = (x << 1) ^ (x >= 128 ? 0x11d : 0);
-    }
-    for (let i = 255; i < 512; i++) EXP[i] = EXP[i - 255];
-  })();
-
-  function gfMul(a, b) { return a === 0 || b === 0 ? 0 : EXP[LOG[a] + LOG[b]]; }
-
-  function polyMul(a, b) {
-    const r = new Uint8Array(a.length + b.length - 1);
-    for (let i = 0; i < a.length; i++)
-      for (let j = 0; j < b.length; j++)
-        r[i + j] ^= gfMul(a[i], b[j]);
-    return r;
-  }
-
-  function rsEncode(data, ecLen) {
-    let gen = new Uint8Array([1]);
-    for (let i = 0; i < ecLen; i++)
-      gen = polyMul(gen, new Uint8Array([1, EXP[i]]));
-    const msg = new Uint8Array(data.length + ecLen);
-    msg.set(data);
-    for (let i = 0; i < data.length; i++) {
-      const coeff = msg[i];
-      if (coeff !== 0)
-        for (let j = 0; j < gen.length; j++)
-          msg[i + j] ^= gfMul(gen[j], coeff);
-    }
-    return msg.slice(data.length);
-  }
-
-  // Version/EC info
-  const EC_CODEWORDS = {
-    1: { L: 7, M: 10, Q: 13, H: 17 },
-    2: { L: 10, M: 16, Q: 22, H: 28 },
-    3: { L: 15, M: 26, Q: 18, H: 22 },
-    4: { L: 20, M: 18, Q: 26, H: 16 },
-    5: { L: 26, M: 24, Q: 18, H: 22 },
-    6: { L: 18, M: 16, Q: 24, H: 28 },
-    7: { L: 20, M: 18, Q: 18, H: 26 },
-    8: { L: 24, M: 22, Q: 22, H: 26 },
-    9: { L: 30, M: 22, Q: 20, H: 24 },
-    10: { L: 18, M: 26, Q: 24, H: 28 }
+  const ECL_MAP = {
+    'L': qrcodegen.QrCode.Ecc.LOW,
+    'M': qrcodegen.QrCode.Ecc.MEDIUM,
+    'Q': qrcodegen.QrCode.Ecc.QUARTILE,
+    'H': qrcodegen.QrCode.Ecc.HIGH
   };
 
-  const DATA_CODEWORDS = {
-    1: { L: 19, M: 16, Q: 13, H: 9 },
-    2: { L: 34, M: 28, Q: 22, H: 16 },
-    3: { L: 55, M: 44, Q: 34, H: 26 },
-    4: { L: 80, M: 64, Q: 48, H: 36 },
-    5: { L: 108, M: 86, Q: 62, H: 46 },
-    6: { L: 136, M: 108, Q: 76, H: 60 },
-    7: { L: 156, M: 124, Q: 88, H: 66 },
-    8: { L: 194, M: 154, Q: 110, H: 86 },
-    9: { L: 232, M: 182, Q: 132, H: 100 },
-    10: { L: 274, M: 216, Q: 154, H: 122 }
-  };
-
-  // Number of EC blocks
-  const EC_BLOCKS = {
-    1: { L: 1, M: 1, Q: 1, H: 1 },
-    2: { L: 1, M: 1, Q: 1, H: 1 },
-    3: { L: 1, M: 1, Q: 1, H: 2 },
-    4: { L: 1, M: 2, Q: 2, H: 4 },
-    5: { L: 1, M: 2, Q: 2, H: 2 },
-    6: { L: 2, M: 4, Q: 4, H: 4 },
-    7: { L: 2, M: 4, Q: 2, H: 4 },
-    8: { L: 2, M: 2, Q: 4, H: 4 },
-    9: { L: 2, M: 3, Q: 4, H: 4 },
-    10: { L: 2, M: 4, Q: 6, H: 6 }
-  };
-
-  const ALIGN_POS = {
-    2: [6, 18], 3: [6, 22], 4: [6, 26], 5: [6, 30],
-    6: [6, 34], 7: [6, 22, 38], 8: [6, 24, 42], 9: [6, 26, 46], 10: [6, 28, 52]
-  };
-
-  function getVersion(text, ecl) {
-    const byteLen = new TextEncoder().encode(text).length;
-    for (let v = 1; v <= 10; v++) {
-      const charCountBits = v < 10 ? 8 : 16;
-      const availBits = DATA_CODEWORDS[v][ecl] * 8;
-      const neededBits = 4 + charCountBits + byteLen * 8;
-      if (neededBits <= availBits) return v;
+  // Build an SVG matching the previous output shape so existing CSS/sizing keeps working.
+  function toSVG(text, ecl = 'L', moduleSize = 3, quietZone = 4) {
+    let qr;
+    try {
+      qr = qrcodegen.QrCode.encodeText(text, ECL_MAP[ecl] || ECL_MAP['L']);
+    } catch (e) {
+      // qrcodegen throws when data exceeds version 40 capacity (~2.9KB byte mode).
+      return '<p style="color:red">URL too long for QR code</p>';
     }
-    return -1;
-  }
-
-  function encodeData(text, version, ecl) {
-    const bytes = new TextEncoder().encode(text);
-    const totalDataCW = DATA_CODEWORDS[version][ecl];
-    const charCountBits = version < 10 ? 8 : 16;
-
-    let bits = '';
-    bits += '0100';
-    bits += bytes.length.toString(2).padStart(charCountBits, '0');
-    for (const b of bytes) bits += b.toString(2).padStart(8, '0');
-    const totalBits = totalDataCW * 8;
-    const termLen = Math.min(4, totalBits - bits.length);
-    bits += '0'.repeat(termLen);
-    if (bits.length % 8 !== 0) bits += '0'.repeat(8 - (bits.length % 8));
-    const padBytes = [0xEC, 0x11];
-    let pi = 0;
-    while (bits.length < totalBits) {
-      bits += padBytes[pi % 2].toString(2).padStart(8, '0');
-      pi++;
-    }
-
-    const data = new Uint8Array(totalDataCW);
-    for (let i = 0; i < totalDataCW; i++)
-      data[i] = parseInt(bits.substr(i * 8, 8), 2);
-
-    return data;
-  }
-
-  function getCodewords(data, version, ecl) {
-    const numBlocks = EC_BLOCKS[version][ecl];
-    const ecCWPerBlock = EC_CODEWORDS[version][ecl];
-    const totalData = data.length;
-    const shortBlockLen = Math.floor(totalData / numBlocks);
-    const longBlocks = totalData % numBlocks;
-
-    const dataBlocks = [];
-    const ecBlocks = [];
-    let offset = 0;
-    for (let i = 0; i < numBlocks; i++) {
-      const len = shortBlockLen + (i >= numBlocks - longBlocks ? 1 : 0);
-      const block = data.slice(offset, offset + len);
-      dataBlocks.push(block);
-      ecBlocks.push(rsEncode(block, ecCWPerBlock));
-      offset += len;
-    }
-
-    const result = [];
-    const maxDataLen = shortBlockLen + (longBlocks > 0 ? 1 : 0);
-    for (let i = 0; i < maxDataLen; i++)
-      for (let j = 0; j < numBlocks; j++)
-        if (i < dataBlocks[j].length) result.push(dataBlocks[j][i]);
-    for (let i = 0; i < ecCWPerBlock; i++)
-      for (let j = 0; j < numBlocks; j++)
-        result.push(ecBlocks[j][i]);
-
-    return result;
-  }
-
-  function createMatrix(version) {
-    const size = version * 4 + 17;
-    const matrix = Array.from({ length: size }, () => new Uint8Array(size));
-    const reserved = Array.from({ length: size }, () => new Uint8Array(size));
-    return { matrix, reserved, size };
-  }
-
-  function placeFinderPattern(m, r, row, col) {
-    for (let dr = -1; dr <= 7; dr++) {
-      for (let dc = -1; dc <= 7; dc++) {
-        const rr = row + dr, cc = col + dc;
-        if (rr < 0 || rr >= m.size || cc < 0 || cc >= m.size) continue;
-        r[rr][cc] = 1;
-        if (dr >= 0 && dr <= 6 && dc >= 0 && dc <= 6) {
-          if (dr === 0 || dr === 6 || dc === 0 || dc === 6 ||
-              (dr >= 2 && dr <= 4 && dc >= 2 && dc <= 4))
-            m.matrix[rr][cc] = 1;
-          else
-            m.matrix[rr][cc] = 0;
-        } else {
-          m.matrix[rr][cc] = 0;
-        }
-      }
-    }
-  }
-
-  function placeAlignmentPattern(m, r, row, col) {
-    for (let dr = -2; dr <= 2; dr++) {
-      for (let dc = -2; dc <= 2; dc++) {
-        const rr = row + dr, cc = col + dc;
-        r[rr][cc] = 1;
-        if (Math.abs(dr) === 2 || Math.abs(dc) === 2 || (dr === 0 && dc === 0))
-          m.matrix[rr][cc] = 1;
-        else
-          m.matrix[rr][cc] = 0;
-      }
-    }
-  }
-
-  function placePatterns(m, version) {
-    const { matrix, reserved, size } = m;
-
-    placeFinderPattern(m, reserved, 0, 0);
-    placeFinderPattern(m, reserved, 0, size - 7);
-    placeFinderPattern(m, reserved, size - 7, 0);
-
-    if (version >= 2) {
-      const positions = ALIGN_POS[version];
-      for (const r of positions) {
-        for (const c of positions) {
-          if (reserved[r][c]) continue;
-          placeAlignmentPattern(m, reserved, r, c);
-        }
-      }
-    }
-
-    for (let i = 8; i < size - 8; i++) {
-      if (!reserved[6][i]) {
-        reserved[6][i] = 1;
-        matrix[6][i] = i % 2 === 0 ? 1 : 0;
-      }
-      if (!reserved[i][6]) {
-        reserved[i][6] = 1;
-        matrix[i][6] = i % 2 === 0 ? 1 : 0;
-      }
-    }
-
-    matrix[size - 8][8] = 1;
-    reserved[size - 8][8] = 1;
-
-    for (let i = 0; i < 8; i++) {
-      reserved[8][i] = 1;
-      reserved[8][size - 1 - i] = 1;
-      reserved[i][8] = 1;
-      reserved[size - 1 - i][8] = 1;
-    }
-    reserved[8][8] = 1;
-  }
-
-  function placeData(m, codewords) {
-    const { matrix, reserved, size } = m;
-    let bitIdx = 0;
-    const totalBits = codewords.length * 8;
-    let col = size - 1;
-    let upward = true;
-
-    while (col >= 0) {
-      if (col === 6) col--;
-      const rows = upward
-        ? Array.from({ length: size }, (_, i) => size - 1 - i)
-        : Array.from({ length: size }, (_, i) => i);
-
-      for (const row of rows) {
-        for (let c = 0; c < 2; c++) {
-          const cc = col - c;
-          if (cc < 0) continue;
-          if (reserved[row][cc]) continue;
-          if (bitIdx < totalBits) {
-            const byteIdx = bitIdx >> 3;
-            const bitPos = 7 - (bitIdx & 7);
-            matrix[row][cc] = (codewords[byteIdx] >> bitPos) & 1;
-            bitIdx++;
-          }
-        }
-      }
-      col -= 2;
-      upward = !upward;
-    }
-  }
-
-  function applyMask(m, maskId) {
-    const { matrix, reserved, size } = m;
-    const maskFn = [
-      (r, c) => (r + c) % 2 === 0,
-      (r, c) => r % 2 === 0,
-      (r, c) => c % 3 === 0,
-      (r, c) => (r + c) % 3 === 0,
-      (r, c) => (Math.floor(r / 2) + Math.floor(c / 3)) % 2 === 0,
-      (r, c) => ((r * c) % 2 + (r * c) % 3) === 0,
-      (r, c) => ((r * c) % 2 + (r * c) % 3) % 2 === 0,
-      (r, c) => ((r + c) % 2 + (r * c) % 3) % 2 === 0,
-    ][maskId];
-
-    for (let r = 0; r < size; r++)
-      for (let c = 0; c < size; c++)
-        if (!reserved[r][c] && maskFn(r, c))
-          matrix[r][c] ^= 1;
-  }
-
-  function getFormatBits(ecl, mask) {
-    const eclBits = { L: 1, M: 0, Q: 3, H: 2 }[ecl];
-    let data = (eclBits << 3) | mask;
-    let bits = data << 10;
-    let gen = 0x537;
-    for (let i = 4; i >= 0; i--) {
-      if (bits & (1 << (i + 10)))
-        bits ^= gen << i;
-    }
-    bits = ((data << 10) | bits) ^ 0x5412;
-    return bits;
-  }
-
-  function placeFormatInfo(m, ecl, mask) {
-    const { matrix, size } = m;
-    const bits = getFormatBits(ecl, mask);
-
-    const positions1 = [
-      [8, 0], [8, 1], [8, 2], [8, 3], [8, 4], [8, 5], [8, 7], [8, 8],
-      [7, 8], [5, 8], [4, 8], [3, 8], [2, 8], [1, 8], [0, 8]
-    ];
-    for (let i = 0; i < 15; i++)
-      matrix[positions1[i][0]][positions1[i][1]] = (bits >> (14 - i)) & 1;
-
-    const positions2 = [
-      [size - 1, 8], [size - 2, 8], [size - 3, 8], [size - 4, 8],
-      [size - 5, 8], [size - 6, 8], [size - 7, 8],
-      [8, size - 8], [8, size - 7], [8, size - 6], [8, size - 5],
-      [8, size - 4], [8, size - 3], [8, size - 2], [8, size - 1]
-    ];
-    for (let i = 0; i < 15; i++)
-      matrix[positions2[i][0]][positions2[i][1]] = (bits >> (14 - i)) & 1;
-  }
-
-  function penalty(matrix, size) {
-    let score = 0;
-    for (let r = 0; r < size; r++) {
-      let count = 1;
-      for (let c = 1; c < size; c++) {
-        if (matrix[r][c] === matrix[r][c - 1]) count++;
-        else { if (count >= 5) score += count - 2; count = 1; }
-      }
-      if (count >= 5) score += count - 2;
-    }
-    for (let c = 0; c < size; c++) {
-      let count = 1;
-      for (let r = 1; r < size; r++) {
-        if (matrix[r][c] === matrix[r - 1][c]) count++;
-        else { if (count >= 5) score += count - 2; count = 1; }
-      }
-      if (count >= 5) score += count - 2;
-    }
-    for (let r = 0; r < size - 1; r++)
-      for (let c = 0; c < size - 1; c++) {
-        const v = matrix[r][c];
-        if (v === matrix[r][c + 1] && v === matrix[r + 1][c] && v === matrix[r + 1][c + 1])
-          score += 3;
-      }
-    return score;
-  }
-
-  function generate(text, ecl = 'M') {
-    const version = getVersion(text, ecl);
-    if (version < 0) return null;
-
-    const data = encodeData(text, version, ecl);
-    const codewords = getCodewords(data, version, ecl);
-
-    let bestMatrix = null, bestPenalty = Infinity;
-    for (let mask = 0; mask < 8; mask++) {
-      const m = createMatrix(version);
-      placePatterns(m, version);
-      placeData(m, codewords);
-      applyMask(m, mask);
-      placeFormatInfo(m, ecl, mask);
-      const p = penalty(m.matrix, m.size);
-      if (p < bestPenalty) { bestPenalty = p; bestMatrix = m; }
-    }
-
-    return bestMatrix;
-  }
-
-  function toSVG(text, ecl = 'M', moduleSize = 4, quietZone = 4) {
-    const m = generate(text, ecl);
-    if (!m) return '<p style="color:red">URL too long for QR code</p>';
-    const { matrix, size } = m;
+    const size = qr.size;
     const svgSize = (size + quietZone * 2) * moduleSize;
     let paths = '';
-    for (let r = 0; r < size; r++)
-      for (let c = 0; c < size; c++)
-        if (matrix[r][c])
-          paths += `M${(c + quietZone) * moduleSize},${(r + quietZone) * moduleSize}h${moduleSize}v${moduleSize}h-${moduleSize}z`;
-
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${svgSize} ${svgSize}" width="${svgSize}" height="${svgSize}">` +
+    for (let y = 0; y < size; y++) {
+      for (let x = 0; x < size; x++) {
+        if (qr.getModule(x, y)) {
+          const px = (x + quietZone) * moduleSize;
+          const py = (y + quietZone) * moduleSize;
+          paths += `M${px},${py}h${moduleSize}v${moduleSize}h-${moduleSize}z`;
+        }
+      }
+    }
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${svgSize} ${svgSize}" width="${svgSize}" height="${svgSize}" style="max-width:100%;height:auto;">` +
       `<rect width="100%" height="100%" fill="#fff"/>` +
       `<path d="${paths}" fill="#000"/>` +
       `</svg>`;
