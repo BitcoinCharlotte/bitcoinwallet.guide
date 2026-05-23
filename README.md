@@ -50,8 +50,11 @@ This repo is mirrored across two remotes:
 **The flow:**
 
 1. Edit `index.html` (or whatever) → `git add` → `git commit`.
-2. `git push` → goes to Gitea only. Test against your local preview server at `http://127.0.0.1:8766/` (or wherever you're serving).
-3. When you're confident, run `./scripts/publish.sh` → promotes the same commit to GitHub. Pages auto-deploys in ~30 seconds.
+2. `git push` → goes to Gitea only. Test against your local preview server at `http://127.0.0.1:8766/` and the Gitea-served preview at `http://ttmf-server:9089/`.
+3. **STOP. Confirm visually that everything looks right on the Gitea preview.** Don't skip this step — it's the whole point of the split.
+4. When you're confident, run `./scripts/publish.sh` → promotes the same commit to GitHub. Pages auto-deploys in ~30 seconds.
+
+**🚨 Hard rule for agents: never run `publish.sh` in the same turn as the Gitea push.** Push to Gitea, then stop and surrender the turn to Jacob. He'll tell you when to publish. The two are deliberately separate actions — bundling them defeats the safety of the workflow.
 
 The publish script has safety checks: it refuses to publish if the working tree isn't clean, if local `main` is ahead of Gitea (untested), or if the push would require a force-push (i.e. GitHub has commits Gitea doesn't — investigate first).
 
