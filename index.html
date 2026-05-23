@@ -445,6 +445,41 @@ a:hover { text-decoration: underline; }
   font-size: 0.95rem;
 }
 
+/* === Why We Built It === */
+.why-section {
+  margin: 40px 0 20px;
+  padding: 24px 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--orange);
+  border-radius: var(--radius);
+}
+.why-section h2 {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+  color: var(--text);
+  font-weight: 600;
+}
+.why-section p {
+  margin: 0 0 10px;
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+.why-section p:last-child { margin-bottom: 0; }
+.why-section .why-meta {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+.why-section .why-meta a {
+  color: var(--orange);
+  text-decoration: none;
+}
+.why-section .why-meta a:hover { text-decoration: underline; }
+
 /* === Selection Counter === */
 .selection-bar {
   position: sticky;
@@ -1795,6 +1830,15 @@ function renderBuilder() {
 
     <div class="filter-bar" id="filter-bar">${renderFilterPills()}</div>
     <div id="wallet-grid-container">${renderWalletGrid()}</div>
+
+    <section class="why-section" aria-labelledby="why-heading">
+      <h2 id="why-heading">Why we built it</h2>
+      <p>Every meetup organizer and Bitcoin educator has their own opinions on which wallets to recommend &mdash; and those opinions vary by region, use case, and philosophy. There's no universal &ldquo;best&rdquo; list, and that's the point.</p>
+      <p>This is a simple way to put <em>your</em> recommendations on one easy-to-share page. No accounts. No tracking. Open source. The picks are yours.</p>
+      <div class="why-meta">
+        Made by <a href="https://bitcoincharlotte.org" target="_blank" rel="noopener">Bitcoin Charlotte</a> &middot; MIT licensed &middot; <a href="https://github.com/BitcoinCharlotte/bitcoinwallet.guide" target="_blank" rel="noopener">Source on GitHub</a>
+      </div>
+    </section>
   `;
 
   html += `
