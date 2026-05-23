@@ -355,13 +355,22 @@ a:hover { text-decoration: underline; }
 }
 
 .qr-container {
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   padding: 16px;
   background: #fff;
   border-radius: 8px;
-  width: fit-content;
+  width: 292px;
+  max-width: 100%;
   margin: 0 auto;
+}
+.qr-img {
+  width: min(100%, 260px);
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  background: #fff;
+  image-rendering: pixelated;
 }
 
 .char-count {
@@ -518,6 +527,7 @@ a:hover { text-decoration: underline; }
 /* === Share URL row (landing page) === */
 .share-url-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: stretch;
   gap: 8px;
   margin-top: 12px;
@@ -566,6 +576,13 @@ a:hover { text-decoration: underline; }
   border-color: var(--orange);
 }
 .share-url-copy .lucide { width: 14px; height: 14px; }
+@media (max-width: 520px) {
+  .share-url-text { flex-basis: 100%; }
+  .share-url-copy {
+    flex: 1 1 calc(50% - 4px);
+    justify-content: center;
+  }
+}
 
 /* === Site Footer === */
 .site-footer {
@@ -1230,7 +1247,43 @@ const QR = (() => {
       `</svg>`;
   }
 
-  return { toSVG };
+  // Render to a PNG data URL via canvas. `scale` is pixels-per-module — use ~10 for
+  // a save-quality image, the <img> tag CSS shrinks it to display size in the layout.
+  function toPNG(text, ecl = 'L', scale = 10, quietZone = 4) {
+    let qr;
+    try {
+      qr = qrcodegen.QrCode.encodeText(text, ECL_MAP[ecl] || ECL_MAP['L']);
+    } catch (e) {
+      return null;
+    }
+    const size = qr.size;
+    const pxSize = (size + quietZone * 2) * scale;
+    const canvas = document.createElement('canvas');
+    canvas.width = pxSize;
+    canvas.height = pxSize;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, pxSize, pxSize);
+    ctx.fillStyle = '#000';
+    for (let y = 0; y < size; y++) {
+      for (let x = 0; x < size; x++) {
+        if (qr.getModule(x, y)) {
+          ctx.fillRect((x + quietZone) * scale, (y + quietZone) * scale, scale, scale);
+        }
+      }
+    }
+    return canvas.toDataURL('image/png');
+  }
+
+  // Return an <img> tag whose src is a PNG data URL. Behaves like a real image:
+  // right-click save on desktop, long-press → "Save Image" on mobile, drag-and-drop, etc.
+  function toImg(text, ecl = 'L', scale = 10, quietZone = 4) {
+    const dataUrl = toPNG(text, ecl, scale, quietZone);
+    if (!dataUrl) return '<p style="color:red">URL too long for QR code</p>';
+    return `<img src="${dataUrl}" alt="QR code for this page" class="qr-img" loading="lazy">`;
+  }
+
+  return { toSVG, toPNG, toImg };
 })();
 
 
@@ -1257,6 +1310,7 @@ const LUCIDE = {
   'eye': `<path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" /><circle cx="12" cy="12" r="3" />`,
   'shopping-cart': `<circle cx="8" cy="21" r="1" /><circle cx="19" cy="21" r="1" /><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />`,
   'clipboard': `<rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />`,
+  'download': `<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/>`,
 };
 function icon(name) {
   const body = LUCIDE[name];
@@ -1544,6 +1598,7 @@ function renderBuilder() {
       <div class="url-display" id="url-display"></div>
       <div class="url-actions">
         <button class="btn btn-secondary" onclick="copyUrl()">${icon('clipboard')} Copy Link</button>
+        <button class="btn btn-secondary" onclick="downloadGeneratedQr()">${icon('download')} Save QR</button>
         <button class="btn btn-secondary" onclick="openPreview()">${icon('eye')} Preview</button>
       </div>
       <div class="char-count" id="char-count"></div>
@@ -1615,7 +1670,7 @@ async function generateLink() {
   charCount.textContent = `${len} characters${len > 1000 ? ' ⚠️ URL may be too long for reliable QR scanning' : ''}`;
   charCount.className = `char-count${len > 1000 ? ' warn' : ''}`;
 
-  qrContainer.innerHTML = QR.toSVG(generatedUrl, 'L', 3, 4);
+  qrContainer.innerHTML = QR.toImg(generatedUrl, 'L', 10, 4);
   output.classList.add('visible');
 
   output.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1628,6 +1683,30 @@ function copyUrl() {
 function copyShareUrl() {
   // Used on landing pages — copies the current page URL (which includes the encoded hash).
   navigator.clipboard.writeText(location.href).then(() => showToast('Link copied!'));
+}
+
+function downloadQrForUrl(url) {
+  const dataUrl = QR.toPNG(url, 'L', 10, 4);
+  if (!dataUrl) { showToast('Could not generate QR'); return; }
+  const a = document.createElement('a');
+  a.href = dataUrl;
+  a.download = 'bitcoinwallet-guide-qr.png';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  showToast('QR saved!');
+}
+
+function downloadGeneratedQr() {
+  if (!generatedUrl) { showToast('Generate a link first'); return; }
+  downloadQrForUrl(generatedUrl);
+}
+
+function downloadLandingQr() {
+  // Save the landing-page QR as a PNG file. Rebuilds the PNG from location.href
+  // so the saved file always matches the visible code (and isn't reliant on the
+  // already-rendered <img> being click-targetable in modal contexts).
+  downloadQrForUrl(location.href);
 }
 
 function openPreview() {
@@ -1693,10 +1772,11 @@ function renderLanding(walletIds, welcomeText) {
   html += `
     <div style="text-align:center;margin:30px 0 10px;padding:20px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);">
       <div style="font-size:0.85rem;color:var(--text-dim);margin-bottom:12px;">${icon('smartphone')} Share this page — scan to open on another device</div>
-      <div class="qr-container" id="landing-qr">${QR.toSVG(currentUrl, 'L', 3, 4)}</div>
+      <div class="qr-container" id="landing-qr">${QR.toImg(currentUrl, 'L', 10, 4)}</div>
       <div class="share-url-row">
         <button class="share-url-text" type="button" onclick="copyShareUrl()" title="${escapeHtml(currentUrl)}">${escapeHtml(currentUrl)}</button>
         <button class="share-url-copy" type="button" onclick="copyShareUrl()" aria-label="Copy share link">${icon('clipboard')} Copy</button>
+        <button class="share-url-copy" type="button" onclick="downloadLandingQr()" aria-label="Download QR code">${icon('download')} Save QR</button>
       </div>
     </div>
     <div class="landing-footer">
