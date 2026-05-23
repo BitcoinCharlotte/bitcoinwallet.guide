@@ -448,7 +448,6 @@ a:hover { text-decoration: underline; }
   padding: 24px 28px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-left: 3px solid var(--orange);
   border-radius: var(--radius);
 }
 .why-section h2 {
@@ -1368,8 +1367,6 @@ function getWalletFilterTags(w) {
   const tags = new Set();
   for (const cat of w.categories) tags.add(cat);
   for (const p of w.platforms) tags.add(p);
-  // Synthesize a `not-bitcoin-only` tag for filtering: include wallets flagged as supporting altcoins.
-  if (w.notBitcoinOnly) tags.add('not-bitcoin-only');
   return tags;
 }
 
@@ -1411,7 +1408,6 @@ function renderFilterPills() {
     { id: 'ecash', label: `${icon('users')} eCash` },
     { id: 'self-custodial', label: `${icon('key')} Self-custody` },
     { id: 'custodial', label: `${icon('landmark')} Custodial` },
-    { id: 'not-bitcoin-only', label: `${icon('alert-triangle')} Not Bitcoin-only` },
     { id: 'ios', label: `${icon('smartphone')} iOS` },
     { id: 'android', label: `${icon('smartphone')} Android` },
     { id: 'desktop', label: `${icon('monitor')} Desktop` },
