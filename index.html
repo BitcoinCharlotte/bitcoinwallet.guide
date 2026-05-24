@@ -272,7 +272,6 @@ a:hover { text-decoration: underline; }
 }
 .lucide { width: 14px; height: 14px; flex-shrink: 0; vertical-align: -2px; display: inline-block; }
 .badge .lucide { width: 13px; height: 13px; flex-shrink: 0; }
-.filter-pill .lucide { width: 14px; height: 14px; flex-shrink: 0; vertical-align: -2px; }
 .download-btn .lucide { width: 14px; height: 14px; flex-shrink: 0; vertical-align: -2px; }
 .badge-lightning { background: rgba(255,210,63,0.15); color: #ffd23f; }
 .badge-onchain { background: rgba(247,147,26,0.15); color: var(--orange); }
@@ -623,33 +622,53 @@ a:hover { text-decoration: underline; }
   font-weight: 400 !important;
 }
 
-/* === Filter Pills === */
-.filter-bar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 16px 0;
+/* === Search + Filter Controls === */
+.wallet-search {
+  margin: 18px 0 12px;
 }
-.filter-pill {
-  padding: 6px 14px;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  background: var(--bg2);
+.wallet-search label,
+.filter-field span {
+  display: block;
+  margin-bottom: 6px;
   color: var(--text-dim);
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s;
-  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
-.filter-pill:hover {
-  border-color: var(--orange-dim);
+.wallet-search-input,
+.filter-select {
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg2);
   color: var(--text);
+  font: inherit;
 }
-.filter-pill.active {
-  background: var(--orange);
+.wallet-search-input:focus,
+.filter-select:focus {
+  outline: none;
   border-color: var(--orange);
-  color: #000;
+  box-shadow: 0 0 0 2px rgba(247,147,26,0.15);
+}
+.filter-controls {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin: 0 0 16px;
+}
+@media (min-width: 720px) {
+  .filter-controls { grid-template-columns: repeat(3, 1fr); }
+}
+.empty-state {
+  padding: 26px 18px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  text-align: center;
+  background: rgba(139,148,158,0.06);
 }
 </style>
 </head>
@@ -1463,67 +1482,92 @@ function renderBadges(wallet) {
   return html;
 }
 
-let activeFilters = new Set(['all']);
+let walletSearchQuery = '';
+let activeFilters = {
+  region: 'all',
+  type: 'all',
+  platform: 'all'
+};
 
-function getWalletFilterTags(w) {
-  const tags = new Set();
-  for (const cat of w.categories) tags.add(cat);
-  for (const p of w.platforms) tags.add(p);
-  if (w.archived) tags.add('archived');
-  return tags;
-}
+const FILTER_OPTIONS = {
+  region: [
+    { id: 'all', label: 'All regions' }
+  ],
+  type: [
+    { id: 'all', label: 'All types' },
+    { id: 'lightning', label: 'Lightning' },
+    { id: 'onchain', label: 'On-chain' },
+    { id: 'hardware', label: 'Hardware' },
+    { id: 'multisig', label: 'Multi-sig' },
+    { id: 'exchange', label: 'Exchange' },
+    { id: 'ecash', label: 'eCash' },
+    { id: 'self-custodial', label: 'Self-custody' },
+    { id: 'custodial', label: 'Custodial' },
+    { id: 'community', label: 'Community custody' }
+  ],
+  platform: [
+    { id: 'all', label: 'All platforms' },
+    { id: 'ios', label: 'iOS' },
+    { id: 'android', label: 'Android' },
+    { id: 'desktop', label: 'Desktop' },
+    { id: 'web', label: 'Web' },
+    { id: 'hardware', label: 'Hardware' }
+  ]
+};
 
 function walletMatchesFilters(w) {
-  if (activeFilters.has('all')) return true;
-  const tags = getWalletFilterTags(w);
-  // Also add custody type as a filterable tag
-  tags.add(w.custody);
-  for (const f of activeFilters) {
-    if (tags.has(f)) return true;
+  const query = walletSearchQuery.trim().toLowerCase();
+  if (query && !w.name.toLowerCase().includes(query)) return false;
+
+  if (activeFilters.region !== 'all') {
+    const regions = w.regions || [];
+    if (!regions.includes(activeFilters.region)) return false;
   }
-  return false;
+
+  if (activeFilters.type !== 'all') {
+    const matchesCategory = w.categories.includes(activeFilters.type);
+    const matchesCustody = w.custody === activeFilters.type;
+    if (!matchesCategory && !matchesCustody) return false;
+  }
+
+  if (activeFilters.platform !== 'all' && !w.platforms.includes(activeFilters.platform)) return false;
+
+  return true;
 }
 
-function toggleFilter(filter) {
-  if (filter === 'all') {
-    activeFilters.clear();
-    activeFilters.add('all');
-  } else {
-    activeFilters.delete('all');
-    if (activeFilters.has(filter)) {
-      activeFilters.delete(filter);
-      if (activeFilters.size === 0) activeFilters.add('all');
-    } else {
-      activeFilters.add(filter);
-    }
-  }
+function setFilter(group, value) {
+  if (!Object.prototype.hasOwnProperty.call(activeFilters, group)) return;
+  activeFilters[group] = value;
   updateFiltersAndGrid();
 }
 
-function renderFilterPills() {
-  const filters = [
-    { id: 'all', label: 'All' },
-    { id: 'lightning', label: `${icon('zap')} Lightning` },
-    { id: 'onchain', label: `${icon('link')} On-chain` },
-    { id: 'hardware', label: `${icon('cpu')} Hardware` },
-    { id: 'multisig', label: `${icon('shield-check')} Multi-sig` },
-    { id: 'exchange', label: `${icon('arrow-left-right')} Exchange` },
-    { id: 'ecash', label: `${icon('users')} eCash` },
-    { id: 'archived', label: `${icon('archive')} Archived` },
-    { id: 'self-custodial', label: `${icon('key')} Self-custody` },
-    { id: 'custodial', label: `${icon('landmark')} Custodial` },
-    { id: 'ios', label: `${icon('smartphone')} iOS` },
-    { id: 'android', label: `${icon('smartphone')} Android` },
-    { id: 'desktop', label: `${icon('monitor')} Desktop` },
-    { id: 'web', label: `${icon('globe')} Web` },
-  ];
-  return filters.map(f =>
-    `<button class="filter-pill${activeFilters.has(f.id) ? ' active' : ''}" onclick="toggleFilter('${f.id}')">${f.label}</button>`
+function applyWalletFilters() {
+  const searchEl = document.getElementById('wallet-search');
+  walletSearchQuery = searchEl ? searchEl.value : '';
+  updateFiltersAndGrid();
+}
+
+function renderSelect(group, label, options) {
+  const opts = options.map(o =>
+    `<option value="${o.id}"${activeFilters[group] === o.id ? ' selected' : ''}>${o.label}</option>`
   ).join('');
+  return `
+    <label class="filter-field" for="filter-${group}">
+      <span>${label}</span>
+      <select id="filter-${group}" class="filter-select" onchange="setFilter('${group}', this.value)">${opts}</select>
+    </label>`;
+}
+
+function renderFilterControls() {
+  return [
+    renderSelect('region', 'Region', FILTER_OPTIONS.region),
+    renderSelect('type', 'Type', FILTER_OPTIONS.type),
+    renderSelect('platform', 'Platform', FILTER_OPTIONS.platform)
+  ].join('');
 }
 
 function renderWalletGrid() {
-  let html = '<div class="wallet-grid">';
+  let cards = '';
   // Sort order: clean (0) → flagged non-Bitcoin-only (1) → archived (2). Preserves original order within each group.
   const tier = w => w.archived ? 2 : (w.notBitcoinOnly ? 1 : 0);
   const ordered = WALLETS.slice().sort((a, b) => tier(a) - tier(b));
@@ -1531,7 +1575,7 @@ function renderWalletGrid() {
     if (!walletMatchesFilters(w)) continue;
     const sel = selected.has(w.id) ? ' selected' : '';
     const status = w.archived ? ' archived' : (w.notBitcoinOnly ? ' flagged' : '');
-    html += `
+    cards += `
       <div class="wallet-card${sel}${status}" data-id="${w.id}" onclick="toggleWallet('${w.id}')">
         <div class="check">${selected.has(w.id) ? '✓' : ''}</div>
         <div class="wallet-card-inner">
@@ -1544,14 +1588,12 @@ function renderWalletGrid() {
         </div>
       </div>`;
   }
-  html += '</div>';
-  return html;
+  if (!cards) return '<div class="empty-state">No wallets match your search and filters.</div>';
+  return `<div class="wallet-grid">${cards}</div>`;
 }
 
 function updateFiltersAndGrid() {
-  const filtersEl = document.getElementById('filter-bar');
   const gridEl = document.getElementById('wallet-grid-container');
-  if (filtersEl) filtersEl.innerHTML = renderFilterPills();
   if (gridEl) gridEl.innerHTML = renderWalletGrid();
 }
 
@@ -1578,7 +1620,11 @@ function renderBuilder() {
 
     </div>
 
-    <div class="filter-bar" id="filter-bar">${renderFilterPills()}</div>
+    <div class="wallet-search">
+      <label for="wallet-search">Search wallets</label>
+      <input id="wallet-search" class="wallet-search-input" type="search" placeholder="Search wallet names…" autocomplete="off" oninput="applyWalletFilters()">
+    </div>
+    <div class="filter-controls" id="filter-controls">${renderFilterControls()}</div>
     <div id="wallet-grid-container">${renderWalletGrid()}</div>
   `;
 
