@@ -383,14 +383,15 @@ a:hover { text-decoration: underline; }
 /* === Landing Mode === */
 .landing-welcome {
   text-align: center;
-  margin: 10px 0 30px;
-  padding: 20px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  margin: 8px auto 28px;
+  padding: 0 8px;
+  max-width: 680px;
 }
 .landing-welcome p {
-  font-size: 1.1rem;
+  margin: 0;
+  font-size: 1.12rem;
+  line-height: 1.55;
+  color: var(--text);
   white-space: pre-wrap;
 }
 
@@ -451,39 +452,27 @@ a:hover { text-decoration: underline; }
   font-size: 0.95rem;
 }
 
-/* === Why We Built It === */
-.why-section {
-  margin: 40px 0 20px;
-  padding: 24px 28px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+/* === Footer Why Copy === */
+.site-footer .footer-why {
+  margin: 0 auto 20px;
+  max-width: 680px;
 }
-.why-section h2 {
-  margin: 0 0 12px;
-  font-size: 1.1rem;
+.site-footer .footer-why h2 {
+  margin: 0 0 8px;
+  font-size: 0.82rem;
   color: var(--text);
   font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
-.why-section p {
-  margin: 0 0 10px;
+.site-footer .footer-why p {
+  margin: 0 0 8px;
   color: var(--text-dim);
-  font-size: 0.95rem;
+  font-size: 0.78rem;
   line-height: 1.55;
 }
-.why-section p:last-child { margin-bottom: 0; }
-.why-section .why-meta {
-  margin-top: 14px;
-  padding-top: 14px;
-  border-top: 1px solid var(--border);
-  font-size: 0.8rem;
-  color: var(--text-dim);
-}
-.why-section .why-meta a {
-  color: var(--orange);
-  text-decoration: none;
-}
-.why-section .why-meta a:hover { text-decoration: underline; }
+.site-footer .footer-why p + p { margin-top: 0; }
+.site-footer .footer-why p:last-child { margin-bottom: 0; }
 
 /* === Selection Counter === */
 .selection-bar {
@@ -524,17 +513,18 @@ a:hover { text-decoration: underline; }
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
-/* === Share URL row (landing page) === */
+/* === Share URL controls (landing page) === */
 .share-url-row {
   display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  gap: 8px;
-  margin-top: 12px;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
   max-width: 100%;
 }
 .share-url-text {
-  flex: 1 1 auto;
+  flex: 0 1 auto;
+  width: min(100%, 520px);
   min-width: 0;
   display: block;
   padding: 8px 12px;
@@ -548,7 +538,7 @@ a:hover { text-decoration: underline; }
   overflow: hidden;
   text-overflow: ellipsis;
   cursor: pointer;
-  text-align: left;
+  text-align: center;
   user-select: all;
   transition: border-color 0.15s, color 0.15s;
 }
@@ -556,10 +546,17 @@ a:hover { text-decoration: underline; }
   border-color: var(--orange);
   color: var(--text);
 }
+.share-url-actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
 .share-url-copy {
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   padding: 8px 14px;
   background: var(--bg3);
@@ -577,11 +574,8 @@ a:hover { text-decoration: underline; }
 }
 .share-url-copy .lucide { width: 14px; height: 14px; }
 @media (max-width: 520px) {
-  .share-url-text { flex-basis: 100%; }
-  .share-url-copy {
-    flex: 1 1 calc(50% - 4px);
-    justify-content: center;
-  }
+  .share-url-actions { width: 100%; }
+  .share-url-copy { flex: 1 1 calc(50% - 4px); }
 }
 
 /* === Site Footer === */
@@ -662,6 +656,11 @@ a:hover { text-decoration: underline; }
 
 <footer class="site-footer">
   <div class="footer-inner">
+    <div class="footer-why" aria-labelledby="footer-why-heading">
+      <h2 id="footer-why-heading">Why we built it</h2>
+      <p>Every meetup organizer and Bitcoin educator has their own opinions on which wallets to recommend — and those opinions vary by region, use case, and philosophy. There's no universal “best” list, and that's the point.</p>
+      <p>This is a simple way to put <em>your</em> recommendations on one easy-to-share page. No accounts. No tracking. Open source. The picks are yours.</p>
+    </div>
     <p>
       Built by <a href="https://bitcoincharlotte.org" target="_blank" rel="noopener">Bitcoin Charlotte</a>
       &middot; <a href="https://github.com/BitcoinCharlotte/bitcoinwallet.guide" target="_blank" rel="noopener">Source on GitHub</a>
@@ -1582,15 +1581,6 @@ function renderBuilder() {
 
     <div class="filter-bar" id="filter-bar">${renderFilterPills()}</div>
     <div id="wallet-grid-container">${renderWalletGrid()}</div>
-
-    <section class="why-section" aria-labelledby="why-heading">
-      <h2 id="why-heading">Why we built it</h2>
-      <p>Every meetup organizer and Bitcoin educator has their own opinions on which wallets to recommend &mdash; and those opinions vary by region, use case, and philosophy. There's no universal &ldquo;best&rdquo; list, and that's the point.</p>
-      <p>This is a simple way to put <em>your</em> recommendations on one easy-to-share page. No accounts. No tracking. Open source. The picks are yours.</p>
-      <div class="why-meta">
-        Made by <a href="https://bitcoincharlotte.org" target="_blank" rel="noopener">Bitcoin Charlotte</a> &middot; MIT licensed &middot; <a href="https://github.com/BitcoinCharlotte/bitcoinwallet.guide" target="_blank" rel="noopener">Source on GitHub</a>
-      </div>
-    </section>
   `;
 
   html += `
@@ -1726,10 +1716,9 @@ function renderLanding(walletIds, welcomeText) {
 
   if (welcomeText) {
     const links = extractLinks(welcomeText);
-    const welcomeMargin = links.length > 0 ? 'margin-bottom:0;border-bottom-left-radius:0;border-bottom-right-radius:0;' : '';
-    html += `<div class="landing-welcome" style="${welcomeMargin}"><p>${renderMarkdownLinks(welcomeText)}</p></div>`;
+    html += `<div class="landing-welcome"><p>${renderMarkdownLinks(welcomeText)}</p></div>`;
     if (links.length > 0) {
-      html += `<div style="font-size:0.65rem;color:var(--text-dim);margin:-1px 0 20px;padding:4px 12px;text-align:center;">`;
+      html += `<div style="font-size:0.65rem;color:var(--text-dim);margin:-14px 0 20px;padding:0 12px;text-align:center;">`;
       html += `<span style="opacity:0.6;">${icon('link')} Verify links before clicking:</span><br>`;
       html += links.map(link => `<div style="margin:2px 0;">${escapeHtml(link.label)} → <span style="color:var(--orange);word-break:break-all;">${escapeHtml(link.url)}</span></div>`).join('');
       html += `</div>`;
@@ -1775,8 +1764,10 @@ function renderLanding(walletIds, welcomeText) {
       <div class="qr-container" id="landing-qr">${QR.toImg(currentUrl, 'L', 10, 4)}</div>
       <div class="share-url-row">
         <button class="share-url-text" type="button" onclick="copyShareUrl()" title="${escapeHtml(currentUrl)}">${escapeHtml(currentUrl)}</button>
-        <button class="share-url-copy" type="button" onclick="copyShareUrl()" aria-label="Copy share link">${icon('clipboard')} Copy</button>
-        <button class="share-url-copy" type="button" onclick="downloadLandingQr()" aria-label="Download QR code">${icon('download')} Save QR</button>
+        <div class="share-url-actions">
+          <button class="share-url-copy" type="button" onclick="copyShareUrl()" aria-label="Copy share link">${icon('clipboard')} Copy</button>
+          <button class="share-url-copy" type="button" onclick="downloadLandingQr()" aria-label="Download QR code">${icon('download')} Save QR</button>
+        </div>
       </div>
     </div>
     <div class="landing-footer">
