@@ -8,17 +8,22 @@ A free, no-signup, no-tracking tool that lets you curate a personalized list of 
 
 ## What it does today
 
-- **Browse 50 Bitcoin wallets**, filtered by category (Lightning, on-chain, hardware, multi-sig, exchange, eCash), custody (self / custodial / community), and platform (iOS, Android, desktop, web).
+- **Browse 49 Bitcoin wallet entries** with title search and dropdown filters for region, type, and platform.
+  - Search matches wallet names only.
+  - Region is scaffolded now and currently defaults to **All regions**.
+  - Type includes Lightning, on-chain, hardware, multi-sig, exchange, eCash, and custody-style groupings.
+  - Platform includes iOS, Android, desktop, web, and hardware.
 - **Select the wallets you recommend**, add a personal welcome message (Markdown links supported), and generate a shareable link.
-- **Recipients land on a clean curated page** with direct App Store / Google Play / website / "buy hardware" links per wallet — plus a built-in QR code to scan onto another device.
-- **Visual safety signals** so newcomers can see the trade-offs at a glance:
-  - ₿ **Bitcoin-only** wallets are clearly badged
-  - 🟡 **Yellow border** on wallets worth vetting carefully (Bitcoin-supporting but with caveats)
-  - 🔴 **Red border** on wallets that aren't Bitcoin-only (still listed because newcomers will ask about them, but visually deprioritized and sorted to the bottom)
+- **Recipients land on a clean curated page** with direct App Store / Google Play / website / "buy hardware" links per wallet — plus a saveable QR code to scan onto another device.
+- **Visual safety signals** keep the list readable without over-explaining:
+  - 🔴 **Not Bitcoin-only** wallets are marked with a red badge and red card treatment.
+  - ⚪ **Archived** wallets are dimmed and marked with an archived badge.
+  - Bitcoin-only is the default assumption; it is not separately badged.
 - **Selection and message are encoded entirely in the URL fragment.** **No server. No accounts. No cookies. No tracking. No analytics.**
 
 ## On the roadmap
 
+- **Region / availability metadata** — real country/region filtering once wallet availability is tracked.
 - **Printable flyers** — curated wallet recommendations as a one-page handout, designed to print.
 - **Bitcoin stickers** — meetup-ready sticker sheets.
 - **Resource printables** — beginner-friendly cheat sheets and reference cards.
@@ -27,7 +32,7 @@ A free, no-signup, no-tracking tool that lets you curate a personalized list of 
 
 ## Run it locally
 
-It's a single static file. Any HTTP server works:
+It's a static site. Any HTTP server works:
 
 ```bash
 git clone https://github.com/BitcoinCharlotte/bitcoinwallet.guide.git
@@ -36,7 +41,7 @@ python3 -m http.server 8000
 # open http://localhost:8000
 ```
 
-No build step, no dependencies, no toolchain. The whole app lives in `index.html` — HTML, CSS, JavaScript, the wallet database, and inline Lucide SVG icons. Edit, refresh, ship.
+No build step, no package install, no JavaScript toolchain. The app lives in `index.html` with static assets in `icons/`, `lib/`, and the root image files. Edit, refresh, ship.
 
 ## Development & publish workflow
 
@@ -44,15 +49,16 @@ This repo is mirrored across two remotes:
 
 | Remote | URL | Purpose |
 |---|---|---|
-| `origin` | Gitea (private TTMF instance) | Source of truth. All commits land here first. |
+| `origin` | Internal Gitea | Source of truth. All commits land here first. |
 | `github` | github.com/BitcoinCharlotte/bitcoinwallet.guide | Public mirror. Pushes here trigger a GitHub Pages deploy to https://bitcoinwallet.guide/ |
 
 **The flow:**
 
-1. Edit `index.html` (or whatever) → `git add` → `git commit`.
-2. `git push` → goes to Gitea only. Test against your local preview server at `http://127.0.0.1:8766/` and the Gitea-served preview at `http://ttmf-server:9089/`.
-3. **STOP. Confirm visually that everything looks right on the Gitea preview.** Don't skip this step — it's the whole point of the split.
-4. When you're confident, run `./scripts/publish.sh` → promotes the same commit to GitHub. Pages auto-deploys in ~30 seconds.
+1. Edit locally → `git add` → `git commit`.
+2. `git push origin main` → goes to Gitea only.
+3. Test the internal preview. Do not assume a Gitea push means the public site changed.
+4. **STOP. Confirm visually that everything looks right on the preview.** Don't skip this step — it's the whole point of the split.
+5. When Jacob explicitly approves a live publish, run `./scripts/publish.sh` → promotes the same commit to GitHub. Pages auto-deploys in ~30 seconds.
 
 **🚨 Hard rule for agents: never run `publish.sh` in the same turn as the Gitea push.** Push to Gitea, then stop and surrender the turn to Jacob. He'll tell you when to publish. The two are deliberately separate actions — bundling them defeats the safety of the workflow.
 
@@ -64,19 +70,22 @@ This setup keeps "iterate fast" (push to Gitea, no public exposure) separate fro
 
 ```
 .
-├── index.html        # The entire app — HTML, CSS, JS, embedded wallet data, inline icons
-├── icons/            # PNG icons for each wallet
-├── CNAME             # GitHub Pages custom domain
-├── .nojekyll         # Tells GitHub Pages to skip Jekyll processing
-├── 404.html          # Branded "page not found" page
-├── og-image.png      # Open Graph social-share image
-├── version.json      # Footer commit hash for "this site is from commit X" verification
+├── index.html             # The app — HTML, CSS, JS, embedded wallet data, inline icons
+├── icons/                 # PNG wallet icons and source/icon variants
+├── lib/                   # Third-party browser libraries, including QR generation
 ├── scripts/
-│   ├── bump-version.sh   # Updates version.json with current HEAD commit hash
-│   └── publish.sh        # Promotes Gitea state to GitHub Pages (the live site)
-├── LICENSE           # MIT
+│   ├── bump-version.sh    # Generates version.json from the current HEAD commit
+│   └── publish.sh         # Promotes tested Gitea state to GitHub Pages
+├── CNAME                  # GitHub Pages custom domain
+├── .nojekyll              # Tells GitHub Pages to skip Jekyll processing
+├── 404.html               # Branded "page not found" page
+├── og-image.png           # Open Graph social-share image
+├── og-image.svg           # Source/vector social-share image
+├── LICENSE                # MIT
 └── README.md
 ```
+
+`version.json` is generated during publish and intentionally ignored by git.
 
 ## Contributing
 
@@ -88,21 +97,20 @@ PRs welcome — especially for:
 - **Translations** (i18n is on the roadmap)
 - **Bug fixes and polish**
 
-To add or edit a wallet, look for the `const WALLETS = [` block inside `index.html`. Each entry follows the same shape — keep descriptions short, accurate, and useful for someone who has never owned Bitcoin before.
+To add or edit a wallet, look for the `const WALLETS = [` block inside `index.html`. Each entry follows the same shape — keep descriptions short, objective, and useful for someone who has never owned Bitcoin before.
 
 ### Wallet entry fields
 
 | Field | Required | Notes |
 |---|---|---|
-| `id`, `name`, `description` | yes | Description should be one sentence, plain language |
+| `id`, `name`, `description` | yes | Description should be plain language: what it is and what it does |
 | `platforms` | yes | Array of `ios`, `android`, `desktop`, `web`, `hardware` |
 | `categories` | yes | Array of `lightning`, `onchain`, `hardware`, `multisig`, `exchange`, `ecash` |
 | `custody` | yes | One of `self-custodial`, `custodial`, `community` |
-| `bitcoinOnly` | optional | Flag for clearly Bitcoin-only wallets |
-| `notBitcoinOnly` | optional | Flag for multi-asset wallets (red border + sort to bottom) |
-| `caution` | optional | Middle tier — wallet supports Bitcoin well but has caveats worth vetting (yellow border) |
-| `url`, `icon` | yes | Canonical website + 64×64 PNG icon |
-| `appStore`, `playStore`, `desktop`, `buyUrl` | optional | Per-platform download links |
+| `notBitcoinOnly` | optional | Flag for wallets/apps that support non-Bitcoin assets (red badge + red card treatment) |
+| `archived` | optional | Flag for kept-for-reference wallets that should not appear as current recommendations |
+| `url`, `icon` | yes | Canonical website + wallet icon |
+| `appStore`, `playStore`, `desktop`, `buyUrl` | optional | Per-platform download or purchase links |
 
 ## Why we built it
 
