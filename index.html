@@ -623,29 +623,36 @@ a:hover { text-decoration: underline; }
 }
 
 /* === Search + Filter Controls === */
-.wallet-search {
-  margin: 18px 0 12px;
+.wallet-filter-panel {
+  margin: 18px 0 16px;
 }
-.wallet-search label,
-.filter-field span {
-  display: block;
-  margin-bottom: 6px;
+.wallet-filter-heading {
+  margin: 0 0 8px;
   color: var(--text-dim);
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
+.wallet-search {
+  margin: 0 0 8px;
+}
 .wallet-search-input,
 .filter-select {
   width: 100%;
-  min-height: 42px;
-  padding: 10px 12px;
+  min-width: 0;
+  min-height: 40px;
+  padding: 9px 10px;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--bg2);
   color: var(--text);
   font: inherit;
+  font-size: 0.9rem;
+}
+.filter-select {
+  padding-left: 7px;
+  padding-right: 4px;
 }
 .wallet-search-input:focus,
 .filter-select:focus {
@@ -655,12 +662,9 @@ a:hover { text-decoration: underline; }
 }
 .filter-controls {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-  margin: 0 0 16px;
-}
-@media (min-width: 720px) {
-  .filter-controls { grid-template-columns: repeat(3, 1fr); }
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0;
 }
 .empty-state {
   padding: 26px 18px;
@@ -1551,11 +1555,7 @@ function renderSelect(group, label, options) {
   const opts = options.map(o =>
     `<option value="${o.id}"${activeFilters[group] === o.id ? ' selected' : ''}>${o.label}</option>`
   ).join('');
-  return `
-    <label class="filter-field" for="filter-${group}">
-      <span>${label}</span>
-      <select id="filter-${group}" class="filter-select" onchange="setFilter('${group}', this.value)">${opts}</select>
-    </label>`;
+  return `<select id="filter-${group}" class="filter-select" aria-label="${label}" onchange="setFilter('${group}', this.value)">${opts}</select>`;
 }
 
 function renderFilterControls() {
@@ -1620,11 +1620,13 @@ function renderBuilder() {
 
     </div>
 
-    <div class="wallet-search">
-      <label for="wallet-search">Search wallets</label>
-      <input id="wallet-search" class="wallet-search-input" type="search" placeholder="Search wallet names…" autocomplete="off" oninput="applyWalletFilters()">
+    <div class="wallet-filter-panel" aria-label="Search and filter wallets">
+      <div class="wallet-filter-heading">Search and filter wallets</div>
+      <div class="wallet-search">
+        <input id="wallet-search" class="wallet-search-input" type="search" aria-label="Search wallets" placeholder="Search wallet names…" autocomplete="off" oninput="applyWalletFilters()">
+      </div>
+      <div class="filter-controls" id="filter-controls">${renderFilterControls()}</div>
     </div>
-    <div class="filter-controls" id="filter-controls">${renderFilterControls()}</div>
     <div id="wallet-grid-container">${renderWalletGrid()}</div>
   `;
 
