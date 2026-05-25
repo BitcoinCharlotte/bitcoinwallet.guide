@@ -754,8 +754,8 @@ const WALLETS = [
   },
   {
     id: "zeus", name: "Zeus",
-    description: "Self-custodial Lightning wallet for connecting to your own node or running an embedded node on mobile.",
-    platforms: ["ios", "android"], categories: ["lightning"], custody: "self-custodial",
+    description: "Self-custodial mobile wallet for Lightning and on-chain Bitcoin payments.",
+    platforms: ["ios", "android"], categories: ["lightning", "onchain"], custody: "self-custodial",
     url: "https://zeusln.com",
     appStore: "https://apps.apple.com/app/zeus-ln/id1456038895",
     playStore: "https://play.google.com/store/apps/details?id=app.zeusln.zeus",
@@ -834,8 +834,8 @@ const WALLETS = [
   },
   {
     id: "bluewallet", name: "Blue Wallet",
-    description: "Mobile Bitcoin wallet for on-chain self-custody with multiple wallets in one app and optional Lightning support through external LndHub connections.",
-    platforms: ["ios", "android"], categories: ["onchain"], custody: "self-custodial",
+    description: "Mobile Bitcoin and Lightning wallet for iOS and Android with multiple wallets in one app.",
+    platforms: ["ios", "android"], categories: ["onchain", "lightning"], custody: "self-custodial",
     url: "https://bluewallet.io",
     appStore: "https://apps.apple.com/app/bluewallet-bitcoin-wallet/id1376878040",
     playStore: "https://play.google.com/store/apps/details?id=io.bluewallet.bluewallet",
@@ -1085,8 +1085,8 @@ const WALLETS = [
   },
   {
     id: "minibits", name: "Minibits",
-    description: "Android Cashu ecash wallet with Lightning send and receive.",
-    platforms: ["android"], categories: ["ecash", "lightning"], custody: "community",
+    description: "Cashu ecash wallet for Android and iOS with Lightning send and receive.",
+    platforms: ["ios", "android"], categories: ["ecash", "lightning"], custody: "community",
     url: "https://www.minibits.cash",
     appStore: null,
     playStore: "https://play.google.com/store/apps/details?id=com.minibits_wallet",
@@ -1195,7 +1195,7 @@ const WALLETS = [
   },
   {
     id: "casa", name: "Casa",
-    description: "Collaborative multisig custody app for Bitcoin and Ethereum with vaults, inheritance, and concierge plans.",
+    description: "Collaborative self-custody app for Bitcoin and stablecoins with vaults, inheritance, and concierge plans.",
     platforms: ["ios", "android", "web"], categories: ["onchain", "multisig"], custody: "self-custodial", notBitcoinOnly: true,
     url: "https://casa.io",
     appStore: "https://apps.apple.com/app/casa-secure-bitcoin-storage/id1300262378",
