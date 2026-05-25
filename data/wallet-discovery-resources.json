@@ -21,34 +21,10 @@
       "why": "Protocol-level wallet changes, vulnerability context, fee/PSBT/miniscript/Taproot updates."
     },
     {
-      "name": "WalletScrutiny",
-      "url": "https://walletscrutiny.com/",
-      "kind": "wallet-index/security",
-      "why": "Checks reproducibility/open-source claims and highlights custody/security caveats."
-    },
-    {
-      "name": "Bitcoin Design Guide - daily spending wallet",
-      "url": "https://bitcoin.design/guide/daily-spending-wallet/",
-      "kind": "ux-guidance",
-      "why": "Good qualitative reference for wallet UX and newcomer-fit criteria."
-    },
-    {
-      "name": "Bitcoin.org choose wallet",
-      "url": "https://bitcoin.org/en/choose-your-wallet",
-      "kind": "wallet-index",
-      "why": "Mainstream wallet directory; useful for candidates but not authoritative."
-    },
-    {
-      "name": "Jameson Lopp recommended wallets",
-      "url": "https://www.lopp.net/bitcoin-information/recommended-wallets.html",
-      "kind": "curated-index",
-      "why": "Long-running curated Bitcoin resource list with wallet sections."
-    },
-    {
       "name": "F-Droid package search - bitcoin wallet",
       "url": "https://search.f-droid.org/?q=bitcoin%20wallet",
       "kind": "app-store/open-source",
-      "why": "Find Android wallets with published source/reproducible-build signals."
+      "why": "Find Android wallets with published source/reproducible-build signals and candidate F-Droid download links."
     },
     {
       "name": "Apple iTunes Search API - bitcoin wallet",
@@ -66,7 +42,7 @@
       "name": "GitHub topic - bitcoin-wallet",
       "url": "https://github.com/topics/bitcoin-wallet",
       "kind": "source-discovery",
-      "why": "Find open-source wallet repos sorted by activity/popularity."
+      "why": "Find open-source Bitcoin wallet repos sorted by activity/popularity."
     },
     {
       "name": "GitHub topic - lightning-wallet",
@@ -75,40 +51,28 @@
       "why": "Find Lightning wallet candidates and active repos."
     },
     {
-      "name": "GitHub topic - cashu",
-      "url": "https://github.com/topics/cashu",
+      "name": "GitHub topic - ecash-wallet",
+      "url": "https://github.com/topics/ecash-wallet",
       "kind": "source-discovery",
-      "why": "Find ecash/Cashu wallet candidates."
+      "why": "Find ecash wallet candidates without narrowing only to Cashu-specific repos."
     },
     {
-      "name": "GitHub API search - bitcoin wallet",
-      "url": "https://api.github.com/search/repositories?q=bitcoin+wallet+in:name,description,readme&sort=updated&order=desc",
-      "kind": "source-discovery-api",
-      "why": "Machine-readable active repo discovery; rate-limited without auth."
+      "name": "GitHub topic - nostr-wallet",
+      "url": "https://github.com/topics/nostr-wallet",
+      "kind": "source-discovery",
+      "why": "Find Nostr wallet/NWC-adjacent projects and active repos."
     },
     {
-      "name": "GitHub API search - lightning wallet",
-      "url": "https://api.github.com/search/repositories?q=lightning+wallet+bitcoin+in:name,description,readme&sort=updated&order=desc",
-      "kind": "source-discovery-api",
-      "why": "Machine-readable Lightning wallet discovery; rate-limited without auth."
+      "name": "Primal Nostr notes search - bitcoin wallet",
+      "url": "https://primal.net/search?query=bitcoin%20wallet",
+      "kind": "nostr-community-signal",
+      "why": "Search Nostr notes for bitcoin-wallet chatter, launches, regressions, and community sentiment."
     },
     {
-      "name": "GitHub API search - cashu wallet",
-      "url": "https://api.github.com/search/repositories?q=cashu+wallet+in:name,description,readme&sort=updated&order=desc",
-      "kind": "source-discovery-api",
-      "why": "Machine-readable Cashu/ecash wallet discovery."
-    },
-    {
-      "name": "Nostr Wallet Connect / NIP-47 repos search",
-      "url": "https://api.github.com/search/repositories?q=NIP-47+wallet+bitcoin&sort=updated&order=desc",
-      "kind": "source-discovery-api",
-      "why": "Find wallets integrating Nostr wallet/payment flows."
-    },
-    {
-      "name": "Bitcoin Magazine wallets tag",
-      "url": "https://bitcoinmagazine.com/tags/wallets",
-      "kind": "news-search",
-      "why": "Broader industry news; noisier than NoBS, useful for launch announcements."
+      "name": "Primal Nostr notes search - bitcoin-wallet",
+      "url": "https://primal.net/search?query=bitcoin-wallet",
+      "kind": "nostr-community-signal",
+      "why": "Hyphenated Nostr notes search to catch bitcoin-wallet tags/phrasing missed by the spaced query."
     },
     {
       "name": "Stacker News wallet search",

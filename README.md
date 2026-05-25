@@ -23,6 +23,8 @@ A free, no-signup, no-tracking tool that lets you curate a personalized list of 
 
 ## On the roadmap
 
+- **Individual wallet pages** — deeper specifics for each wallet, including custody model, platform availability, feature notes, source/release links, and WalletScrutiny checks where available.
+- **F-Droid download links** — evaluate adding F-Droid as a first-class Android download option for wallets that officially publish there.
 - **Region / availability metadata** — real country/region filtering once wallet availability is tracked.
 - **Printable flyers** — curated wallet recommendations as a one-page handout, designed to print.
 - **Bitcoin stickers** — meetup-ready sticker sheets.
