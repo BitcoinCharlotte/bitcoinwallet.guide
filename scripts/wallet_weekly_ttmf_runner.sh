@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Weekly bitcoinwallet.guide maintenance runner for TTMF.
-# Intended systemd working directory: /srv/www/bitcoin-wallet-guide
+# Weekly bitcoinwallet.guide maintenance runner for maintainer infrastructure.
+# Intended TTMF systemd working directory: /srv/www/bitcoin-wallet-guide
 # This updates Gitea/TTMF preview only. It does NOT publish to GitHub Pages/live.
+# See docs/wallet-research-automation.md for source model, flags, outputs, and guardrails.
 
 REPO_DIR="${BWG_REPO_DIR:-/srv/www/bitcoin-wallet-guide}"
 STAMP="${BWG_WEEKLY_STAMP:-$(date -u +%Y%m%d-%H%M%S)}"

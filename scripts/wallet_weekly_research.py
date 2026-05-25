@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 """Weekly wallet research + proposal staging for bitcoinwallet.guide.
 
-What this script does:
-1) Parses the WALLETS array from index.html (without brittle regex edits).
-2) Fetches objective source signals from each wallet's official links:
-   - HTTP status/final URL/content-type
-   - <title> and meta description (when available)
-3) Emits a dated research snapshot under reports/weekly/<stamp>/.
-4) Emits a self-contained Hermes prompt that asks for objective
-   description/tag proposals and a staged patch file for review.
+Default mode is evidence-only:
+1) Parse the WALLETS array from index.html without brittle regex edits.
+2) Fetch objective signals from visible wallet links, hidden per-wallet
+   maintenance sources, and curated global discovery resources.
+3) Emit dated review artifacts under reports/weekly/<stamp>/.
+4) Emit a self-contained Hermes prompt for producing a human-reviewable
+   proposal summary and a non-applied index.html patch.
 
-This script does NOT modify index.html directly.
+Maintainer automation can opt into the full review/apply flow with:
+--git-sync --run-hermes --apply-staged-patch --commit-and-push
+
+Even in automation mode this script pushes only to the existing Gitea
+origin/main preview path. It does not publish the live GitHub Pages site.
 """
 
 from __future__ import annotations

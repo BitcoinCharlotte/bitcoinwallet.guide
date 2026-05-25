@@ -56,7 +56,7 @@ Hidden maintenance metadata lives in `data/` so contributors can audit the sourc
 - `data/wallet-research-sources.json` — per-wallet blog/news, release, and source URLs.
 - `data/wallet-discovery-resources.json` — global resources for discovering new wallets and cross-checking existing entries.
 
-Generated weekly reports are local review artifacts and are intentionally not committed to the public repo.
+Generated weekly reports are local review artifacts and are intentionally not committed to the public repo. Full workflow documentation lives in [`docs/wallet-research-automation.md`](./docs/wallet-research-automation.md).
 
 ## Project layout
 
@@ -66,6 +66,7 @@ Generated weekly reports are local review artifacts and are intentionally not co
 ├── icons/                 # PNG wallet icons and source/icon variants
 ├── lib/                   # Third-party browser libraries, including QR generation
 ├── data/                  # Hidden maintenance metadata for wallet research automation
+├── docs/                  # Maintainer and contributor workflow documentation
 ├── scripts/
 │   ├── bump-version.sh                # Generates version.json from the current HEAD commit
 │   ├── publish.sh                     # Maintainer publishing utility
