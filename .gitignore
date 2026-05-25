@@ -10,6 +10,8 @@ Thumbs.db
 node_modules/
 dist/
 .cache/
+__pycache__/
+*.py[cod]
 
 # Local notes / drafts
 *.local.*
@@ -18,6 +20,9 @@ TODO.local.md
 
 # Logs
 *.log
+
+# Generated wallet research snapshots/proposals
+reports/weekly/
 
 # Build version (regenerated per deploy by scripts/bump-version.sh)
 version.json

@@ -66,6 +66,34 @@ The publish script has safety checks: it refuses to publish if the working tree 
 
 This setup keeps "iterate fast" (push to Gitea, no public exposure) separate from "publish to the world" (an explicit, deliberate action).
 
+## Weekly wallet research helper
+
+Wallet descriptions and app-store links go stale. The maintenance helper scans the current `WALLETS` data, fetches objective source signals from each official wallet link, and writes review artifacts under `reports/weekly/<stamp>/`:
+
+- `wallet-research.json` — raw snapshot with status codes, final URLs, titles, and meta descriptions.
+- `snapshot-summary.md` — human-readable link-check summary.
+- `stage-proposal.prompt.md` — a self-contained Hermes prompt for producing a review summary and a non-applied `index.html` patch.
+
+Run a snapshot:
+
+```bash
+python3 scripts/wallet_weekly_research.py --timeout 10 --workers 10
+```
+
+Smoke-test only the first few wallets:
+
+```bash
+python3 scripts/wallet_weekly_research.py --limit 3 --timeout 5 --workers 3
+```
+
+Optionally ask Hermes to generate the staged proposal artifacts after the scan:
+
+```bash
+python3 scripts/wallet_weekly_research.py --run-hermes --timeout 10 --workers 10
+```
+
+The script does **not** modify `index.html` unless a human later reviews and applies the generated patch. Generated `reports/weekly/` artifacts are intentionally gitignored.
+
 ## Project layout
 
 ```
@@ -74,8 +102,9 @@ This setup keeps "iterate fast" (push to Gitea, no public exposure) separate fro
 ├── icons/                 # PNG wallet icons and source/icon variants
 ├── lib/                   # Third-party browser libraries, including QR generation
 ├── scripts/
-│   ├── bump-version.sh    # Generates version.json from the current HEAD commit
-│   └── publish.sh         # Promotes tested Gitea state to GitHub Pages
+│   ├── bump-version.sh             # Generates version.json from the current HEAD commit
+│   ├── publish.sh                  # Promotes tested Gitea state to GitHub Pages
+│   └── wallet_weekly_research.py   # Scans wallet links and stages review artifacts
 ├── CNAME                  # GitHub Pages custom domain
 ├── .nojekyll              # Tells GitHub Pages to skip Jekyll processing
 ├── 404.html               # Branded "page not found" page
