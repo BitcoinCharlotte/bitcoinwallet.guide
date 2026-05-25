@@ -43,56 +43,18 @@ python3 -m http.server 8000
 
 No build step, no package install, no JavaScript toolchain. The app lives in `index.html` with static assets in `icons/`, `lib/`, and the root image files. Edit, refresh, ship.
 
-## Development & publish workflow
+## Weekly wallet data maintenance
 
-This repo is mirrored across two remotes:
+Wallet descriptions, app-store links, release pages, and project blogs go stale. BitcoinWallet.Guide is maintained with a weekly automated research pass that checks wallet websites, app-store listings, release notes, source repositories, and curated Bitcoin wallet discovery resources.
 
-| Remote | URL | Purpose |
-|---|---|---|
-| `origin` | Internal Gitea | Source of truth. All commits land here first. |
-| `github` | github.com/BitcoinCharlotte/bitcoinwallet.guide | Public mirror. Pushes here trigger a GitHub Pages deploy to https://bitcoinwallet.guide/ |
+The weekly automation is designed to catch dead links, changed download pages, new releases, stale descriptions, and candidate wallets worth reviewing. Findings are staged for review before they become public site changes, so the guide can stay current without adding accounts, analytics, cookies, or visitor tracking.
 
-**The flow:**
+Hidden maintenance metadata lives in `data/` so contributors can audit the source lists without cluttering the wallet picker itself:
 
-1. Edit locally → `git add` → `git commit`.
-2. `git push origin main` → goes to Gitea only.
-3. Test the internal preview. Do not assume a Gitea push means the public site changed.
-4. **STOP. Confirm visually that everything looks right on the preview.** Don't skip this step — it's the whole point of the split.
-5. When Jacob explicitly approves a live publish, run `./scripts/publish.sh` → promotes the same commit to GitHub. Pages auto-deploys in ~30 seconds.
+- `data/wallet-research-sources.json` — per-wallet blog/news, release, and source URLs.
+- `data/wallet-discovery-resources.json` — global resources for discovering new wallets and cross-checking existing entries.
 
-**🚨 Hard rule for agents: never run `publish.sh` in the same turn as the Gitea push.** Push to Gitea, then stop and surrender the turn to Jacob. He'll tell you when to publish. The two are deliberately separate actions — bundling them defeats the safety of the workflow.
-
-The publish script has safety checks: it refuses to publish if the working tree isn't clean, if local `main` is ahead of Gitea (untested), or if the push would require a force-push (i.e. GitHub has commits Gitea doesn't — investigate first).
-
-This setup keeps "iterate fast" (push to Gitea, no public exposure) separate from "publish to the world" (an explicit, deliberate action).
-
-## Weekly wallet research helper
-
-Wallet descriptions and app-store links go stale. The maintenance helper scans the current `WALLETS` data, fetches objective source signals from each official wallet link, and writes review artifacts under `reports/weekly/<stamp>/`:
-
-- `wallet-research.json` — raw snapshot with status codes, final URLs, titles, and meta descriptions.
-- `snapshot-summary.md` — human-readable link-check summary.
-- `stage-proposal.prompt.md` — a self-contained Hermes prompt for producing a review summary and a non-applied `index.html` patch.
-
-Run a snapshot:
-
-```bash
-python3 scripts/wallet_weekly_research.py --timeout 10 --workers 10
-```
-
-Smoke-test only the first few wallets:
-
-```bash
-python3 scripts/wallet_weekly_research.py --limit 3 --timeout 5 --workers 3
-```
-
-Optionally ask Hermes to generate the staged proposal artifacts after the scan:
-
-```bash
-python3 scripts/wallet_weekly_research.py --run-hermes --timeout 10 --workers 10
-```
-
-The script does **not** modify `index.html` unless a human later reviews and applies the generated patch. Generated `reports/weekly/` artifacts are intentionally gitignored.
+Generated weekly reports are local review artifacts and are intentionally not committed to the public repo.
 
 ## Project layout
 
@@ -101,10 +63,12 @@ The script does **not** modify `index.html` unless a human later reviews and app
 ├── index.html             # The app — HTML, CSS, JS, embedded wallet data, inline icons
 ├── icons/                 # PNG wallet icons and source/icon variants
 ├── lib/                   # Third-party browser libraries, including QR generation
+├── data/                  # Hidden maintenance metadata for wallet research automation
 ├── scripts/
-│   ├── bump-version.sh             # Generates version.json from the current HEAD commit
-│   ├── publish.sh                  # Promotes tested Gitea state to GitHub Pages
-│   └── wallet_weekly_research.py   # Scans wallet links and stages review artifacts
+│   ├── bump-version.sh                # Generates version.json from the current HEAD commit
+│   ├── publish.sh                     # Maintainer publishing utility
+│   ├── wallet_weekly_research.py      # Scans wallet links/sources and stages review artifacts
+│   └── wallet_weekly_ttmf_runner.sh   # Maintainer automation wrapper; does not publish live
 ├── CNAME                  # GitHub Pages custom domain
 ├── .nojekyll              # Tells GitHub Pages to skip Jekyll processing
 ├── 404.html               # Branded "page not found" page

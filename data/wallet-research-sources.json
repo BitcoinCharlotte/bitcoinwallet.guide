@@ -1,0 +1,1060 @@
+{
+  "schema": "bwg-wallet-research-sources/v1",
+  "purpose": "Hidden maintenance metadata for weekly wallet research. These URLs are not rendered on the website.",
+  "wallets": {
+    "phoenix": {
+      "news": [
+        {
+          "label": "Phoenix official site",
+          "url": "https://phoenix.acinq.co",
+          "notes": "No separate official Phoenix blog found; use global news resources for announcements."
+        }
+      ],
+      "releases": [
+        {
+          "label": "Phoenix GitHub releases",
+          "url": "https://github.com/ACINQ/phoenix/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Phoenix source repo",
+          "url": "https://github.com/ACINQ/phoenix"
+        }
+      ]
+    },
+    "breez": {
+      "news": [
+        {
+          "label": "Breez blog",
+          "url": "https://blog.breez.technology"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Breez Mobile GitHub releases",
+          "url": "https://github.com/breez/breezmobile/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Breez Mobile source repo",
+          "url": "https://github.com/breez/breezmobile"
+        }
+      ]
+    },
+    "zeus": {
+      "news": [
+        {
+          "label": "Zeus blog",
+          "url": "https://blog.zeusln.com/"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Zeus GitHub releases",
+          "url": "https://github.com/ZeusLN/zeus/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Zeus source repo",
+          "url": "https://github.com/ZeusLN/zeus"
+        }
+      ]
+    },
+    "muun": {
+      "news": [
+        {
+          "label": "Muun blog",
+          "url": "https://blog.muun.com/"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Muun Apollo GitHub releases",
+          "url": "https://github.com/muun/apollo/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Muun Apollo source repo",
+          "url": "https://github.com/muun/apollo"
+        }
+      ]
+    },
+    "wos": {
+      "news": [
+        {
+          "label": "Wallet of Satoshi official site",
+          "url": "https://www.walletofsatoshi.com",
+          "notes": "No public source repo or official blog found."
+        }
+      ],
+      "releases": [
+        {
+          "label": "Wallet of Satoshi App Store version history",
+          "url": "https://apps.apple.com/app/wallet-of-satoshi/id1438599608",
+          "type": "app-store"
+        }
+      ],
+      "source": []
+    },
+    "blixt": {
+      "news": [
+        {
+          "label": "Blixt official site",
+          "url": "https://blixtwallet.github.io",
+          "notes": "Archived on BWG; use releases/global news for update signal."
+        }
+      ],
+      "releases": [
+        {
+          "label": "Blixt GitHub releases",
+          "url": "https://github.com/hsjoberg/blixt-wallet/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Blixt source repo",
+          "url": "https://github.com/hsjoberg/blixt-wallet"
+        }
+      ]
+    },
+    "alby": {
+      "news": [
+        {
+          "label": "Alby blog",
+          "url": "https://blog.getalby.com/"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Alby Hub GitHub releases",
+          "url": "https://github.com/getAlby/hub/releases",
+          "type": "github-releases"
+        },
+        {
+          "label": "Alby browser extension GitHub releases",
+          "url": "https://github.com/getAlby/lightning-browser-extension/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Alby Hub source repo",
+          "url": "https://github.com/getAlby/hub"
+        },
+        {
+          "label": "Alby browser extension source repo",
+          "url": "https://github.com/getAlby/lightning-browser-extension"
+        }
+      ]
+    },
+    "blink": {
+      "news": [
+        {
+          "label": "Blink blog/articles",
+          "url": "https://www.blink.sv/en/blog/articles"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Blink Mobile GitHub releases",
+          "url": "https://github.com/blinkbitcoin/blink-mobile/releases/",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Blink Mobile source repo",
+          "url": "https://github.com/blinkbitcoin/blink-mobile"
+        }
+      ]
+    },
+    "coinos": {
+      "news": [
+        {
+          "label": "Coinos official site",
+          "url": "https://coinos.io",
+          "notes": "No dedicated official blog found."
+        }
+      ],
+      "releases": [
+        {
+          "label": "Coinos server GitHub releases",
+          "url": "https://github.com/coinos/coinos-server/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Coinos server source repo",
+          "url": "https://github.com/coinos/coinos-server"
+        }
+      ]
+    },
+    "sparrow": {
+      "news": [
+        {
+          "label": "Sparrow official site",
+          "url": "https://sparrowwallet.com",
+          "notes": "Release news primarily appears on GitHub releases/downloads."
+        }
+      ],
+      "releases": [
+        {
+          "label": "Sparrow GitHub releases",
+          "url": "https://github.com/sparrowwallet/sparrow/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Sparrow source repo",
+          "url": "https://github.com/sparrowwallet/sparrow"
+        }
+      ]
+    },
+    "bluewallet": {
+      "news": [
+        {
+          "label": "BlueWallet blog",
+          "url": "https://bluewallet.io/blog/"
+        }
+      ],
+      "releases": [
+        {
+          "label": "BlueWallet GitHub releases",
+          "url": "https://github.com/BlueWallet/BlueWallet/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "BlueWallet source repo",
+          "url": "https://github.com/BlueWallet/BlueWallet"
+        }
+      ]
+    },
+    "nunchuk": {
+      "news": [
+        {
+          "label": "Nunchuk blog",
+          "url": "https://nunchuk.io/blog"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Nunchuk Desktop GitHub releases",
+          "url": "https://github.com/nunchuk-io/nunchuk-desktop/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Nunchuk GitHub org",
+          "url": "https://github.com/nunchuk-io"
+        }
+      ]
+    },
+    "green": {
+      "news": [
+        {
+          "label": "Blockstream blog",
+          "url": "https://blog.blockstream.com/"
+        },
+        {
+          "label": "Blockstream newsroom",
+          "url": "https://blockstream.com/newsroom/"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Blockstream Green Android GitHub releases",
+          "url": "https://github.com/Blockstream/green_android/releases",
+          "type": "github-releases"
+        },
+        {
+          "label": "Blockstream Green desktop GitHub releases",
+          "url": "https://github.com/Blockstream/green_qt/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Blockstream Green Android source repo",
+          "url": "https://github.com/Blockstream/green_android"
+        },
+        {
+          "label": "Blockstream Green desktop source repo",
+          "url": "https://github.com/Blockstream/green_qt"
+        }
+      ]
+    },
+    "aqua": {
+      "news": [
+        {
+          "label": "AQUA official site",
+          "url": "https://aquawallet.io",
+          "notes": "Official site currently times out from this environment; global news resources catch announcements."
+        }
+      ],
+      "releases": [
+        {
+          "label": "AQUA Wallet GitHub releases",
+          "url": "https://github.com/AquaWallet/aqua-wallet/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "AQUA Wallet source repo",
+          "url": "https://github.com/AquaWallet/aqua-wallet"
+        }
+      ]
+    },
+    "envoy": {
+      "news": [
+        {
+          "label": "Foundation blog",
+          "url": "https://foundation.xyz/blog"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Envoy GitHub releases",
+          "url": "https://github.com/Foundation-Devices/envoy/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Envoy source repo",
+          "url": "https://github.com/Foundation-Devices/envoy"
+        }
+      ]
+    },
+    "electrum": {
+      "news": [
+        {
+          "label": "Electrum website news section",
+          "url": "https://electrum.org/#news"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Electrum downloads/releases",
+          "url": "https://download.electrum.org/",
+          "type": "download-directory"
+        },
+        {
+          "label": "Electrum release notes",
+          "url": "https://github.com/spesmilo/electrum/blob/master/RELEASE-NOTES",
+          "type": "release-notes"
+        }
+      ],
+      "source": [
+        {
+          "label": "Electrum source repo",
+          "url": "https://github.com/spesmilo/electrum"
+        }
+      ]
+    },
+    "wasabi": {
+      "news": [
+        {
+          "label": "Wasabi official site",
+          "url": "https://wasabiwallet.io",
+          "notes": "Former blog subdomain was not resolvable during research."
+        }
+      ],
+      "releases": [
+        {
+          "label": "Wasabi Wallet GitHub releases",
+          "url": "https://github.com/WalletWasabi/WalletWasabi/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Wasabi Wallet source repo",
+          "url": "https://github.com/WalletWasabi/WalletWasabi"
+        }
+      ]
+    },
+    "proton": {
+      "news": [
+        {
+          "label": "Proton Wallet product updates",
+          "url": "https://proton.me/blog/product-updates/proton-wallet"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Proton Wallet download page",
+          "url": "https://proton.me/wallet/download",
+          "type": "download-page"
+        }
+      ],
+      "source": [
+        {
+          "label": "Proton Wallet GitHub org",
+          "url": "https://github.com/protonwallet/"
+        }
+      ]
+    },
+    "bullbitcoin": {
+      "news": [
+        {
+          "label": "Bull Bitcoin blog",
+          "url": "https://www.bullbitcoin.com/blog"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Bull Bitcoin mobile GitHub releases",
+          "url": "https://github.com/SatoshiPortal/bullbitcoin-mobile/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Bull Bitcoin mobile source repo",
+          "url": "https://github.com/SatoshiPortal/bullbitcoin-mobile"
+        }
+      ]
+    },
+    "strike": {
+      "news": [
+        {
+          "label": "Strike blog",
+          "url": "https://strike.me/blog/"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Strike App Store version history",
+          "url": "https://apps.apple.com/app/strike-bitcoin-payments/id1488724463",
+          "type": "app-store"
+        }
+      ],
+      "source": []
+    },
+    "river": {
+      "news": [
+        {
+          "label": "River Learn/newsletter",
+          "url": "https://river.com/learn/"
+        },
+        {
+          "label": "River newsletter",
+          "url": "https://river.com/newsletter"
+        }
+      ],
+      "releases": [
+        {
+          "label": "River App Store version history",
+          "url": "https://apps.apple.com/app/river-buy-bitcoin/id1536176542",
+          "type": "app-store"
+        }
+      ],
+      "source": []
+    },
+    "swan": {
+      "news": [
+        {
+          "label": "Swan articles",
+          "url": "https://www.swanbitcoin.com/articles"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Swan App Store version history",
+          "url": "https://apps.apple.com/app/swan-bitcoin-buy-save/id1576287352",
+          "type": "app-store"
+        }
+      ],
+      "source": []
+    },
+    "cashapp": {
+      "news": [
+        {
+          "label": "Cash App press/news",
+          "url": "https://cash.app/press"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Cash App App Store version history",
+          "url": "https://apps.apple.com/app/cash-app/id711923939",
+          "type": "app-store"
+        }
+      ],
+      "source": []
+    },
+    "fold": {
+      "news": [
+        {
+          "label": "Fold blog",
+          "url": "https://blog.foldapp.com/"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Fold App Store version history",
+          "url": "https://apps.apple.com/app/fold-bitcoin-personal-finance/id1480424785",
+          "type": "app-store"
+        }
+      ],
+      "source": []
+    },
+    "amber": {
+      "news": [
+        {
+          "label": "Amber articles",
+          "url": "https://www.amber.app/article/the-importance-of-price-signals-facilitating-cooperation-and-efficient-resource-allocation",
+          "notes": "No durable blog index found; official article URL used as a weak signal."
+        }
+      ],
+      "releases": [
+        {
+          "label": "Amber Google Play listing",
+          "url": "https://play.google.com/store/apps/details?id=io.getamber.app",
+          "type": "google-play"
+        }
+      ],
+      "source": []
+    },
+    "coldcard": {
+      "news": [
+        {
+          "label": "Coinkite blog",
+          "url": "https://blog.coinkite.com/"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Coldcard firmware GitHub releases",
+          "url": "https://github.com/Coldcard/firmware/releases",
+          "type": "github-releases"
+        },
+        {
+          "label": "Coldcard firmware downloads",
+          "url": "https://coldcard.com/downloads",
+          "type": "download-page"
+        }
+      ],
+      "source": [
+        {
+          "label": "Coldcard firmware source repo",
+          "url": "https://github.com/Coldcard/firmware"
+        }
+      ]
+    },
+    "passport": {
+      "news": [
+        {
+          "label": "Foundation blog",
+          "url": "https://foundation.xyz/blog"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Passport firmware GitHub releases",
+          "url": "https://github.com/Foundation-Devices/passport2/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Passport firmware source repo",
+          "url": "https://github.com/Foundation-Devices/passport2"
+        }
+      ]
+    },
+    "jade": {
+      "news": [
+        {
+          "label": "Blockstream blog",
+          "url": "https://blog.blockstream.com/"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Blockstream Jade GitHub releases",
+          "url": "https://github.com/Blockstream/Jade/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Blockstream Jade source repo",
+          "url": "https://github.com/Blockstream/Jade"
+        }
+      ]
+    },
+    "seedsigner": {
+      "news": [
+        {
+          "label": "SeedSigner official site",
+          "url": "https://seedsigner.com",
+          "notes": "No dedicated official blog index found."
+        }
+      ],
+      "releases": [
+        {
+          "label": "SeedSigner GitHub releases",
+          "url": "https://github.com/SeedSigner/seedsigner/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "SeedSigner source repo",
+          "url": "https://github.com/SeedSigner/seedsigner"
+        }
+      ]
+    },
+    "krux": {
+      "news": [
+        {
+          "label": "Krux documentation/site",
+          "url": "https://selfcustody.github.io/krux/"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Krux GitHub releases",
+          "url": "https://github.com/selfcustody/krux/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Krux source repo",
+          "url": "https://github.com/selfcustody/krux"
+        }
+      ]
+    },
+    "trezor": {
+      "news": [
+        {
+          "label": "Trezor blog",
+          "url": "https://trezor.io/blog"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Trezor firmware GitHub releases",
+          "url": "https://github.com/trezor/trezor-firmware/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Trezor firmware source repo",
+          "url": "https://github.com/trezor/trezor-firmware"
+        }
+      ]
+    },
+    "bitkey": {
+      "news": [
+        {
+          "label": "Bitkey blog",
+          "url": "https://bitkey.world/blog"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Bitkey official releases",
+          "url": "https://bitkey.world/releases",
+          "type": "official-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Bitkey source repo",
+          "url": "https://github.com/proto-at-block/bitkey"
+        }
+      ]
+    },
+    "unchained": {
+      "news": [
+        {
+          "label": "Unchained blog",
+          "url": "https://www.unchained.com/blog"
+        },
+        {
+          "label": "Unchained product updates",
+          "url": "https://www.unchained.com/blog-category/product-updates"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Unchained product updates",
+          "url": "https://www.unchained.com/blog-category/product-updates",
+          "type": "product-updates"
+        }
+      ],
+      "source": [
+        {
+          "label": "Unchained GitHub org",
+          "url": "https://github.com/unchained-capital"
+        }
+      ]
+    },
+    "fedi": {
+      "news": [
+        {
+          "label": "Fedi blog",
+          "url": "https://www.fedi.xyz/blog"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Fedi GitHub releases",
+          "url": "https://github.com/fedixyz/fedi/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Fedi source repo",
+          "url": "https://github.com/fedixyz/fedi"
+        }
+      ]
+    },
+    "enuts": {
+      "news": [
+        {
+          "label": "eNuts official site",
+          "url": "https://enuts.cash",
+          "notes": "No dedicated official blog found."
+        }
+      ],
+      "releases": [
+        {
+          "label": "eNuts GitHub releases",
+          "url": "https://github.com/cashubtc/eNuts/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "eNuts source repo",
+          "url": "https://github.com/cashubtc/eNuts"
+        }
+      ]
+    },
+    "minibits": {
+      "news": [
+        {
+          "label": "Minibits official site",
+          "url": "https://www.minibits.cash",
+          "notes": "No dedicated official blog found."
+        }
+      ],
+      "releases": [
+        {
+          "label": "Minibits Wallet GitHub releases",
+          "url": "https://github.com/minibits-cash/minibits_wallet/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Minibits Wallet source repo",
+          "url": "https://github.com/minibits-cash/minibits_wallet"
+        }
+      ]
+    },
+    "cashume": {
+      "news": [
+        {
+          "label": "Cashu project site",
+          "url": "https://cashu.space/",
+          "notes": "Cashu.me wallet-specific blog not found; Cashu project site is used as ecosystem signal."
+        }
+      ],
+      "releases": [
+        {
+          "label": "Cashu.me GitHub releases",
+          "url": "https://github.com/cashubtc/cashu.me/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Cashu.me source repo",
+          "url": "https://github.com/cashubtc/cashu.me"
+        }
+      ]
+    },
+    "liana": {
+      "news": [
+        {
+          "label": "Liana resources",
+          "url": "https://lianawallet.com/resources/"
+        },
+        {
+          "label": "Wizardsardine blog",
+          "url": "https://wizardsardine.com/blog/"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Liana GitHub releases",
+          "url": "https://github.com/wizardsardine/liana/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Liana source repo",
+          "url": "https://github.com/wizardsardine/liana"
+        }
+      ]
+    },
+    "bitcoinsafe": {
+      "news": [
+        {
+          "label": "Bitcoin Safe official site",
+          "url": "https://bitcoin-safe.org",
+          "notes": "No dedicated official blog found."
+        }
+      ],
+      "releases": [
+        {
+          "label": "Bitcoin Safe GitHub releases",
+          "url": "https://github.com/andreasgriffin/bitcoin-safe/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Bitcoin Safe source repo",
+          "url": "https://github.com/andreasgriffin/bitcoin-safe"
+        }
+      ]
+    },
+    "specter": {
+      "news": [
+        {
+          "label": "Specter official site",
+          "url": "https://specter.solutions/desktop/",
+          "notes": "No active blog index found; use downloads and GitHub releases for updates."
+        }
+      ],
+      "releases": [
+        {
+          "label": "Specter Desktop GitHub releases",
+          "url": "https://github.com/cryptoadvance/specter-desktop/releases",
+          "type": "github-releases"
+        },
+        {
+          "label": "Specter downloads",
+          "url": "https://specter.solutions/downloads",
+          "type": "download-page"
+        }
+      ],
+      "source": [
+        {
+          "label": "Specter Desktop source repo",
+          "url": "https://github.com/cryptoadvance/specter-desktop"
+        }
+      ]
+    },
+    "tapsigner": {
+      "news": [
+        {
+          "label": "Coinkite blog",
+          "url": "https://blog.coinkite.com/"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Tapsigner FAQ/support page",
+          "url": "https://tapsigner.com/faq",
+          "type": "support-page",
+          "notes": "No public firmware/source release page found for Tapsigner."
+        }
+      ],
+      "source": []
+    },
+    "bitcoincore": {
+      "news": [
+        {
+          "label": "Bitcoin Core blog",
+          "url": "https://bitcoincore.org/en/blog/"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Bitcoin Core releases",
+          "url": "https://bitcoincore.org/en/releases/",
+          "type": "official-releases"
+        },
+        {
+          "label": "Bitcoin Core GitHub releases",
+          "url": "https://github.com/bitcoin/bitcoin/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Bitcoin Core source repo",
+          "url": "https://github.com/bitcoin/bitcoin"
+        }
+      ]
+    },
+    "bitcoinknots": {
+      "news": [
+        {
+          "label": "Bitcoin Knots news section",
+          "url": "https://bitcoinknots.org/#news"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Bitcoin Knots files/releases",
+          "url": "https://bitcoinknots.org/files/",
+          "type": "download-directory"
+        },
+        {
+          "label": "Bitcoin Knots GitHub releases",
+          "url": "https://github.com/bitcoinknots/bitcoin/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Bitcoin Knots source repo",
+          "url": "https://github.com/bitcoinknots/bitcoin"
+        }
+      ]
+    },
+    "bitcoinkeeper": {
+      "news": [
+        {
+          "label": "Bitcoin Keeper official site",
+          "url": "https://bitcoinkeeper.app",
+          "notes": "No durable blog index found."
+        }
+      ],
+      "releases": [
+        {
+          "label": "Bitcoin Keeper mobile GitHub releases",
+          "url": "https://github.com/bithyve/bitcoin-keeper/releases/",
+          "type": "github-releases"
+        },
+        {
+          "label": "Keeper Desktop GitHub releases",
+          "url": "https://github.com/bithyve/keeper-desktop/releases/",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Bithyve GitHub org",
+          "url": "https://github.com/bithyve/"
+        }
+      ]
+    },
+    "theya": {
+      "news": [
+        {
+          "label": "Theya blog",
+          "url": "https://blog.theya.us/"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Theya App Store version history",
+          "url": "https://apps.apple.com/us/app/theya-bitcoin-wallet/id1669665032",
+          "type": "app-store"
+        }
+      ],
+      "source": []
+    },
+    "bitkit": {
+      "news": [
+        {
+          "label": "Bitkit blog",
+          "url": "https://blog.bitkit.to/"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Bitkit GitHub releases",
+          "url": "https://github.com/synonymdev/bitkit/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Bitkit source repo",
+          "url": "https://github.com/synonymdev/bitkit"
+        }
+      ]
+    },
+    "casa": {
+      "news": [
+        {
+          "label": "Casa blog",
+          "url": "https://blog.casa.io/"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Casa download page",
+          "url": "https://casa.io/download",
+          "type": "download-page"
+        }
+      ],
+      "source": []
+    },
+    "ledger": {
+      "news": [
+        {
+          "label": "Ledger blog",
+          "url": "https://www.ledger.com/blog"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Ledger Live GitHub releases",
+          "url": "https://github.com/LedgerHQ/ledger-live/releases",
+          "type": "github-releases"
+        }
+      ],
+      "source": [
+        {
+          "label": "Ledger Live source repo",
+          "url": "https://github.com/LedgerHQ/ledger-live"
+        }
+      ]
+    },
+    "coinbase": {
+      "news": [
+        {
+          "label": "Coinbase blog",
+          "url": "https://www.coinbase.com/blog"
+        }
+      ],
+      "releases": [
+        {
+          "label": "Coinbase App Store version history",
+          "url": "https://apps.apple.com/app/coinbase-buy-bitcoin-ether/id886427730",
+          "type": "app-store"
+        }
+      ],
+      "source": []
+    }
+  }
+}
