@@ -1,6 +1,6 @@
 {
   "schema": "bwg-wallet-research-sources/v1",
-  "purpose": "Hidden maintenance metadata for weekly wallet research. These URLs are not rendered on the website.",
+  "purpose": "Hidden per-wallet news/release/source/twitter/nostr links scanned by the weekly research helper. These URLs are not rendered on the public site; they exist so the helper can surface stale or moving sources and feed the Sunday Newspaper signal into the Command Center.",
   "wallets": {
     "phoenix": {
       "news": [
@@ -21,6 +21,12 @@
         {
           "label": "Phoenix source repo",
           "url": "https://github.com/ACINQ/phoenix"
+        }
+      ],
+      "twitter": [
+        {
+          "label": "Phoenix on X",
+          "url": "https://x.com/PhoenixWallet"
         }
       ]
     },
@@ -43,6 +49,12 @@
           "label": "Breez Mobile source repo",
           "url": "https://github.com/breez/breezmobile"
         }
+      ],
+      "twitter": [
+        {
+          "label": "Breez on X",
+          "url": "https://x.com/Breez_Tech"
+        }
       ]
     },
     "zeus": {
@@ -63,6 +75,19 @@
         {
           "label": "Zeus source repo",
           "url": "https://github.com/ZeusLN/zeus"
+        }
+      ],
+      "twitter": [
+        {
+          "label": "Zeus on X",
+          "url": "https://x.com/ZeusLN"
+        }
+      ],
+      "nostr": [
+        {
+          "label": "Zeus on Nostr",
+          "url": "nostr:npub1xnf02f60r9v0e5kty33a404dm79zr7z2eepyrk5gsq3m7pwvsz2sazlpr5",
+          "type": "nostr-npub"
         }
       ]
     },
@@ -85,6 +110,12 @@
           "label": "Muun Apollo source repo",
           "url": "https://github.com/muun/apollo"
         }
+      ],
+      "twitter": [
+        {
+          "label": "Muun on X",
+          "url": "https://x.com/muun"
+        }
       ]
     },
     "wos": {
@@ -102,7 +133,13 @@
           "type": "app-store"
         }
       ],
-      "source": []
+      "source": [],
+      "twitter": [
+        {
+          "label": "Wallet of Satoshi on X",
+          "url": "https://x.com/walletofsatoshi"
+        }
+      ]
     },
     "blixt": {
       "news": [
@@ -154,6 +191,19 @@
           "label": "Alby browser extension source repo",
           "url": "https://github.com/getAlby/lightning-browser-extension"
         }
+      ],
+      "twitter": [
+        {
+          "label": "Alby on X",
+          "url": "https://x.com/getAlby"
+        }
+      ],
+      "nostr": [
+        {
+          "label": "Alby on Nostr",
+          "url": "nostr:npub1getal6ykt05fsz5nqu4uld09nfj3y3qxmv8crys4aeut53unfvlqr80nfm",
+          "type": "nostr-npub"
+        }
       ]
     },
     "blink": {
@@ -174,6 +224,19 @@
         {
           "label": "Blink Mobile source repo",
           "url": "https://github.com/blinkbitcoin/blink-mobile"
+        }
+      ],
+      "twitter": [
+        {
+          "label": "Blink on X",
+          "url": "https://x.com/blinkbtc"
+        }
+      ],
+      "nostr": [
+        {
+          "label": "Blink on Nostr",
+          "url": "nostr:npub13ljnkd633c7maxatymv3y2fqq8vt3qk7j3tt0vytv90eztwgha9qmfcfhw",
+          "type": "nostr-npub"
         }
       ]
     },
@@ -197,6 +260,13 @@
           "label": "Coinos server source repo",
           "url": "https://github.com/coinos/coinos-server"
         }
+      ],
+      "nostr": [
+        {
+          "label": "Coinos on Nostr",
+          "url": "nostr:npub1w27mc4aa6m0ufe3xs5z3m6qyr52gc0rglept7vqlwx4xeaf72tasnqz70r",
+          "type": "nostr-npub"
+        }
       ]
     },
     "sparrow": {
@@ -219,6 +289,12 @@
           "label": "Sparrow source repo",
           "url": "https://github.com/sparrowwallet/sparrow"
         }
+      ],
+      "twitter": [
+        {
+          "label": "Sparrow on X",
+          "url": "https://x.com/SparrowWallet"
+        }
       ]
     },
     "bluewallet": {
@@ -240,6 +316,12 @@
           "label": "BlueWallet source repo",
           "url": "https://github.com/BlueWallet/BlueWallet"
         }
+      ],
+      "twitter": [
+        {
+          "label": "Blue Wallet on X",
+          "url": "https://x.com/bluewalletio"
+        }
       ]
     },
     "nunchuk": {
@@ -260,6 +342,12 @@
         {
           "label": "Nunchuk GitHub org",
           "url": "https://github.com/nunchuk-io"
+        }
+      ],
+      "twitter": [
+        {
+          "label": "Nunchuk on X",
+          "url": "https://x.com/nunchuk_io"
         }
       ]
     },
@@ -295,6 +383,13 @@
           "label": "Blockstream Green desktop source repo",
           "url": "https://github.com/Blockstream/green_qt"
         }
+      ],
+      "twitter": [
+        {
+          "label": "Blockstream Green on X",
+          "url": "https://x.com/Blockstream",
+          "notes": "Parent Blockstream account; no Green/Jade-specific X handle."
+        }
       ]
     },
     "aqua": {
@@ -317,6 +412,12 @@
           "label": "AQUA Wallet source repo",
           "url": "https://github.com/AquaWallet/aqua-wallet"
         }
+      ],
+      "twitter": [
+        {
+          "label": "AQUA on X",
+          "url": "https://x.com/AquaBitcoin"
+        }
       ]
     },
     "envoy": {
@@ -337,6 +438,13 @@
         {
           "label": "Envoy source repo",
           "url": "https://github.com/Foundation-Devices/envoy"
+        }
+      ],
+      "twitter": [
+        {
+          "label": "Envoy on X",
+          "url": "https://x.com/foundationdvcs",
+          "notes": "Parent Foundation Devices account; covers both Envoy and Passport."
         }
       ]
     },
@@ -407,6 +515,13 @@
           "label": "Proton Wallet GitHub org",
           "url": "https://github.com/protonwallet/"
         }
+      ],
+      "twitter": [
+        {
+          "label": "Proton Wallet on X",
+          "url": "https://x.com/ProtonPrivacy",
+          "notes": "Main Proton account; covers Proton Wallet alongside other products."
+        }
       ]
     },
     "bullbitcoin": {
@@ -428,6 +543,12 @@
           "label": "Bull Bitcoin mobile source repo",
           "url": "https://github.com/SatoshiPortal/bullbitcoin-mobile"
         }
+      ],
+      "twitter": [
+        {
+          "label": "Bull Bitcoin on X",
+          "url": "https://x.com/bullbitcoin_"
+        }
       ]
     },
     "strike": {
@@ -444,7 +565,13 @@
           "type": "app-store"
         }
       ],
-      "source": []
+      "source": [],
+      "twitter": [
+        {
+          "label": "Strike on X",
+          "url": "https://x.com/Strike"
+        }
+      ]
     },
     "river": {
       "news": [
@@ -464,7 +591,13 @@
           "type": "app-store"
         }
       ],
-      "source": []
+      "source": [],
+      "twitter": [
+        {
+          "label": "River on X",
+          "url": "https://x.com/River"
+        }
+      ]
     },
     "swan": {
       "news": [
@@ -480,7 +613,13 @@
           "type": "app-store"
         }
       ],
-      "source": []
+      "source": [],
+      "twitter": [
+        {
+          "label": "Swan Bitcoin on X",
+          "url": "https://x.com/Swan"
+        }
+      ]
     },
     "cashapp": {
       "news": [
@@ -496,7 +635,14 @@
           "type": "app-store"
         }
       ],
-      "source": []
+      "source": [],
+      "twitter": [
+        {
+          "label": "Cash App on X",
+          "url": "https://x.com/CashApp",
+          "notes": "Main Cash App account; covers the Bitcoin product alongside other features."
+        }
+      ]
     },
     "fold": {
       "news": [
@@ -512,7 +658,13 @@
           "type": "app-store"
         }
       ],
-      "source": []
+      "source": [],
+      "twitter": [
+        {
+          "label": "Fold on X",
+          "url": "https://x.com/fold_app"
+        }
+      ]
     },
     "amber": {
       "news": [
@@ -529,7 +681,20 @@
           "type": "google-play"
         }
       ],
-      "source": []
+      "source": [],
+      "twitter": [
+        {
+          "label": "Amber on X",
+          "url": "https://x.com/theamberapp"
+        }
+      ],
+      "nostr": [
+        {
+          "label": "Amber on Nostr",
+          "url": "nostr:npub16uu27ark63w72qlrzvavp4kfp8ndkxz26eyzke6uckqr0v3k0k2q3sx0h6",
+          "type": "nostr-npub"
+        }
+      ]
     },
     "coldcard": {
       "news": [
@@ -555,6 +720,12 @@
           "label": "Coldcard firmware source repo",
           "url": "https://github.com/Coldcard/firmware"
         }
+      ],
+      "twitter": [
+        {
+          "label": "Coldcard on X",
+          "url": "https://x.com/COLDCARDwallet"
+        }
       ]
     },
     "passport": {
@@ -576,6 +747,13 @@
           "label": "Passport firmware source repo",
           "url": "https://github.com/Foundation-Devices/passport2"
         }
+      ],
+      "twitter": [
+        {
+          "label": "Foundation Passport on X",
+          "url": "https://x.com/foundationdvcs",
+          "notes": "Parent Foundation Devices account; covers both Envoy and Passport."
+        }
       ]
     },
     "jade": {
@@ -596,6 +774,13 @@
         {
           "label": "Blockstream Jade source repo",
           "url": "https://github.com/Blockstream/Jade"
+        }
+      ],
+      "twitter": [
+        {
+          "label": "Blockstream Jade on X",
+          "url": "https://x.com/Blockstream",
+          "notes": "Parent Blockstream account; no Green/Jade-specific X handle."
         }
       ]
     },
@@ -619,6 +804,12 @@
           "label": "SeedSigner source repo",
           "url": "https://github.com/SeedSigner/seedsigner"
         }
+      ],
+      "twitter": [
+        {
+          "label": "SeedSigner on X",
+          "url": "https://x.com/SeedSigner"
+        }
       ]
     },
     "krux": {
@@ -639,6 +830,12 @@
         {
           "label": "Krux source repo",
           "url": "https://github.com/selfcustody/krux"
+        }
+      ],
+      "twitter": [
+        {
+          "label": "Krux on X",
+          "url": "https://x.com/selfcustodykrux"
         }
       ]
     },
@@ -661,6 +858,12 @@
           "label": "Trezor firmware source repo",
           "url": "https://github.com/trezor/trezor-firmware"
         }
+      ],
+      "twitter": [
+        {
+          "label": "Trezor on X",
+          "url": "https://x.com/Trezor"
+        }
       ]
     },
     "bitkey": {
@@ -681,6 +884,12 @@
         {
           "label": "Bitkey source repo",
           "url": "https://github.com/proto-at-block/bitkey"
+        }
+      ],
+      "twitter": [
+        {
+          "label": "Bitkey on X",
+          "url": "https://x.com/Bitkey"
         }
       ]
     },
@@ -707,6 +916,12 @@
           "label": "Unchained GitHub org",
           "url": "https://github.com/unchained-capital"
         }
+      ],
+      "twitter": [
+        {
+          "label": "Unchained on X",
+          "url": "https://x.com/unchained"
+        }
       ]
     },
     "fedi": {
@@ -727,6 +942,19 @@
         {
           "label": "Fedi source repo",
           "url": "https://github.com/fedixyz/fedi"
+        }
+      ],
+      "twitter": [
+        {
+          "label": "Fedi on X",
+          "url": "https://x.com/fedibtc"
+        }
+      ],
+      "nostr": [
+        {
+          "label": "Fedi on Nostr",
+          "url": "nostr:npub1uq70uqgas9pyhds2zt57kr9se8rg3s68ztphjnq82ts8rzeknmeql7u0c2",
+          "type": "nostr-npub"
         }
       ]
     },
@@ -771,6 +999,19 @@
         {
           "label": "Minibits Wallet source repo",
           "url": "https://github.com/minibits-cash/minibits_wallet"
+        }
+      ],
+      "twitter": [
+        {
+          "label": "Minibits on X",
+          "url": "https://x.com/MinibitsCash"
+        }
+      ],
+      "nostr": [
+        {
+          "label": "Minibits on Nostr",
+          "url": "nostr:npub1kvaln6tm0re4d99q9e4ma788wpvnw0jzkz595cljtfgwhldd75xsj9tkzv",
+          "type": "nostr-npub"
         }
       ]
     },
@@ -818,6 +1059,13 @@
         {
           "label": "Liana source repo",
           "url": "https://github.com/wizardsardine/liana"
+        }
+      ],
+      "twitter": [
+        {
+          "label": "Liana on X",
+          "url": "https://x.com/wizardsardine",
+          "notes": "Parent Wizardsardine account."
         }
       ]
     },
@@ -868,6 +1116,12 @@
           "label": "Specter Desktop source repo",
           "url": "https://github.com/cryptoadvance/specter-desktop"
         }
+      ],
+      "twitter": [
+        {
+          "label": "Specter Desktop on X",
+          "url": "https://x.com/SpecterDIY"
+        }
       ]
     },
     "tapsigner": {
@@ -885,7 +1139,14 @@
           "notes": "No public firmware/source release page found for Tapsigner."
         }
       ],
-      "source": []
+      "source": [],
+      "twitter": [
+        {
+          "label": "Tapsigner on X",
+          "url": "https://x.com/Coinkite",
+          "notes": "Parent Coinkite account; Tapsigner-specific posts share this handle."
+        }
+      ]
     },
     "bitcoincore": {
       "news": [
@@ -910,6 +1171,13 @@
         {
           "label": "Bitcoin Core source repo",
           "url": "https://github.com/bitcoin/bitcoin"
+        }
+      ],
+      "twitter": [
+        {
+          "label": "Bitcoin Core on X",
+          "url": "https://x.com/bitcoincoreorg",
+          "notes": "Community-run account linked from bitcoincore.org footer; no corporate handle exists."
         }
       ]
     },
@@ -936,6 +1204,12 @@
         {
           "label": "Bitcoin Knots source repo",
           "url": "https://github.com/bitcoinknots/bitcoin"
+        }
+      ],
+      "twitter": [
+        {
+          "label": "Bitcoin Knots on X",
+          "url": "https://x.com/BitcoinKnots"
         }
       ]
     },
@@ -964,6 +1238,12 @@
           "label": "Bithyve GitHub org",
           "url": "https://github.com/bithyve/"
         }
+      ],
+      "twitter": [
+        {
+          "label": "Bitcoin Keeper on X",
+          "url": "https://x.com/bitcoinKeeper_"
+        }
       ]
     },
     "theya": {
@@ -980,7 +1260,13 @@
           "type": "app-store"
         }
       ],
-      "source": []
+      "source": [],
+      "twitter": [
+        {
+          "label": "Theya on X",
+          "url": "https://x.com/TheyaBitcoin"
+        }
+      ]
     },
     "bitkit": {
       "news": [
@@ -1001,6 +1287,12 @@
           "label": "Bitkit source repo",
           "url": "https://github.com/synonymdev/bitkit"
         }
+      ],
+      "twitter": [
+        {
+          "label": "Bitkit on X",
+          "url": "https://x.com/bitkitwallet"
+        }
       ]
     },
     "casa": {
@@ -1017,7 +1309,13 @@
           "type": "download-page"
         }
       ],
-      "source": []
+      "source": [],
+      "twitter": [
+        {
+          "label": "Casa on X",
+          "url": "https://x.com/CasaHODL"
+        }
+      ]
     },
     "ledger": {
       "news": [
@@ -1038,6 +1336,12 @@
           "label": "Ledger Live source repo",
           "url": "https://github.com/LedgerHQ/ledger-live"
         }
+      ],
+      "twitter": [
+        {
+          "label": "Ledger on X",
+          "url": "https://x.com/Ledger"
+        }
       ]
     },
     "coinbase": {
@@ -1054,7 +1358,14 @@
           "type": "app-store"
         }
       ],
-      "source": []
+      "source": [],
+      "twitter": [
+        {
+          "label": "Coinbase on X",
+          "url": "https://x.com/baseapp",
+          "notes": "Coinbase Wallet was rebranded as Base App in 2025; @baseapp is the current self-custody handle."
+        }
+      ]
     }
   }
 }

@@ -40,7 +40,7 @@ WALLET_SOURCE_FILE = DATA_ROOT / "wallet-research-sources.json"
 DISCOVERY_RESOURCE_FILE = DATA_ROOT / "wallet-discovery-resources.json"
 
 URL_FIELDS = ["url", "appStore", "playStore", "desktop", "buyUrl"]
-EXTRA_SOURCE_GROUPS = ["news", "releases", "source"]
+EXTRA_SOURCE_GROUPS = ["news", "releases", "source", "twitter", "nostr"]
 
 
 def load_json_file(path: Path, default: Dict[str, Any] | None = None) -> Dict[str, Any]:
@@ -225,6 +225,17 @@ def fetch_source(url: str, timeout: int = 20) -> Dict[str, Any]:
         "meta_description": "",
         "error": None,
     }
+
+    # Non-HTTP URI schemes are watch-only references (nostr:, lnurl:, etc).
+    # We register them as sources for the weekly proposal but don't fetch.
+    parsed_scheme = url.split(":", 1)[0].lower() if ":" in url else ""
+    if parsed_scheme in {"nostr", "lnurl"}:
+        out["ok"] = True
+        out["status_code"] = None
+        out["content_type"] = f"{parsed_scheme}-uri"
+        out["final_url"] = url
+        return out
+
     try:
         req = urllib.request.Request(
             url,
@@ -240,6 +251,14 @@ def fetch_source(url: str, timeout: int = 20) -> Dict[str, Any]:
         capture_response(e, out)
     except Exception as e:  # noqa: BLE001
         out["error"] = str(e)
+
+    # X/Twitter actively block non-browser User-Agents (403/429) even for public
+    # profile pages. These are watch-only — don't surface them as failing links.
+    host = (out.get("domain") or "").lower()
+    if host in {"x.com", "twitter.com", "www.x.com", "www.twitter.com"} and not out["ok"]:
+        out["ok"] = True
+        out["content_type"] = out.get("content_type") or "x-com-watch-only"
+
     return out
 
 
